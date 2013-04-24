@@ -1,0 +1,29 @@
+{
+	"name": "inline-source",
+	"description": "Inline all flagged js & css source files",
+	"version": "0.0.0",
+	"author": "popeindustries <alex@pope-industries.com>",
+	"keywords": ["inline", "html", "js", "css"],
+	"dependencies": {
+		"uglify-js": "2.2.5",
+		"clean-css": "1.0.1"
+	},
+	"devDependencies": {
+		"should": "*",
+		"mocha": "*"
+	},
+	"main": "index.js",
+	"scripts": {
+		"test": "mocha --reporter spec --require should"
+	},
+	"engines": {
+		"node": ">=0.8.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/popeindustries/inline-source.git"
+	},
+  "readmeFilename": "README.md",
+	"readme": "[![Build Status](https://travis-ci.org/popeindustries/inline-source.png)](https://travis-ci.org/popeindustries/inline-source)\n\n# inline-source\n\nInline all `<script>` or `<link>` tags that contain the `inline` attribute.",
+	"license": "MIT"
+}
