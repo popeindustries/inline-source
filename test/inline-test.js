@@ -8,120 +8,88 @@ describe('inline-source', function() {
 		process.chdir('./test/fixtures');
 	});
 	describe('script tag inlining', function() {
-		it('should ignore commented sources', function(done) {
+		it('should ignore commented sources', function() {
 			var test = '<!-- <script inline src="foo.js"></script> -->';
-			inline(test, function(err, html) {
-				html.should.eql(test);
-				done();
-			});
+			var html = inline(test);
+			html.should.eql(test);
 		});
-		it('should ignore sources that don\'t contain an "inline" attribute', function(done) {
+		it('should ignore sources that don\'t contain an "inline" attribute', function() {
 			var test = '<script src="foo.js"></script>';
-			inline(test, function(err, html) {
-				html.should.eql(test);
-				done();
-			});
+			var html = inline(test);
+			html.should.eql(test);
 		});
-		it('should ignore sources that don\'t contain an "inline" attribute but contain the string "inline"', function(done) {
+		it('should ignore sources that don\'t contain an "inline" attribute but contain the string "inline"', function() {
 			var test = '<script src="inline.js"></script>';
-			inline(test, function(err, html) {
-				html.should.eql(test);
-				done();
-			});
+			var html = inline(test);
+			html.should.eql(test);
 		});
-		it('should inline sources that contain an "inline" attribute', function(done) {
+		it('should inline sources that contain an "inline" attribute', function() {
 			var test = '<script inline src="foo.js"></script>';
-			inline(test, function(err, html) {
-				html.should.eql('<script>var foo=this;</script>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<script>var foo=this;</script>');
 		});
-		it('should inline sources that contain an "inline" attribute on a line with leading whitespace', function(done) {
+		it('should inline sources that contain an "inline" attribute on a line with leading whitespace', function() {
 			var test = '		<script inline src="foo.js"></script>';
-			inline(test, function(err, html) {
-				html.should.eql('		<script>var foo=this;</script>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('		<script>var foo=this;</script>');
 		});
-		it('should inline sources that contain an "inline" attribute at the end of the <script> tag', function(done) {
+		it('should inline sources that contain an "inline" attribute at the end of the <script> tag', function() {
 			var test = '<script src="foo.js" inline></script>';
-			inline(test, function(err, html) {
-				html.should.eql('<script>var foo=this;</script>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<script>var foo=this;</script>');
 		});
-		it('should inline sources that contain an "inline" attribute at the end of the <script> tag surrounded by whitespace', function(done) {
+		it('should inline sources that contain an "inline" attribute at the end of the <script> tag surrounded by whitespace', function() {
 			var test = '<script src="foo.js" inline ></script>';
-			inline(test, function(err, html) {
-				html.should.eql('<script>var foo=this;</script>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<script>var foo=this;</script>');
 		});
-		it('should remove the "inline" attribute for sources that can\'t be found', function(done) {
+		it('should remove the "inline" attribute for sources that can\'t be found', function() {
 			var test = '<script inline src="bar.js"></script>';
-			inline(test, function(err, html) {
-				html.should.eql('<script src="bar.js"></script>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<script src="bar.js"></script>');
 		});
 	});
 
 	describe('link tag inlining', function() {
-		it('should ignore commented sources', function(done) {
+		it('should ignore commented sources', function() {
 			var test = '<!-- <link inline rel="stylesheet" href="foo.css"> -->';
-			inline(test, function(err, html) {
-				html.should.eql(test);
-				done();
-			});
+			var html = inline(test);
+			html.should.eql(test);
 		});
-		it('should ignore sources that don\'t contain an "inline" attribute', function(done) {
+		it('should ignore sources that don\'t contain an "inline" attribute', function() {
 			var test = '<link rel="stylesheet" href="foo.js">';
-			inline(test, function(err, html) {
-				html.should.eql(test);
-				done();
-			});
+			var html = inline(test);
+			html.should.eql(test);
 		});
-		it('should ignore sources that don\'t contain an "inline" attribute but contain the string "inline"', function(done) {
+		it('should ignore sources that don\'t contain an "inline" attribute but contain the string "inline"', function() {
 			var test = '<link rel="stylesheet" href="inline.js">';
-			inline(test, function(err, html) {
-				html.should.eql(test);
-				done();
-			});
+			var html = inline(test);
+			html.should.eql(test);
 		});
-		it('should inline sources that contain an "inline" attribute', function(done) {
+		it('should inline sources that contain an "inline" attribute', function() {
 			var test = '<link inline rel="stylesheet" href="foo.css">';
-			inline(test, function(err, html) {
-				html.should.eql('<style>body{background-color:#fff}</style>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<style>body{background-color:#fff}</style>');
 		});
-		it('should inline sources that contain an "inline" attribute on a line with leading whitespace', function(done) {
+		it('should inline sources that contain an "inline" attribute on a line with leading whitespace', function() {
 			var test = '		<link inline rel="stylesheet" href="foo.css">';
-			inline(test, function(err, html) {
-				html.should.eql('		<style>body{background-color:#fff}</style>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('		<style>body{background-color:#fff}</style>');
 		});
-		it('should inline sources that contain an "inline" attribute at the end of the <link> tag', function(done) {
+		it('should inline sources that contain an "inline" attribute at the end of the <link> tag', function() {
 			var test = '<link rel="stylesheet" href="foo.css" inline>';
-			inline(test, function(err, html) {
-				html.should.eql('<style>body{background-color:#fff}</style>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<style>body{background-color:#fff}</style>');
 		});
-		it('should inline sources that contain an "inline" attribute at the end of the <link> tag surrounded by whitespace', function(done) {
+		it('should inline sources that contain an "inline" attribute at the end of the <link> tag surrounded by whitespace', function() {
 			var test = '<link rel="stylesheet" href="foo.css" inline >';
-			inline(test, function(err, html) {
-				html.should.eql('<style>body{background-color:#fff}</style>');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<style>body{background-color:#fff}</style>');
 		});
-		it('should remove the "inline" attribute for sources that can\'t be found', function(done) {
+		it('should remove the "inline" attribute for sources that can\'t be found', function() {
 			var test = '<link inline rel="stylesheet" href="bar.css">';
-			inline(test, function(err, html) {
-				html.should.eql('<link rel="stylesheet" href="bar.css">');
-				done();
-			});
+			var html = inline(test);
+			html.should.eql('<link rel="stylesheet" href="bar.css">');
 		});
 	});
 });

@@ -10,9 +10,8 @@ var path = require('path')
 /**
  * Parse 'html' for <script> and <link> tags containing an 'inline' attribute
  * @param {String} html
- * @param {Function} fn(err, html)
  */
-module.exports = function(html, fn) {
+module.exports = function(html) {
 	var match;
 
 	// Parse inline <script> tags
@@ -25,7 +24,7 @@ module.exports = function(html, fn) {
 		html = inline('css', match[1], html);
 	}
 
-	fn(null, html);
+	return html;
 };
 
 /**
