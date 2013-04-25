@@ -9,19 +9,20 @@ var path = require('path')
 
 /**
  * Parse 'html' for <script> and <link> tags containing an 'inline' attribute
+ * @param {String} htmlpath
  * @param {String} html
  */
-module.exports = function(html) {
+module.exports = function(htmlpath, html) {
 	var match;
 
 	// Parse inline <script> tags
 	while (match = RE_INLINE_SOURCE.exec(html)) {
-		html = inline('js', match[1], html);
+		html = inline('js', match[1], htmlpath, html);
 	}
 
 	// Parse inline <link> tags
 	while (match = RE_INLINE_HREF.exec(html)) {
-		html = inline('css', match[1], html);
+		html = inline('css', match[1], htmlpath, html);
 	}
 
 	return html;
@@ -31,15 +32,16 @@ module.exports = function(html) {
  * Inline a 'source' tag in 'html'
  * @param {String} type
  * @param {String} source
+ * @param {String} htmlpath
  * @param {String} html
  * @returns {String}
  */
-function inline(type, source, html) {
+function inline(type, source, htmlpath, html) {
 	var isCSS = (type == 'css')
 		, tag = isCSS ? 'style' : 'script'
 		, content = '<' + tag + '>'
 		// Parse url
-		, filepath = path.resolve(source.match(isCSS ? RE_HREF : RE_SRC)[1])
+		, filepath = path.resolve(path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath, source.match(isCSS ? RE_HREF : RE_SRC)[1])
 		, filecontent;
 
 	if (fs.existsSync(filepath)) {
