@@ -5,8 +5,8 @@
 	"author": "popeindustries <alex@pope-industries.com>",
 	"keywords": ["inline", "html", "js", "css"],
 	"dependencies": {
-		"uglify-js": "2.2.5",
-		"clean-css": "1.0.1"
+		"uglify-js": "2.4.0",
+		"clean-css": "1.0.12"
 	},
 	"devDependencies": {
 		"should": "*",
