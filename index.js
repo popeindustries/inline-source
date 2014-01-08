@@ -1,7 +1,7 @@
 var path = require('path')
 	, fs = require('fs')
 	, uglify = require('uglify-js')
-	, cleanCSS = require('clean-css')
+	, CleanCSS = require('clean-css')
 	, RE_INLINE_SOURCE = /^\s*?(<script.*?\sinline.*?[^<]+<\/script>)/gm
 	, RE_INLINE_HREF = /^\s*?(<link.*?\sinline[^>]*>)/gm
 	, RE_SRC = /src=["|'](.+)["|']/
@@ -49,10 +49,9 @@ function inline(type, source, htmlpath, html) {
 		// Compress
 		try {
 			filecontent = isCSS
-				? cleanCSS.process(filecontent)
+				? new CleanCSS().minify(filecontent)
 				: uglify.minify(filecontent, {fromString: true}).code;
 		} catch (err) {
-			return fn(err);
 		}
 		content += filecontent + '</' + tag + '>';
 		// Inline
