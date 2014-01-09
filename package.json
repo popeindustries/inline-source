@@ -19,10 +19,7 @@
 	"engines": {
 		"node": ">=0.8.0"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/popeindustries/inline-source.git"
-	},
+	"repository": "git://github.com/popeindustries/inline-source.git",
   "readmeFilename": "README.md",
 	"readme": "[![Build Status](https://travis-ci.org/popeindustries/inline-source.png)](https://travis-ci.org/popeindustries/inline-source)\n\n# inline-source\n\nInline all `<script>` or `<link>` tags that contain the `inline` attribute.",
 	"license": "MIT"
