@@ -53,6 +53,11 @@ describe('inline-source', function() {
 			var html = inline(path.resolve('index.html'), test);
 			html.should.eql('<script>var foo=this;</script>');
 		});
+		it('should inline sources referenced by absolute path', function() {
+			var test = '<script inline src="/nested/foo.js"></script>';
+			var html = inline(path.resolve('nested/index.html'), test);
+			html.should.eql('<script>var foo=this;</script>');
+		});
 	});
 
 	describe('link tag inlining', function() {
