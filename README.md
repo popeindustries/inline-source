@@ -16,7 +16,7 @@ Inline and compress all `<script>` or `<link>` tags that contain the `inline` at
   <!-- inline project/scripts/inlineScript.js -->
   <script inline src="/scripts/inlineScript.js"></script>
   <!-- inline project/src/css/inlineStyle.css -->
-  <style inline href="../css/inlineStyle.css"></style>
+  <link inline rel="../css/inlineStyle.css"></link>
 </head>
 </html>
 ```
