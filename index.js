@@ -1,7 +1,8 @@
-var Promise = require('bluebird')
-	, path = require('path')
+var path = require('path')
 	, fs = require('fs')
-	, readFileAsync = Promise.promisify(fs.readFile)
+	, co = require('co')
+	, thunkify = require('thunkify')
+	, readFile = thunkify(fs.readFile)
 	, readFileSync = fs.readFileSync
 	, uglify = require('uglify-js')
 	, csso = require('csso')
@@ -16,35 +17,38 @@ var Promise = require('bluebird')
  * and replace with compressed file contents
  * @param {String} htmlpath
  * @param {String} html
- * @param {Function} [fn(err, html)]
- * @returns {Promise}
+ * @param {Function} fn(err, html)
  */
 module.exports = function (htmlpath, html, fn) {
-	// Remove file name if necessary
-	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
+	co(function* (htmlpath, html) {
+		try {
+			// Parse inline sources
+			var sources = parse(html)
+				, source, filepath, content;
 
-	// Parse inline sources
-	var sources = parse(html);
+			// Remove file name if necessary
+			htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
-	if (sources.length) {
-		// Get inlined content
-		return Promise.all(sources.map(function (source) {
-			return getContent(source.type, source.content, htmlpath, true)
-				.then(function (content) {
-					return [source.content, content];
-				});
-		// Replace inlined content in html
-		})).then(function (sources) {
-			sources.forEach(function (source) {
-				html = html.replace(source[0], source[1]);
-			});
-			return html;
-		}).nodeify(fn);
-
-	// Return untouched html if no content to inline
-	} else {
-		return Promise.resolve(html).nodeify(fn);
-	}
+			if (sources.length) {
+				// Get inlined content
+				for (var i = 0, n = sources.length; i < n; i++) {
+					source = sources[i];
+					filepath = getPath(source.type, source.content, htmlpath);
+					try {
+						content = yield getContent(source.type, filepath);
+					} catch (err) {
+						// Remove 'inline' attribute if error loading content
+						content = source.content.replace(' inline', '');
+					}
+					// Replace inlined content in html
+					html = html.replace(source.content, content);
+				}
+			}
+			fn(null, html);
+		} catch (err) {
+			fn(err, html);
+		}
+	})(htmlpath, html);
 };
 
 /**
@@ -55,25 +59,25 @@ module.exports = function (htmlpath, html, fn) {
  * @returns {String}
  */
 module.exports.sync = function (htmlpath, html) {
+	// Parse inline sources
+	var sources = parse(html)
+		, filepath, content;
+
 	// Remove file name if necessary
 	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
-	// Parse inline sources
-	var sources = parse(html);
-
 	if (sources.length) {
 		sources.map(function (source) {
+			filepath = getPath(source.type, source.content, htmlpath);
 			try {
-				var content = getContent(source.type, source.content, htmlpath, false);
-				return [source.content, content];
+				content = getContentSync(source.type, filepath);
 			} catch (err) {
 				// Remove 'inline' attribute if error loading content
-				return [source.content, source.content.replace(' inline', '')];
+				content = source.content.replace(' inline', '');
 			}
-		// Replace inlined content in html
-		}).forEach(function (source) {
-			html = html.replace(source[0], source[1]);
-		})
+			// Replace inlined content in html
+			html = html.replace(source.content, content);
+		});
 	}
 
 	return html;
@@ -102,41 +106,55 @@ function parse (html) {
 }
 
 /**
- * Retrieve content for 'source'
+ * Retrieve filepath for 'source'
  * @param {String} type
  * @param {String} source
  * @param {String} htmlpath
- * @param {Boolean} async
  * @returns {String}
  */
-function getContent (type, source, htmlpath, async) {
+function getPath (type, source, htmlpath) {
 	var isCSS = (type == 'css')
-		, tag = isCSS ? 'style' : 'script'
 		// Parse url
 		, sourcepath = source.match(isCSS ? RE_HREF : RE_SRC)[1]
 		, filepath = sourcepath.indexOf('/') == 0
 			// Absolute
 			? path.resolve(process.cwd(), sourcepath.slice(1))
 			// Relative
-			: path.resolve(htmlpath, sourcepath)
-		, content;
+			: path.resolve(htmlpath, sourcepath);
 
-	if (async) {
-		return readFileAsync(filepath, 'utf8')
-			.then(function (content) {
-				return '<' + tag + '>'
-					+ compressContent(type, content)
-					+ '</' + tag + '>';
-			}).catch(function (err) {
-				// Remove 'inline' attribute if error loading content
-				return source.replace(' inline', '');
-			});
-	} else {
-		content = readFileSync(filepath, 'utf8');
-		return '<' + tag + '>'
-			+ compressContent(type, content)
-			+ '</' + tag + '>';
-	}
+	return filepath;
+}
+
+/**
+ * Retrieve content for 'source'
+ * @param {String} type
+ * @param {String} filepath
+ * @returns {String}
+ */
+function* getContent (type, filepath) {
+	var isCSS = (type == 'css')
+		, tag = isCSS ? 'style' : 'script'
+		, content = yield readFile(filepath, 'utf8');
+
+	return '<' + tag + '>'
+		+ compressContent(type, content)
+		+ '</' + tag + '>';
+}
+
+/**
+ * Synchronously retrieve content for 'source'
+ * @param {String} type
+ * @param {String} filepath
+ * @returns {String}
+ */
+function getContentSync (type, filepath) {
+	var isCSS = (type == 'css')
+		, tag = isCSS ? 'style' : 'script'
+		, content = readFileSync(filepath, 'utf8');
+
+	return '<' + tag + '>'
+		+ compressContent(type, content)
+		+ '</' + tag + '>';
 }
 
 /**
@@ -150,7 +168,7 @@ function compressContent (type, content) {
 		content = (type == 'css')
 			? csso.justDoIt(content)
 			: uglify.minify(content, {fromString: true}).code;
-	} catch (err) { /* return uncompressed if error */}
+	} catch (err) { /* return uncompressed if error */ }
 
 	return content;
 }
