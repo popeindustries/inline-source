@@ -21,34 +21,30 @@ var path = require('path')
  */
 module.exports = function (htmlpath, html, fn) {
 	co(function* (htmlpath, html) {
-		try {
-			// Parse inline sources
-			var sources = parse(html)
-				, source, filepath, content;
+		// Parse inline sources
+		var sources = parse(html)
+			, source, filepath, content;
 
-			// Remove file name if necessary
-			htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
+		// Remove file name if necessary
+		htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
-			if (sources.length) {
-				// Get inlined content
-				for (var i = 0, n = sources.length; i < n; i++) {
-					source = sources[i];
-					filepath = getPath(source.type, source.content, htmlpath);
-					try {
-						content = yield getContent(source.type, filepath);
-					} catch (err) {
-						// Remove 'inline' attribute if error loading content
-						content = source.content.replace(' inline', '');
-					}
-					// Replace inlined content in html
-					html = html.replace(source.content, content);
+		if (sources.length) {
+			// Get inlined content
+			for (var i = 0, n = sources.length; i < n; i++) {
+				source = sources[i];
+				filepath = getPath(source.type, source.content, htmlpath);
+				try {
+					content = yield getContent(source.type, filepath);
+				} catch (err) {
+					// Remove 'inline' attribute if error loading content
+					content = source.content.replace(' inline', '');
 				}
+				// Replace inlined content in html
+				html = html.replace(source.content, content);
 			}
-			fn(null, html);
-		} catch (err) {
-			fn(err, html);
 		}
-	})(htmlpath, html);
+		return html;
+	}).call(this, htmlpath, html, fn);
 };
 
 /**
