@@ -1,9 +1,5 @@
 var path = require('path')
 	, fs = require('fs')
-	, co = require('co')
-	, thunkify = require('thunkify')
-	, readFile = thunkify(fs.readFile)
-	, readFileSync = fs.readFileSync
 	, uglify = require('uglify-js')
 	, csso = require('csso')
 
@@ -13,89 +9,53 @@ var path = require('path')
 	, RE_HREF = /href=["|'](.+)["|']/;
 
 /**
- * Parse 'html' for <script> and <link> tags containing an 'inline' attribute,
- * and replace with compressed file contents
- * @param {String} htmlpath
- * @param {String} html
- * @param {Function} fn(err, html)
- */
-module.exports = function (htmlpath, html, fn) {
-	co(function* (htmlpath, html) {
-		// Parse inline sources
-		var sources = parse(html)
-			, source, filepath, content;
-
-		// Remove file name if necessary
-		htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
-
-		if (sources.length) {
-			// Get inlined content
-			for (var i = 0, n = sources.length; i < n; i++) {
-				source = sources[i];
-				filepath = getPath(source.type, source.content, htmlpath);
-				try {
-					content = yield getContent(source.type, filepath);
-				} catch (err) {
-					// Remove 'inline' attribute if error loading content
-					content = source.content.replace(' inline', '');
-				}
-				// Replace inlined content in html
-				html = html.replace(source.content, content);
-			}
-		}
-		return html;
-	}).call(this, htmlpath, html, fn);
-};
-
-/**
  * Synchronously parse 'html' for <script> and <link> tags containing an 'inline' attribute,
  * and replace with compressed file contents
  * @param {String} htmlpath
  * @param {String} html
  * @returns {String}
  */
-module.exports.sync = function (htmlpath, html) {
+module.exports = function (htmlpath, html) {
 	// Parse inline sources
-	var sources = parse(html)
-		, filepath, content;
+	var sources = parse(htmlpath, html);
 
-	// Remove file name if necessary
-	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
-
-	if (sources.length) {
-		sources.map(function (source) {
-			filepath = getPath(source.type, source.content, htmlpath);
-			try {
-				content = getContentSync(source.type, filepath);
-			} catch (err) {
-				// Remove 'inline' attribute if error loading content
-				content = source.content.replace(' inline', '');
-			}
-			// Replace inlined content in html
-			html = html.replace(source.content, content);
-		});
-	}
-
-	return html;
+	// Inline
+	return inline(sources, html);
 };
+
+// Expose steps
+module.exports.parse = parse;
+module.exports.inline = inline;
 
 /**
  * Parse 'html' for inlineable sources
+ * @param {String} htmlpath
  * @param {String} html
  * @returns {Array}
  */
-function parse (html) {
+function parse (htmlpath, html) {
+	// Remove file name if necessary
+	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
+
 	var sources = []
 		, match;
 
 	// Parse inline <script> tags
 	while (match = RE_INLINE_SOURCE.exec(html)) {
-		sources.push({content: match[1], type: 'js'});
+		sources.push({
+			context: match[1],
+			filepath: getPath('js', match[1], htmlpath),
+			type: 'js'
+		});
 	}
 
 	// Parse inline <link> tags
 	while (match = RE_INLINE_HREF.exec(html)) {
-		sources.push({content: match[1], type: 'css'});
+		sources.push({
+			context: match[1],
+			filepath: getPath('css', match[1], htmlpath),
+			type: 'css'
+		});
 	}
 
 	return sources;
@@ -122,31 +82,40 @@ function getPath (type, source, htmlpath) {
 }
 
 /**
+ * Inline 'sources' into 'html'
+ * @param {Array} source
+ * @param {String} html
+ * @returns {String}
+ */
+function inline (sources, html) {
+	var content;
+
+	if (sources.length) {
+		sources.forEach(function (source) {
+			try {
+				content = getContent(source.type, source.filepath);
+			} catch (err) {
+				// Remove 'inline' attribute if error loading content
+				content = source.context.replace(' inline', '');
+			}
+			// Replace inlined content in html
+			html = html.replace(source.context, content);
+		});
+	}
+
+	return html;
+}
+
+/**
  * Retrieve content for 'source'
  * @param {String} type
  * @param {String} filepath
  * @returns {String}
  */
-function* getContent (type, filepath) {
+function getContent (type, filepath) {
 	var isCSS = (type == 'css')
 		, tag = isCSS ? 'style' : 'script'
-		, content = yield readFile(filepath, 'utf8');
-
-	return '<' + tag + '>'
-		+ compressContent(type, content)
-		+ '</' + tag + '>';
-}
-
-/**
- * Synchronously retrieve content for 'source'
- * @param {String} type
- * @param {String} filepath
- * @returns {String}
- */
-function getContentSync (type, filepath) {
-	var isCSS = (type == 'css')
-		, tag = isCSS ? 'style' : 'script'
-		, content = readFileSync(filepath, 'utf8');
+		, content = fs.readFileSync(filepath, 'utf8');
 
 	return '<' + tag + '>'
 		+ compressContent(type, content)
