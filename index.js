@@ -13,14 +13,17 @@ var path = require('path')
  * and replace with compressed file contents
  * @param {String} htmlpath
  * @param {String} html
+ * @param {Object} options
  * @returns {String}
  */
-module.exports = function (htmlpath, html) {
+module.exports = function (htmlpath, html, options) {
+	options = options || {};
+
 	// Parse inline sources
 	var sources = parse(htmlpath, html);
 
 	// Inline
-	return inline(sources, html);
+	return inline(sources, html, options);
 };
 
 // Expose steps
@@ -85,10 +88,13 @@ function getPath (type, source, htmlpath) {
  * Inline 'sources' into 'html'
  * @param {Array} source
  * @param {String} html
+ * @param {Object} options
  * @returns {String}
  */
-function inline (sources, html) {
-	var content;
+function inline (sources, html, options) {
+	options = options || {};
+
+	var type, content;
 
 	if (sources.length) {
 		sources.forEach(function (source) {
@@ -97,6 +103,8 @@ function inline (sources, html) {
 			} catch (err) {
 				// Remove 'inline' attribute if error loading content
 				content = source.context.replace(' inline', '');
+					// Compress if set
+					if (options.compress) content = compressContent(type, content);
 			}
 			// Replace inlined content in html
 			html = html.replace(source.context, content);
@@ -118,7 +126,7 @@ function getContent (type, filepath) {
 		, content = fs.readFileSync(filepath, 'utf8');
 
 	return '<' + tag + '>'
-		+ compressContent(type, content)
+		+ content
 		+ '</' + tag + '>';
 }
 
