@@ -48,6 +48,7 @@ function parse (htmlpath, html) {
 		sources.push({
 			context: match[1],
 			filepath: getPath('js', match[1], htmlpath),
+			inline: true,
 			type: 'js'
 		});
 	}
@@ -57,6 +58,7 @@ function parse (htmlpath, html) {
 		sources.push({
 			context: match[1],
 			filepath: getPath('css', match[1], htmlpath),
+			inline: true,
 			type: 'css'
 		});
 	}
@@ -98,16 +100,23 @@ function inline (sources, html, options) {
 
 	if (sources.length) {
 		sources.forEach(function (source) {
-			try {
-				content = getContent(source.type, source.filepath);
-			} catch (err) {
-				// Remove 'inline' attribute if error loading content
-				content = source.context.replace(' inline', '');
+			if (source.inline) {
+				type = source.type;
+				try {
+					// Read from File instance if passed
+					content = source.instance
+						? source.instance.content
+						: getContent(source.filepath);
 					// Compress if set
 					if (options.compress) content = compressContent(type, content);
+					content = wrapContent(type, content);
+				} catch (err) {
+					// Remove 'inline' attribute if error loading content
+					content = source.context.replace(' inline', '');
+				}
+				// Replace inlined content in html
+				html = html.replace(source.context, content);
 			}
-			// Replace inlined content in html
-			html = html.replace(source.context, content);
 		});
 	}
 
@@ -115,19 +124,29 @@ function inline (sources, html, options) {
 }
 
 /**
- * Retrieve content for 'source'
- * @param {String} type
+ * Retrieve content for 'filepath'
  * @param {String} filepath
  * @returns {String}
  */
-function getContent (type, filepath) {
-	var isCSS = (type == 'css')
-		, tag = isCSS ? 'style' : 'script'
-		, content = fs.readFileSync(filepath, 'utf8');
+function getContent (filepath) {
+	return fs.readFileSync(filepath, 'utf8');
+}
+
+/**
+ * Wrap 'content' in appropriate tag based on 'type'
+ * @param {String} type
+ * @param {String} content
+ * @returns {String}
+ */
+function wrapContent (type, content) {
+	var tag = (type == 'css')
+				? 'style'
+				: 'script';
 
 	return '<' + tag + '>'
 		+ content
 		+ '</' + tag + '>';
+
 }
 
 /**
