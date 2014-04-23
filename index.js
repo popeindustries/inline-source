@@ -9,63 +9,158 @@ var path = require('path')
 	, RE_HREF = /href=["|'](.+)["|']/;
 
 /**
- * Parse 'html' for <script> and <link> tags containing an 'inline' attribute
+ * Synchronously parse 'html' for <script> and <link> tags containing an 'inline' attribute,
+ * and replace with compressed file contents
  * @param {String} htmlpath
  * @param {String} html
+ * @param {Object} options
+ * @returns {String}
  */
-module.exports = function (htmlpath, html) {
-	var match;
+module.exports = function (htmlpath, html, options) {
+	options = options || {};
 
+	// Parse inline sources
+	var sources = parse(htmlpath, html);
+
+	// Inline
+	return inline(sources, html, options);
+};
+
+// Expose steps
+module.exports.parse = parse;
+module.exports.inline = inline;
+
+/**
+ * Parse 'html' for inlineable sources
+ * @param {String} htmlpath
+ * @param {String} html
+ * @returns {Array}
+ */
+function parse (htmlpath, html) {
 	// Remove file name if necessary
 	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
+	var sources = []
+		, match;
+
 	// Parse inline <script> tags
 	while (match = RE_INLINE_SOURCE.exec(html)) {
-		html = inline('js', match[1], htmlpath, html);
+		sources.push({
+			context: match[1],
+			filepath: getPath('js', match[1], htmlpath),
+			inline: true,
+			type: 'js'
+		});
 	}
 
 	// Parse inline <link> tags
 	while (match = RE_INLINE_HREF.exec(html)) {
-		html = inline('css', match[1], htmlpath, html);
+		sources.push({
+			context: match[1],
+			filepath: getPath('css', match[1], htmlpath),
+			inline: true,
+			type: 'css'
+		});
 	}
 
-	return html;
-};
+	return sources;
+}
 
 /**
- * Inline a 'source' tag in 'html'
+ * Retrieve filepath for 'source'
  * @param {String} type
  * @param {String} source
  * @param {String} htmlpath
- * @param {String} html
  * @returns {String}
  */
-function inline (type, source, htmlpath, html) {
+function getPath (type, source, htmlpath) {
 	var isCSS = (type == 'css')
-		, tag = isCSS ? 'style' : 'script'
-		, content = '<' + tag + '>'
 		// Parse url
 		, sourcepath = source.match(isCSS ? RE_HREF : RE_SRC)[1]
 		, filepath = sourcepath.indexOf('/') == 0
 			// Absolute
 			? path.resolve(process.cwd(), sourcepath.slice(1))
 			// Relative
-			: path.resolve(htmlpath, sourcepath)
-		, filecontent;
+			: path.resolve(htmlpath, sourcepath);
 
-	if (fs.existsSync(filepath)) {
-		filecontent = fs.readFileSync(filepath, 'utf8');
-		// Compress
-		try {
-			filecontent = isCSS
-				? csso.justDoIt(filecontent)
-				: uglify.minify(filecontent, {fromString: true}).code;
-		} catch (err) { }
-		content += filecontent + '</' + tag + '>';
-		// Inline
-		return html.replace(source, content);
-	} else {
-		// Remove 'inline' attribute
-		return html.replace(source, source.replace(' inline', ''))
+	return filepath;
+}
+
+/**
+ * Inline 'sources' into 'html'
+ * @param {Array} source
+ * @param {String} html
+ * @param {Object} options
+ * @returns {String}
+ */
+function inline (sources, html, options) {
+	options = options || {};
+
+	var type, content;
+
+	if (sources.length) {
+		sources.forEach(function (source) {
+			if (source.inline) {
+				type = source.type;
+				try {
+					// Read from File instance if passed
+					content = source.instance
+						? source.instance.content
+						: getContent(source.filepath);
+					// Compress if set
+					if (options.compress) content = compressContent(type, content);
+					content = wrapContent(type, content);
+				} catch (err) {
+					// Remove 'inline' attribute if error loading content
+					content = source.context.replace(' inline', '');
+				}
+				// Replace inlined content in html
+				html = html.replace(source.context, content);
+			}
+		});
 	}
+
+	return html;
+}
+
+/**
+ * Retrieve content for 'filepath'
+ * @param {String} filepath
+ * @returns {String}
+ */
+function getContent (filepath) {
+	return fs.readFileSync(filepath, 'utf8');
+}
+
+/**
+ * Wrap 'content' in appropriate tag based on 'type'
+ * @param {String} type
+ * @param {String} content
+ * @returns {String}
+ */
+function wrapContent (type, content) {
+	var tag = (type == 'css')
+				? 'style'
+				: 'script';
+
+	return '<' + tag + '>'
+		+ content
+		+ '</' + tag + '>';
+
+}
+
+/**
+ * Compress 'content' of 'type'
+ * @param {String} type
+ * @param {String} content
+ * @returns {String}
+ */
+function compressContent (type, content) {
+	try {
+		content = (type == 'css')
+			? csso.justDoIt(content)
+			: uglify.minify(content, {fromString: true}).code;
+	} catch (err) { /* return uncompressed if error */ }
+
+	return content;
 }
