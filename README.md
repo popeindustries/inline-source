@@ -29,17 +29,5 @@ var inline = require('inline-source')
   , htmlpath = path.resolve('project/src/html/index.html');
   , html = fs.readFileSync(htmlpath, 'utf8');
 
-// Async callback
-inline(htmlpath, html, function (err, html) {
-  // Use inlined html
-});
-
-// Async Promise
-inline(htmlpath, html)
-  .then(function (html) {
-    // Use inlined html
-  });
-
-// Sync
-html = inline.sync(htmlpath, html);
+html = inline(htmlpath, html, {compress: true});
 ```

@@ -1,7 +1,7 @@
 {
 	"name": "inline-source",
 	"description": "Inline all flagged js & css source files",
-	"version": "0.4.1",
+	"version": "0.5.0",
 	"author": "popeindustries <alex@pope-industries.com>",
 	"keywords": ["inline", "html", "js", "css"],
 	"dependencies": {
@@ -21,6 +21,6 @@
 	},
 	"repository": "git://github.com/popeindustries/inline-source.git",
   "readmeFilename": "README.md",
-	"readme": "[![Build Status](https://travis-ci.org/popeindustries/inline-source.png)](https://travis-ci.org/popeindustries/inline-source)\n\n# inline-source\n\nInline and compress all `<script>` or `<link>` tags that contain the `inline` attribute.\n\n## Usage\n\n**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched.\n\n```html\n<!-- project/src/html/index.html -->\n<!DOCTYPE html>\n<html>\n<head>\n  <!-- inline project/src/js/inlineScript.js -->\n  <script inline src=\"../js/inlineScript.js\"></script>\n  <!-- inline project/scripts/inlineScript.js -->\n  <script inline src=\"/scripts/inlineScript.js\"></script>\n  <!-- inline project/src/css/inlineStyle.css -->\n  <link inline rel=\"../css/inlineStyle.css\"></link>\n</head>\n</html>\n```\n```javascript\nvar inline = require('inline-source')\n  , fs = require('fs')\n  , path = require('path')\n  , htmlpath = path.resolve('project/src/html/index.html');\n  , html = fs.readFileSync(htmlpath, 'utf8');\n\n// Async callback\ninline(htmlpath, html, function (err, html) {\n  // Use inlined html\n});\n\n// Async Promise\ninline(htmlpath, html)\n  .then(function (html) {\n    // Use inlined html\n  });\n\n// Sync\nhtml = inline.sync(htmlpath, html);\n```",
+	"readme": "[![Build Status](https://travis-ci.org/popeindustries/inline-source.png)](https://travis-ci.org/popeindustries/inline-source)\n\n# inline-source\n\nInline and compress all `<script>` or `<link>` tags that contain the `inline` attribute.\n\n## Usage\n\n**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched.\n\n```html\n<!-- project/src/html/index.html -->\n<!DOCTYPE html>\n<html>\n<head>\n  <!-- inline project/src/js/inlineScript.js -->\n  <script inline src=\"../js/inlineScript.js\"></script>\n  <!-- inline project/scripts/inlineScript.js -->\n  <script inline src=\"/scripts/inlineScript.js\"></script>\n  <!-- inline project/src/css/inlineStyle.css -->\n  <link inline rel=\"../css/inlineStyle.css\"></link>\n</head>\n</html>\n```\n```javascript\nvar inline = require('inline-source')\n  , fs = require('fs')\n  , path = require('path')\n  , htmlpath = path.resolve('project/src/html/index.html');\n  , html = fs.readFileSync(htmlpath, 'utf8');\n\nhtml = inline(htmlpath, html, {compress: true});\n```",
 	"license": "MIT"
 }
