@@ -6,7 +6,7 @@ Inline and compress all `<script>` or `<link>` tags that contain the `inline` at
 
 ## Usage
 
-**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched.
+**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false`.
 
 ```html
 <!-- project/src/html/index.html -->
@@ -29,5 +29,5 @@ var inline = require('inline-source')
   , htmlpath = path.resolve('project/src/html/index.html');
   , html = fs.readFileSync(htmlpath, 'utf8');
 
-html = inline(htmlpath, html, {compress: true});
+html = inline(htmlpath, html, {compress: true, swallowErrors: true});
 ```

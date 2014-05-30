@@ -13,11 +13,13 @@ var path = require('path')
  * and replace with compressed file contents
  * @param {String} htmlpath
  * @param {String} html
- * @param {Object} options
+ * @param {Object} options  [compress:true, swallowErrors:true]
  * @returns {String}
  */
 module.exports = function (htmlpath, html, options) {
 	options = options || {};
+	if (options.compress == null) options.compress = true;
+	if (options.swallowErrors == null) options.swallowErrors = true;
 
 	// Parse inline sources
 	var sources = parse(htmlpath, html);
@@ -106,11 +108,12 @@ function inline (sources, html, options) {
 					// Read from File instance if passed
 					content = source.instance
 						? source.instance.content
-						: getContent(source.filepath);
+						: fs.readFileSync(source.filepath, 'utf8');
 					// Compress if set
 					if (options.compress) content = compressContent(type, content);
 					content = wrapContent(type, content);
 				} catch (err) {
+					if (!options.swallowErrors) throw err;
 					// Remove 'inline' attribute if error loading content
 					content = source.context.replace(' inline', '');
 				}
@@ -121,15 +124,6 @@ function inline (sources, html, options) {
 	}
 
 	return html;
-}
-
-/**
- * Retrieve content for 'filepath'
- * @param {String} filepath
- * @returns {String}
- */
-function getContent (filepath) {
-	return fs.readFileSync(filepath, 'utf8');
 }
 
 /**

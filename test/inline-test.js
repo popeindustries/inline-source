@@ -53,6 +53,14 @@ describe('inline-source', function () {
 			html = inline(process.cwd(), test, {compress: true});
 			html.should.eql('<script src="baz.js"></script>\n<script>var foo=this;</script>');
 		});
+		it('should throw an error when options.swallowErrors is "false"', function () {
+			var test = '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
+			try {
+				inline(process.cwd(), test, {swallowErrors: false});
+			} catch (err) {
+				should.exist(err);
+			}
+		});
 		it('should inline sources referenced by relative path', function () {
 			var test = '<script inline src="./nested/foo.js"></script>';
 			html = inline(path.resolve('index.html'), test, {compress: true});
@@ -62,6 +70,11 @@ describe('inline-source', function () {
 			var test = '<script inline src="/nested/foo.js"></script>';
 			html = inline(path.resolve('nested/index.html'), test, {compress: true});
 			html.should.eql('<script>var foo=this;</script>');
+		});
+		it('should not compress inlined content when options.compressed is "false"', function () {
+			var test = '<script inline src="./nested/foo.js"></script>';
+			html = inline(path.resolve('index.html'), test, {compress: false});
+			html.should.eql('<script>var foo = this;</script>');
 		});
 	});
 
