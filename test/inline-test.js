@@ -70,10 +70,15 @@ describe('inline-source', function () {
 			html = inline(path.resolve('index.html'), test, {compress: true});
 			html.should.eql('<script>var foo=this;</script>');
 		});
-		it('should inline sources referenced by absolute path', function () {
+		it('should inline sources referenced by absolute path relative to project directory', function () {
 			var test = '<script inline src="/nested/foo.js"></script>';
 			html = inline(path.resolve('nested/index.html'), test, {compress: true});
 			html.should.eql('<script>var foo=this;</script>');
+		});
+		it('should inline sources referenced by absolute path relative to passed rootpath directory', function () {
+			var test = '<script inline src="/bar.js"></script>';
+			html = inline(path.resolve('nested/index.html'), test, {compress: true, rootpath: path.resolve('nested/deep')});
+			html.should.eql('<script>var bar=this;</script>');
 		});
 		it('should not compress inlined content when options.compressed is "false"', function () {
 			var test = '<script inline src="./nested/foo.js"></script>';

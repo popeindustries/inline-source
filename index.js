@@ -12,8 +12,8 @@ var path = require('path')
  * Synchronously parse 'html' for <script> and <link> tags containing an 'inline' attribute,
  * and replace with compressed file contents
  * @param {String} htmlpath
- * @param {Object} options  [compress:true, swallowErrors:true]
  * @param {String} [html]
+ * @param {Object} options  [compress:true, swallowErrors:true, rootpath:'']
  * @returns {String}
  */
 module.exports = function (htmlpath, html, options) {
@@ -31,6 +31,10 @@ module.exports = function (htmlpath, html, options) {
 	}
 	if (options.compress == null) options.compress = true;
 	if (options.swallowErrors == null) options.swallowErrors = true;
+	options.rootpath = options.rootpath
+		? path.resolve(options.rootpath)
+		: process.cwd();
+
 	if (!html) {
 		try {
 			html = fs.readFileSync(htmlpath, 'utf8');
@@ -38,9 +42,10 @@ module.exports = function (htmlpath, html, options) {
 			if (!options.swallowErrors) throw err;
 			return;
 		}
+	}
 
 	// Parse inline sources
-	var sources = parse(htmlpath, html);
+	var sources = parse(htmlpath, html, options.rootpath);
 
 	// Inline
 	return inline(sources, html, options);
@@ -54,33 +59,33 @@ module.exports.inline = inline;
  * Parse 'html' for inlineable sources
  * @param {String} htmlpath
  * @param {String} html
+ * @param {String} rootpath
  * @returns {Array}
  */
-function parse (htmlpath, html) {
+function parse (htmlpath, html, rootpath) {
 	// Remove file name if necessary
 	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
 	var sources = []
 		, match;
 
+	var getSource = function (type, context) {
+		return {
+			context: context,
+			filepath: getPath(type, match[1], htmlpath, rootpath),
+			inline: true,
+			type: type
+		}
+	}
+
 	// Parse inline <script> tags
 	while (match = RE_INLINE_SOURCE.exec(html)) {
-		sources.push({
-			context: match[1],
-			filepath: getPath('js', match[1], htmlpath),
-			inline: true,
-			type: 'js'
-		});
+		sources.push(getSource('js', match[1]));
 	}
 
 	// Parse inline <link> tags
 	while (match = RE_INLINE_HREF.exec(html)) {
-		sources.push({
-			context: match[1],
-			filepath: getPath('css', match[1], htmlpath),
-			inline: true,
-			type: 'css'
-		});
+		sources.push(getSource('css', match[1]));
 	}
 
 	return sources;
@@ -91,15 +96,16 @@ function parse (htmlpath, html) {
  * @param {String} type
  * @param {String} source
  * @param {String} htmlpath
+ * @param {String} rootpath
  * @returns {String}
  */
-function getPath (type, source, htmlpath) {
+function getPath (type, source, htmlpath, rootpath) {
 	var isCSS = (type == 'css')
 		// Parse url
 		, sourcepath = source.match(isCSS ? RE_HREF : RE_SRC)[1]
 		, filepath = sourcepath.indexOf('/') == 0
 			// Absolute
-			? path.resolve(process.cwd(), sourcepath.slice(1))
+			? path.resolve(rootpath, sourcepath.slice(1))
 			// Relative
 			: path.resolve(htmlpath, sourcepath);
 
@@ -124,6 +130,7 @@ function inline (sources, html, options) {
 				type = source.type;
 				try {
 					// Read from File instance if passed
+					// (popeindustries/buddy optimization)
 					content = source.instance
 						? source.instance.content
 						: fs.readFileSync(source.filepath, 'utf8');
