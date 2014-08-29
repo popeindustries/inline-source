@@ -1,22 +1,37 @@
-[![Build Status](https://travis-ci.org/popeindustries/inline-source.png)](https://travis-ci.org/popeindustries/inline-source)
+[![NPM Version](https://img.shields.io/npm/v/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
+[![Build Status](https://img.shields.io/travis/popeindustries/inline-source.svg?style=flat)](https://travis-ci.org/popeindustries/inline-source)
 
 # inline-source
 
 Inline and compress all `<script>` or `<link>` tags that contain the `inline` attribute.
 
+**Note:** Resources are loaded *synchronously*, so these operations are best done during a build or template precompile step, and not per server request.
+
 ## Usage
 
-**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false`.
+**inline(htmlpath, [html], [options])**: synchronously parse `html` content for `<script>` and `<link>` tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
 
+If `html` content is omitted, content will be loaded from `htmlpath`.
+
+Available `options` include:
+- `compress`: enable/disable compression of inlined content (default `true`)
+- `swallowErrors`: enable/disable suppression of errors (default `true`)
+- `rootpath`: directory path used for resolving absolute inlineable paths (default `process.cwd()`)
+
+**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false`
+
+```bash
+$ npm install inline-source
+```
 ```html
-<!-- project/src/html/index.html -->
+<!-- located at project/src/html/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <!-- inline project/src/js/inlineScript.js -->
   <script inline src="../js/inlineScript.js"></script>
-  <!-- inline project/scripts/inlineScript.js -->
-  <script inline src="/scripts/inlineScript.js"></script>
+  <!-- inline project/www/js/inlineScript.js -->
+  <script inline src="/js/inlineScript.js"></script>
   <!-- inline project/src/css/inlineStyle.css -->
   <link inline rel="../css/inlineStyle.css"></link>
 </head>
@@ -27,7 +42,10 @@ var inline = require('inline-source')
   , fs = require('fs')
   , path = require('path')
   , htmlpath = path.resolve('project/src/html/index.html');
-  , html = fs.readFileSync(htmlpath, 'utf8');
 
-html = inline(htmlpath, html, {compress: true, swallowErrors: true});
+var html = inline(htmlpath, {
+  compress: true,
+  swallowErrors: false,
+  rootpath: path.resolve('www')
+});
 ```
