@@ -71,6 +71,11 @@ describe('inline-source', function () {
 			html = inline(path.resolve('nested/index.html'), test, {compress: true});
 			html.should.eql('<script>var foo=this;</script>');
 		});
+		it('should inline sources referenced by absolute path with absoluteBasePath specified', function () {
+			var test = '<script inline src="/foo.js"></script>';
+			html = inline(path.resolve('nested/index.html'), test, {compress: true, absoluteBasePath: 'nested/'});
+			html.should.eql('<script>var foo=this;</script>');
+		});
 		it('should not compress inlined content when options.compressed is "false"', function () {
 			var test = '<script inline src="./nested/foo.js"></script>';
 			html = inline(path.resolve('index.html'), test, {compress: false});

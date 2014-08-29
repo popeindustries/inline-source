@@ -31,3 +31,4 @@ var inline = require('inline-source')
 
 html = inline(htmlpath, html, {compress: true, swallowErrors: true});
 ```
+**NOTE:** If a base path for absolute URLs is *not* a project root directory, you can use `options.absoluteBasePath` to specify a different base for resolving absolute paths. Value can be either an absolute filesystem path or a path relative to project root.

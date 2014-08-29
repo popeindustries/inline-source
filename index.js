@@ -22,7 +22,7 @@ module.exports = function (htmlpath, html, options) {
 	if (options.swallowErrors == null) options.swallowErrors = true;
 
 	// Parse inline sources
-	var sources = parse(htmlpath, html);
+	var sources = parse(htmlpath, html, options.absoluteBasePath || '');
 
 	// Inline
 	return inline(sources, html, options);
@@ -38,7 +38,7 @@ module.exports.inline = inline;
  * @param {String} html
  * @returns {Array}
  */
-function parse (htmlpath, html) {
+function parse (htmlpath, html, absolutebasepath) {
 	// Remove file name if necessary
 	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
@@ -49,7 +49,7 @@ function parse (htmlpath, html) {
 	while (match = RE_INLINE_SOURCE.exec(html)) {
 		sources.push({
 			context: match[1],
-			filepath: getPath('js', match[1], htmlpath),
+			filepath: getPath('js', match[1], htmlpath, absolutebasepath),
 			inline: true,
 			type: 'js'
 		});
@@ -59,7 +59,7 @@ function parse (htmlpath, html) {
 	while (match = RE_INLINE_HREF.exec(html)) {
 		sources.push({
 			context: match[1],
-			filepath: getPath('css', match[1], htmlpath),
+			filepath: getPath('css', match[1], htmlpath, absolutebasepath),
 			inline: true,
 			type: 'css'
 		});
@@ -75,13 +75,13 @@ function parse (htmlpath, html) {
  * @param {String} htmlpath
  * @returns {String}
  */
-function getPath (type, source, htmlpath) {
+function getPath (type, source, htmlpath, absolutebasepath) {
 	var isCSS = (type == 'css')
 		// Parse url
 		, sourcepath = source.match(isCSS ? RE_HREF : RE_SRC)[1]
 		, filepath = sourcepath.indexOf('/') == 0
 			// Absolute
-			? path.resolve(process.cwd(), sourcepath.slice(1))
+			? path.resolve(process.cwd(), absolutebasepath, sourcepath.slice(1))
 			// Relative
 			: path.resolve(htmlpath, sourcepath);
 
