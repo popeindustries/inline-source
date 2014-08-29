@@ -61,6 +61,10 @@ describe('inline-source', function () {
 				should.exist(err);
 			}
 		});
+		it('should load html source content if none specified', function () {
+			html = inline(path.resolve('test.html'));
+			html.should.eql('<script>var foo=this;</script>');
+		});
 		it('should inline sources referenced by relative path', function () {
 			var test = '<script inline src="./nested/foo.js"></script>';
 			html = inline(path.resolve('index.html'), test, {compress: true});

@@ -12,14 +12,32 @@ var path = require('path')
  * Synchronously parse 'html' for <script> and <link> tags containing an 'inline' attribute,
  * and replace with compressed file contents
  * @param {String} htmlpath
- * @param {String} html
  * @param {Object} options  [compress:true, swallowErrors:true]
+ * @param {String} [html]
  * @returns {String}
  */
 module.exports = function (htmlpath, html, options) {
-	options = options || {};
+	var arity = arguments.length;
+	if (arity == 1) {
+		html = '';
+		options = {};
+	} else if (arity == 2) {
+		if ('object' == typeof html) {
+			options = html;
+			html = '';
+		} else {
+			options = {};
+		}
+	}
 	if (options.compress == null) options.compress = true;
 	if (options.swallowErrors == null) options.swallowErrors = true;
+	if (!html) {
+		try {
+			html = fs.readFileSync(htmlpath, 'utf8');
+		} catch (err) {
+			if (!options.swallowErrors) throw err;
+			return;
+		}
 
 	// Parse inline sources
 	var sources = parse(htmlpath, html);
