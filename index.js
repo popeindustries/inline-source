@@ -143,7 +143,7 @@ function inline (sources, html, options) {
 					content = source.context.replace(' inline', '');
 				}
 				// Replace inlined content in html
-				html = html.replace(source.context, content);
+				html = html.replace(source.context, function () {return content;});
 			}
 		});
 	}
