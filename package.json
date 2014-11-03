@@ -1,7 +1,7 @@
 {
 	"name": "inline-source",
 	"description": "Inline all flagged js & css source files",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"author": "popeindustries <alex@pope-industries.com>",
 	"keywords": ["inline", "html", "js", "css"],
 	"dependencies": {
