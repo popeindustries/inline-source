@@ -17,6 +17,7 @@ Available `options` include:
 - `compress`: enable/disable compression of inlined content (default `true`)
 - `swallowErrors`: enable/disable suppression of errors (default `true`)
 - `rootpath`: directory path used for resolving absolute inlineable paths (default `process.cwd()`)
+- `attribute`: attribute used to parse sources (default `inline`)
 
 **NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false`
 

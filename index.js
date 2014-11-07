@@ -3,8 +3,6 @@ var path = require('path')
 	, uglify = require('uglify-js')
 	, csso = require('csso')
 
-	, RE_INLINE_SOURCE = /^\s*?(<script.*?\sinline.*?[^<]+<\/script>)/gm
-	, RE_INLINE_HREF = /^\s*?(<link.*?\sinline[^>]*>)/gm
 	, RE_SRC = /src=["|'](.+)["|']/
 	, RE_HREF = /href=["|'](.+)["|']/;
 
@@ -31,9 +29,12 @@ module.exports = function (htmlpath, html, options) {
 	}
 	if (options.compress == null) options.compress = true;
 	if (options.swallowErrors == null) options.swallowErrors = true;
+	if (options.attribute == null) options.attribute = 'inline';
 	options.rootpath = options.rootpath
 		? path.resolve(options.rootpath)
 		: process.cwd();
+	options.reInlineSource = new RegExp('^\\s*?(<script.*?\\s' + options.attribute + '.*?[^<]+<\\/script>)', 'gm');
+	options.reInlineHref = new RegExp('^\\s*?(<link.*?\\s' + options.attribute + '[^>]*>)', 'gm');
 
 	if (!html) {
 		try {
@@ -45,7 +46,7 @@ module.exports = function (htmlpath, html, options) {
 	}
 
 	// Parse inline sources
-	var sources = parse(htmlpath, html, options.rootpath);
+	var sources = parse(htmlpath, html, options);
 
 	// Inline
 	return inline(sources, html, options);
@@ -59,10 +60,10 @@ module.exports.inline = inline;
  * Parse 'html' for inlineable sources
  * @param {String} htmlpath
  * @param {String} html
- * @param {String} rootpath
+ * @param {Object} options
  * @returns {Array}
  */
-function parse (htmlpath, html, rootpath) {
+function parse (htmlpath, html, options) {
 	// Remove file name if necessary
 	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
@@ -72,19 +73,19 @@ function parse (htmlpath, html, rootpath) {
 	var getSource = function (type, context) {
 		return {
 			context: context,
-			filepath: getPath(type, match[1], htmlpath, rootpath),
+			filepath: getPath(type, match[1], htmlpath, options.rootpath),
 			inline: true,
 			type: type
 		}
 	}
 
 	// Parse inline <script> tags
-	while (match = RE_INLINE_SOURCE.exec(html)) {
+	while (match = options.reInlineSource.exec(html)) {
 		sources.push(getSource('js', match[1]));
 	}
 
 	// Parse inline <link> tags
-	while (match = RE_INLINE_HREF.exec(html)) {
+	while (match = options.reInlineHref.exec(html)) {
 		sources.push(getSource('css', match[1]));
 	}
 
@@ -140,10 +141,10 @@ function inline (sources, html, options) {
 				} catch (err) {
 					if (!options.swallowErrors) throw err;
 					// Remove 'inline' attribute if error loading content
-					content = source.context.replace(' inline', '');
+					content = source.context.replace(' ' + options.attribute, '');
 				}
-				// Replace inlined content in html
-				html = html.replace(source.context, function () {return content;});
+				// Replace inlined content in html (PR #5)
+				html = html.replace(source.context, function () { return content; });
 			}
 		});
 	}

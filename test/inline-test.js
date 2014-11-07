@@ -53,6 +53,11 @@ describe('inline-source', function () {
 			html = inline(process.cwd(), test, {compress: true});
 			html.should.eql('<script src="baz.js"></script>\n<script>var foo=this;</script>');
 		});
+		it('should allow specification of a custom attribute name', function () {
+			var test = '<script data-inline src="baz.js"></script>\n<script data-inline src="foo.js"></script>';
+			html = inline(process.cwd(), test, {compress: true, attribute: 'data-inline'});
+			html.should.eql('<script src="baz.js"></script>\n<script>var foo=this;</script>');
+		});
 		it('should throw an error when options.swallowErrors is "false"', function () {
 			var test = '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
 			try {
