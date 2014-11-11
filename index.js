@@ -27,14 +27,8 @@ module.exports = function (htmlpath, html, options) {
 			options = {};
 		}
 	}
-	if (options.compress == null) options.compress = true;
-	if (options.swallowErrors == null) options.swallowErrors = true;
-	if (options.attribute == null) options.attribute = 'inline';
-	options.rootpath = options.rootpath
-		? path.resolve(options.rootpath)
-		: process.cwd();
-	options.reInlineSource = new RegExp('^\\s*?(<script.*?\\s' + options.attribute + '.*?[^<]+<\\/script>)', 'gm');
-	options.reInlineHref = new RegExp('^\\s*?(<link.*?\\s' + options.attribute + '[^>]*>)', 'gm');
+
+	options = config(options);
 
 	if (!html) {
 		try {
@@ -57,6 +51,28 @@ module.exports.parse = parse;
 module.exports.inline = inline;
 
 /**
+ * Configure 'options'
+ * @param {Object} options
+ * @returns {Object}
+ */
+function config (options) {
+	if (!options || !options.config) {
+		options = options || {};
+		if (options.compress == null) options.compress = true;
+		if (options.swallowErrors == null) options.swallowErrors = true;
+		if (options.attribute == null) options.attribute = 'inline';
+		options.rootpath = options.rootpath
+			? path.resolve(options.rootpath)
+			: process.cwd();
+		options.reInlineSource = new RegExp('^\\s*?(<script.*?\\s' + options.attribute + '.*?[^<]+<\\/script>)', 'gm');
+		options.reInlineHref = new RegExp('^\\s*?(<link.*?\\s' + options.attribute + '[^>]*>)', 'gm');
+		options.config = true;
+	}
+
+	return options;
+}
+
+/**
  * Parse 'html' for inlineable sources
  * @param {String} htmlpath
  * @param {String} html
@@ -64,6 +80,9 @@ module.exports.inline = inline;
  * @returns {Array}
  */
 function parse (htmlpath, html, options) {
+	// In case this is entry point, configure
+	options = config(options);
+
 	// Remove file name if necessary
 	htmlpath = path.extname(htmlpath).length ? path.dirname(htmlpath) : htmlpath;
 
@@ -121,7 +140,8 @@ function getPath (type, source, htmlpath, rootpath) {
  * @returns {String}
  */
 function inline (sources, html, options) {
-	options = options || {};
+	// In case this is entry point, configure
+	options = config(options);
 
 	var type, content;
 
