@@ -3,8 +3,8 @@ var path = require('path')
 	, uglify = require('uglify-js')
 	, csso = require('csso')
 
-	, RE_SRC = /src=["|'](.+)["|']/
-	, RE_HREF = /href=["|'](.+)["|']/;
+	, RE_SRC = /src=["|'](.+?)["|']/
+	, RE_HREF = /href=["|'](.+?)["|']/;
 
 /**
  * Synchronously parse 'html' for <script> and <link> tags containing an 'inline' attribute,
