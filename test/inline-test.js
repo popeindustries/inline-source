@@ -90,6 +90,11 @@ describe('inline-source', function () {
 			html = inline(path.resolve('index.html'), test, {compress: false});
 			html.should.eql('<script>var foo = this;</script>');
 		});
+		it('should not unescape escaped script tags in inlined content', function () {
+			var test = '<script inline src="scriptTag.js"></script>';
+			html = inline(path.resolve('index.html'), test, {compress: false});
+			html.should.eql("<script>(a='<script>document.domain=\"'+document.domain+'\";\\x3c/script>');</script>");
+		});
 	});
 
 	describe('<link> tag inlining', function () {
