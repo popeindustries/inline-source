@@ -95,6 +95,16 @@ describe('inline-source', function () {
 			html = inline(path.resolve('index.html'), test, {compress: false});
 			html.should.eql("<script>(a='<script>document.domain=\"'+document.domain+'\";\\x3c/script>');</script>");
 		});
+		it('should inline content when options.inlineJS is "true"', function () {
+			var test = '<script inline src="./nested/foo.js"></script>';
+			html = inline(path.resolve('index.html'), test, {inlineJS: true});
+			html.should.eql('<script>var foo=this;</script>');
+		});
+		it('should not inline content when options.inlineJS is "false"', function () {
+			var test = '<script inline src="./nested/foo.js"></script>';
+			html = inline(path.resolve('index.html'), test, {inlineJS: false});
+			html.should.eql('<script src="./nested/foo.js"></script>');
+		});
 	});
 
 	describe('<link> tag inlining', function () {
@@ -137,6 +147,16 @@ describe('inline-source', function () {
 			var test = '<link inline rel="stylesheet" href="bar.css">';
 			html = inline(process.cwd(), test, {compress: true});
 			html.should.eql('<link rel="stylesheet" href="bar.css">');
+		});
+		it('should inline content when options.inlineCSS is "true"', function () {
+			var test = '<link inline rel="stylesheet" href="foo.css">';
+			html = inline(path.resolve('index.html'), test, {inlineCSS: true});
+			html.should.eql('<style>body{background-color:#fff}</style>');
+		});
+		it('should not inline content when options.inlineCSS is "false"', function () {
+			var test = '<link inline rel="stylesheet" href="foo.css">';
+			html = inline(path.resolve('index.html'), test, {inlineCSS: false});
+			html.should.eql('<link rel="stylesheet" href="foo.css">');
 		});
 	});
 });

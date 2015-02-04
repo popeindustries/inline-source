@@ -64,6 +64,8 @@ function config (options) {
 		options.rootpath = options.rootpath
 			? path.resolve(options.rootpath)
 			: process.cwd();
+		if (options.inlineJS == null) options.inlineJS = true;
+		if (options.inlineCSS == null) options.inlineCSS = true;
 		options.reInlineSource = new RegExp('^\\s*?(<script.*?\\s' + options.attribute + '.*?[^<]+<\\/script>)', 'gm');
 		options.reInlineHref = new RegExp('^\\s*?(<link.*?\\s' + options.attribute + '[^>]*>)', 'gm');
 		options.config = true;
@@ -93,7 +95,7 @@ function parse (htmlpath, html, options) {
 		return {
 			context: context,
 			filepath: getPath(type, match[1], htmlpath, options.rootpath),
-			inline: true,
+			inline: (type == 'js') ? options.inlineJS : options.inlineCSS,
 			type: type
 		}
 	}
@@ -143,7 +145,8 @@ function inline (sources, html, options) {
 	// In case this is entry point, configure
 	options = config(options);
 
-	var type, content;
+	var clean = function (source) { return source.context.replace(' ' + options.attribute, ''); }
+		, type, content;
 
 	if (sources.length) {
 		sources.forEach(function (source) {
@@ -161,11 +164,16 @@ function inline (sources, html, options) {
 				} catch (err) {
 					if (!options.swallowErrors) throw err;
 					// Remove 'inline' attribute if error loading content
-					content = source.context.replace(' ' + options.attribute, '');
+					content = clean(source);
 				}
-				// Replace inlined content in html (PR #5)
-				html = html.replace(source.context, function () { return content; });
+			// Disabled via options.inlineXX
+			} else {
+				// Remove 'inline' attribute
+				content = clean(source);
 			}
+
+			// Replace inlined content in html (PR #5)
+			html = html.replace(source.context, function () { return content; });
 		});
 	}
 
