@@ -66,6 +66,7 @@ function config (options) {
 			: process.cwd();
 		if (options.inlineJS == null) options.inlineJS = true;
 		if (options.inlineCSS == null) options.inlineCSS = true;
+		if (options.pretty == null || options.pretty == true && options.compress == true) options.pretty = false;
 		options.reInlineSource = new RegExp('^\\s*?(<script.*?\\s' + options.attribute + '.*?[^<]+<\\/script>)', 'gm');
 		options.reInlineHref = new RegExp('^\\s*?(<link.*?\\s' + options.attribute + '[^>]*>)', 'gm');
 		options.config = true;
@@ -94,9 +95,10 @@ function parse (htmlpath, html, options) {
 	var getSource = function (type, context) {
 		return {
 			context: context,
-			filepath: getPath(type, match[1], htmlpath, options.rootpath),
+			filepath: getPath(type, context, htmlpath, options.rootpath),
 			inline: (type == 'js') ? options.inlineJS : options.inlineCSS,
-			type: type
+			type: type,
+			padding: options.pretty ? getPadding(context, html) : ''
 		}
 	}
 
@@ -135,6 +137,19 @@ function getPath (type, source, htmlpath, rootpath) {
 }
 
 /**
+ * Retrieve leading whitespace for 'source' in 'html'
+ * @param {String} source
+ * @param {String} html
+ * @returns {String}
+ */
+function getPadding (source, html) {
+	var re = new RegExp('^(\\s+)' + escape(source), 'gm')
+		, match = re.exec(html);
+
+	return match ? match[1] : '';
+}
+
+/**
  * Inline 'sources' into 'html'
  * @param {Array} source
  * @param {String} html
@@ -160,7 +175,10 @@ function inline (sources, html, options) {
 						: fs.readFileSync(source.filepath, 'utf8');
 					// Compress if set
 					if (options.compress) content = compressContent(type, content);
-					content = wrapContent(type, content);
+					content = wrapContent(type, content, {
+						padding: source.padding,
+						pretty: options.pretty
+					});
 				} catch (err) {
 					if (!options.swallowErrors) throw err;
 					// Remove 'inline' attribute if error loading content
@@ -184,17 +202,22 @@ function inline (sources, html, options) {
  * Wrap 'content' in appropriate tag based on 'type'
  * @param {String} type
  * @param {String} content
+ * @param {Object} options
  * @returns {String}
  */
-function wrapContent (type, content) {
+function wrapContent (type, content, options) {
 	var tag = (type == 'css')
-				? 'style'
-				: 'script';
+		? 'style'
+		: 'script';
+
+	// Indent lines if 'pretty'
+	content = options.pretty
+		? '\n' + content.replace(/^./gm, options.padding + '$&') + '\n' + options.padding
+		: content;
 
 	return '<' + tag + '>'
 		+ content
 		+ '</' + tag + '>';
-
 }
 
 /**
@@ -212,3 +235,12 @@ function compressContent (type, content) {
 
 	return content;
 }
+
+/**
+ * Escape 'str' for use in RegExp constructor
+ * @param {String} str
+ * @returns {String}
+ */
+ function escape (str) {
+	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
