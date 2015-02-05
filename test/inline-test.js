@@ -105,6 +105,10 @@ describe('inline-source', function () {
 			html = inline(path.resolve('index.html'), test, {inlineJS: false});
 			html.should.eql('<script src="./nested/foo.js"></script>');
 		});
+		it('should preserve whitespace while inlining content when options.pretty is "true"', function () {
+			html = inline(path.resolve('multiline.html'), {pretty: true, compress: false});
+			html.should.eql('<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n  <script>\n  var foo = \'foo\'\n    , bar = \'bar\';\n\n  function baz () {\n    console.log(\'baz\');\n  }\n  </script>\n</head>\n<body>\n\n</body>\n</html>');
+		});
 	});
 
 	describe('<link> tag inlining', function () {
