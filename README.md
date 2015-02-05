@@ -18,6 +18,9 @@ Available `options` include:
 - `swallowErrors`: enable/disable suppression of errors (default `true`)
 - `rootpath`: directory path used for resolving absolute inlineable paths (default `process.cwd()`)
 - `attribute`: attribute used to parse sources (default `inline`)
+- `inlineJS`: enable/disable inlining of `<script>` tags (default `true`)
+- `inlineCSS`: enable/disable inlining of `<link>` tags (default `true`)
+- `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
 
 **NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false`
 
