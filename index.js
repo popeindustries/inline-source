@@ -143,7 +143,7 @@ function getPath (type, source, htmlpath, rootpath) {
  * @returns {String}
  */
 function getPadding (source, html) {
-	var re = new RegExp('^(\\s+)' + escape(source), 'gm')
+	var re = new RegExp('^([\\t ]+)' + escape(source), 'gm')
 		, match = re.exec(html);
 
 	return match ? match[1] : '';
