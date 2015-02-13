@@ -22,7 +22,7 @@ Available `options` include:
 - `inlineCSS`: enable/disable inlining of `<link>` tags (default `true`)
 - `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
 
-**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false`
+**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false` (in which case an `Error` will be thrown).
 
 ```bash
 $ npm install inline-source
