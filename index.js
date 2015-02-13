@@ -160,8 +160,7 @@ function inline (sources, html, options) {
 	// In case this is entry point, configure
 	options = config(options);
 
-	var clean = function (source) { return source.context.replace(' ' + options.attribute, ''); }
-		, type, content;
+	var type, content;
 
 	if (sources.length) {
 		sources.forEach(function (source) {
@@ -182,12 +181,11 @@ function inline (sources, html, options) {
 				} catch (err) {
 					if (!options.swallowErrors) throw err;
 					// Remove 'inline' attribute if error loading content
-					content = clean(source);
+					content = source.context.replace(' ' + options.attribute, '');
 				}
 			// Disabled via options.inlineXX
 			} else {
-				// Remove 'inline' attribute
-				content = clean(source);
+				content = source.context;
 			}
 
 			// Replace inlined content in html (PR #5)

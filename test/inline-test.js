@@ -103,7 +103,7 @@ describe('inline-source', function () {
 		it('should not inline content when options.inlineJS is "false"', function () {
 			var test = '<script inline src="./nested/foo.js"></script>';
 			html = inline(path.resolve('index.html'), test, {inlineJS: false});
-			html.should.eql('<script src="./nested/foo.js"></script>');
+			html.should.eql('<script inline src="./nested/foo.js"></script>');
 		});
 		it('should preserve whitespace while inlining content when options.pretty is "true"', function () {
 			html = inline(path.resolve('multiline.html'), {pretty: true, compress: false});
@@ -160,7 +160,7 @@ describe('inline-source', function () {
 		it('should not inline content when options.inlineCSS is "false"', function () {
 			var test = '<link inline rel="stylesheet" href="foo.css">';
 			html = inline(path.resolve('index.html'), test, {inlineCSS: false});
-			html.should.eql('<link rel="stylesheet" href="foo.css">');
+			html.should.eql('<link inline rel="stylesheet" href="foo.css">');
 		});
 	});
 });
