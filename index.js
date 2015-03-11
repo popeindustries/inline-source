@@ -61,6 +61,7 @@ function config (options) {
 		if (options.compress == null) options.compress = true;
 		if (options.swallowErrors == null) options.swallowErrors = true;
 		if (options.attribute == null) options.attribute = 'inline';
+		if (options.preserveAttributes == null) options.preserveAttributes = false;
 		options.rootpath = options.rootpath
 			? path.resolve(options.rootpath)
 			: process.cwd();
@@ -98,7 +99,8 @@ function parse (htmlpath, html, options) {
 			filepath: getPath(type, context, htmlpath, options.rootpath),
 			inline: (type == 'js') ? options.inlineJS : options.inlineCSS,
 			type: type,
-			padding: options.pretty ? getPadding(context, html) : ''
+			padding: options.pretty ? getPadding(context, html) : '',
+			preservedAttributes: (options.preserveAttributes) ? getPreservedAttributes(context, options) : []
 		}
 	}
 
@@ -176,7 +178,8 @@ function inline (sources, html, options) {
 					if (options.compress) content = compressContent(type, content);
 					content = wrapContent(type, content, {
 						padding: source.padding,
-						pretty: options.pretty
+						pretty: options.pretty,
+						preservedAttributes: source.preservedAttributes
 					});
 				} catch (err) {
 					if (!options.swallowErrors) throw err;
@@ -213,7 +216,12 @@ function wrapContent (type, content, options) {
 		? '\n' + content.replace(/^./gm, options.padding + '$&') + '\n' + options.padding
 		: content;
 
-	return '<' + tag + '>'
+	// pad preserved attributes with a space
+	if (options.preservedAttributes.length > 0) {
+		options.preservedAttributes[0] = ' '+options.preservedAttributes[0];
+	}
+
+	return '<' + tag +  options.preservedAttributes.join(' ') + '>'
 		+ content
 		+ '</' + tag + '>';
 }
@@ -241,4 +249,39 @@ function compressContent (type, content) {
  */
  function escape (str) {
 	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
+/**
+ * Retrieve the attributes for the tag if they are to be preserved
+ * @param {String} source
+ * @returns {Array}
+ */
+ function getPreservedAttributes (source, options) {
+	var tokens, attribute, attributes = [];
+
+	tokens = source.split(' ');
+
+	// remove the first item (its just the tag)
+	tokens = tokens.slice(1);
+
+	for (var i=0; i<tokens.length; i++){
+		attribute = tokens[i].trim();
+
+		// remove the tailing '></script>' and '>'
+		if (attribute.substr(attribute.length - '></script>'.length) === '></script>'){
+			attribute = attribute.substr(0, attribute.length - '></script>'.length);
+		}
+		if (attribute.substr(attribute.length - 1) === '>') {
+			attribute = attribute.substr(0, attribute.length - 1);
+		}
+
+		// omit ignored attributes
+		if      (attribute === options.attribute)    continue;
+		else if (attribute === '')                   continue;
+		else if (attribute.split('=')[0] === 'src')  continue;
+		else if (attribute.split('=')[0] === 'href') continue;
+		else if (attribute.split('=')[0] === 'rel')  continue;
+		attributes.push(attribute);
+	}
+	return attributes;
 };

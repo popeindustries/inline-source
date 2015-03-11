@@ -109,6 +109,11 @@ describe('inline-source', function () {
 			html = inline(path.resolve('multiline.html'), {pretty: true, compress: false});
 			html.should.eql('<!DOCTYPE html>\n<html>\n<head>\n  <title></title>\n  <script>\n  var foo = \'foo\'\n    , bar = \'bar\';\n\n  function baz () {\n    console.log(\'baz\');\n  }\n  </script>\n</head>\n<body>\n\n</body>\n</html>');
 		});
+		it('should preserve attributes when options.preserveAttributes is "true"', function(){
+			var test = '<script inline src="./nested/foo.js" type="x-tmpl-mustache"></script>';
+			html = inline(path.resolve('index.html'), test, {preserveAttributes: true});
+			html.should.eql('<script type="x-tmpl-mustache">var foo=this;</script>');
+		});
 	});
 
 	describe('<link> tag inlining', function () {
