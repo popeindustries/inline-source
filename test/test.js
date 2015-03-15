@@ -3,7 +3,7 @@ var inline = require('..')
 	, fs = require('fs')
 	, should = require('should');
 
-describe('inline-source', function () {
+describe.skip('inline-source', function () {
 	before(function () {
 		process.chdir('./test/fixtures');
 	});
