@@ -1,6 +1,8 @@
 var context = require('./lib/context')
 	, fs = require('fs')
 	, path = require('path')
+	, parse = require('./lib/parse')
+	, run = require('./lib/run')
 	, utils = require('./lib/utils');
 
 /**
@@ -20,38 +22,20 @@ module.exports = function inlineSource (htmlpath, options, fn) {
 				ctx.html = html;
 				parse(ctx, function (err) {
 					if (err) return fn(err);
-					inline(ctx, fn);
+					run(ctx, function (err) {
+						if (err) return fn(err);
+						inline(ctx, fn);
+					});
 				});
 			};
 
 	if (utils.isFilepath(htmlpath)) {
-		ctx.htmlpath = htmlpath;
-		fs.readFile(html, 'utf8', function (err, content) {
+		fs.readFile(htmlpath, 'utf8', function (err, content) {
 			if (err) return fn(err);
 			next(content);
 		});
-	// Already loaded
+	// Passed file content instead of path
 	} else {
 		next(htmlpath);
 	}
-};
-
-/**
- *
- * @param {String} htmlpath
- * @param {Object} options
- * @returns {String}
- */
-module.exports.sync = function inlineSourceSync (htmlpath, options) {
-	var ctx = context.create(options);
-
-	if (utils.isFilepath(htmlpath)) {
-		ctx.htmlpath = htmlpath;
-		ctx.html = fs.readFileSync(htmlpath, 'utf8');
-	} else {
-		ctx.html = htmlpath;
-	}
-
-	parse(ctx);
-	return inline(ctx);
 };
