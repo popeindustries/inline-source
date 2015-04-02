@@ -6,7 +6,7 @@ var fs = require('fs')
 
 	, ctx;
 
-describe.only('parse', function () {
+describe('parse', function () {
 	beforeEach(function () {
 		ctx = {
 			attribute: 'inline',
