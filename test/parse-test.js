@@ -62,4 +62,13 @@ describe('parse', function () {
 			done();
 		});
 	});
+	it('should parse an inline <script>\'s type', function (done) {
+		ctx.html = '<script type="application/json" src="foo.json" inline></script>';
+		parse(ctx, function (err) {
+			should.not.exist(err);
+			ctx.sources.should.have.length(1);
+			ctx.sources[0].should.have.property('type', 'json');
+			done();
+		});
+	});
 });
