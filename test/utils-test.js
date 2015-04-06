@@ -65,16 +65,16 @@ describe('utils', function () {
 
 	describe('getAttributeString()', function () {
 		it('should return stringified attributes', function () {
-			utils.getAttributeString({ foo: 'foo' }, 'inline').should.eql('foo="foo" ');
+			utils.getAttributeString({ foo: 'foo' }, 'inline').should.eql(' foo="foo"');
 		});
 		it('should return stringified boolean attributes', function () {
-			utils.getAttributeString({ foo: true }, 'inline').should.eql('foo ');
+			utils.getAttributeString({ foo: true }, 'inline').should.eql(' foo');
 		});
 		it('should ignore prefixed attributes', function () {
-			utils.getAttributeString({ foo: 'foo', inline: true}, 'inline').should.eql('foo="foo" ');
+			utils.getAttributeString({ foo: 'foo', inline: true}, 'inline').should.eql(' foo="foo"');
 		});
 		it('should ignore blacklisted attributes', function () {
-			utils.getAttributeString({ foo: 'foo', inline: true, src: 'foo.js'}, 'inline').should.eql('foo="foo" ');
+			utils.getAttributeString({ foo: 'foo', inline: true, src: 'foo.js'}, 'inline').should.eql(' foo="foo"');
 		});
 	});
 });

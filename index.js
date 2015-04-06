@@ -24,7 +24,7 @@ module.exports = function inlineSource (htmlpath, options, fn) {
 					if (err) return fn(err);
 					run(ctx, function (err) {
 						if (err) return fn(err);
-						inline(ctx, fn);
+						return fn(null, ctx.html);
 					});
 				});
 			};
