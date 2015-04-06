@@ -14,6 +14,6 @@ describe('context', function () {
 	});
 	it('should allow adding handlers', function () {
 		var ctx = context.create({ handlers: [function (source, next) { next(); } ] })
-		ctx.stack.should.have.length(3);
+		ctx.stack.should.have.length(5);
 	});
 });
