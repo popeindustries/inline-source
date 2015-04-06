@@ -15,7 +15,7 @@ describe('run', function () {
 	});
 
 	it('should return if no sources', function (done) {
-		run(ctx, function (err) {
+		run(ctx.sources, function (err) {
 			should.not.exist(err);
 			done();
 		})
@@ -25,7 +25,7 @@ describe('run', function () {
 		ctx.sources.push({
 			stack: [function (source, next) { idx++; next(); }]
 		});
-		run(ctx, function (err) {
+		run(ctx.sources, function (err) {
 			should.not.exist(err);
 			idx.should.equal(1);
 			done();
@@ -39,7 +39,7 @@ describe('run', function () {
 				function (source, next) { idx++; next(); },
 			]
 		});
-		run(ctx, function (err) {
+		run(ctx.sources, function (err) {
 			should.not.exist(err);
 			idx.should.equal(2);
 			done();
@@ -59,7 +59,7 @@ describe('run', function () {
 				function (source, next) { idx++; next(); },
 			]
 		});
-		run(ctx, function (err) {
+		run(ctx.sources, function (err) {
 			should.not.exist(err);
 			idx.should.equal(4);
 			done();
@@ -73,7 +73,7 @@ describe('run', function () {
 				function (source, next) { idx++; next(); },
 			]
 		});
-		run(ctx, function (err) {
+		run(ctx.sources, function (err) {
 			should.exist(err);
 			idx.should.equal(1);
 			done();
@@ -93,7 +93,7 @@ describe('run', function () {
 				function (source, next) { idx++; next(); },
 			]
 		});
-		run(ctx, function (err) {
+		run(ctx.sources, function (err) {
 			should.exist(err);
 			idx.should.equal(1);
 			done();

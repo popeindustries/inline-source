@@ -22,7 +22,7 @@ module.exports = function inlineSource (htmlpath, options, fn) {
 				ctx.html = html;
 				parse(ctx, function (err) {
 					if (err) return fn(err);
-					run(ctx, function (err) {
+					run(ctx.sources, function (err) {
 						if (err) return fn(err);
 						return fn(null, ctx.html);
 					});
