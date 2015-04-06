@@ -71,4 +71,14 @@ describe('parse', function () {
 			done();
 		});
 	});
+	it('should generate a source object with custom compression setting', function (done) {
+		ctx.compress = false;
+		ctx.html = '<script src="foo.js" inline inline-compress></script>';
+		parse(ctx, function (err) {
+			should.not.exist(err);
+			ctx.sources.should.have.length(1);
+			ctx.sources[0].should.have.property('compress', true);
+			done();
+		});
+	});
 });

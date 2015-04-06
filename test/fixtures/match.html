@@ -2,24 +2,28 @@
 <html>
 <head>
 	<title>match</title>
+	<!-- These match -->
 	<script type="text/javascript" src="foo.js" inline></script>
 	<script src="foo.js" inline></script>
 	<script src="foo.js" inline ></script>
 	<script inline src="foo.js"></script>
-	<link inline href="foo.css">
-	<link inliner href="foo.css">
-	<link href="inline.css">
 	<link rel="stylesheet" type="text/css" inline href="foo.css">
+	<link inline href="foo.css">
 	<link
 		href="foo.css"
 		inline>
+	<!-- These don't match -->
+	<link inliner href="foo.css">
+	<link href="inline.css">
 </head>
 <body>
+	<!-- These match -->
 	<img inline src="foo.jpg" />
 	<script
 		src="foo"
 		inline>
 	</script>
 	<p>this is text with 'inline'</p><script src="foo.js" inline></script>
+	<!-- These don't match -->
 </body>
 </html>
