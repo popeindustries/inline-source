@@ -80,10 +80,17 @@ describe('inline', function () {
 				done();
 			});
 		});
-		it('should allow specification of a custom attribute name', function (done) {
-			var test = '<script data-inline src="bar.js"></script>\n<script data-inline src="foo.js"></script>';
-			inline(test, { compress: true, attribute: 'data-inline' }, function (err, html) {
+		it('should preserve order of multiple inlined items', function (done) {
+			var test = '<script inline src="bar.js"></script>\n<script inline src="foo.js"></script>';
+			inline(test, { compress: true }, function (err, html) {
 				html.should.eql('<script>var bar=this;</script>\n<script>var foo=this;</script>');
+				done();
+			});
+		});
+		it('should allow specification of a custom attribute name', function (done) {
+			var test = '<script data-inline src="bar.js"></script>';
+			inline(test, { compress: true, attribute: 'data-inline' }, function (err, html) {
+				html.should.eql('<script>var bar=this;</script>');
 				done();
 			});
 		});
@@ -128,9 +135,16 @@ describe('inline', function () {
 				done();
 			});
 		});
-		it('should not inline content when options.ignore includes "script"', function (done) {
+		it('should not inline content when options.ignore.tag includes "script"', function (done) {
 			var test = '<script inline src="./nested/foo.js"></script>';
-			inline(test, { compress: true, ignore: ['script'] }, function (err, html) {
+			inline(test, { compress: true, ignore: { tag: ['script'] } }, function (err, html) {
+				html.should.eql('<script inline src="./nested/foo.js"></script>');
+				done();
+			});
+		});
+		it('should not inline content when options.ignore.type includes "js"', function (done) {
+			var test = '<script inline src="./nested/foo.js"></script>';
+			inline(test, { compress: true, ignore: { type: ['js'] } }, function (err, html) {
 				html.should.eql('<script inline src="./nested/foo.js"></script>');
 				done();
 			});
@@ -207,9 +221,16 @@ describe('inline', function () {
 				done();
 			});
 		});
-		it('should not inline content when options.ignore includes "link"', function (done) {
+		it('should not inline content when options.ignore.tag includes "link"', function (done) {
 			var test = '<link inline rel="stylesheet" href="foo.css">';
-			inline(test, { compress: true, ignore: ['link'] }, function (err, html) {
+			inline(test, { compress: true, ignore: { tag: ['link'] } }, function (err, html) {
+				html.should.eql('<link inline rel="stylesheet" href="foo.css">');
+				done();
+			});
+		});
+		it('should not inline content when options.ignore.type includes "css"', function (done) {
+			var test = '<link inline rel="stylesheet" href="foo.css">';
+			inline(test, { compress: true, ignore: { type: ['css'] } }, function (err, html) {
 				html.should.eql('<link inline rel="stylesheet" href="foo.css">');
 				done();
 			});
@@ -231,6 +252,16 @@ describe('inline', function () {
 				next();
 			}}, function (err, html) {
 				html.should.eql('<foo>foo</foo>');
+				done();
+			});
+		});
+		it('should inline sources with overridden js handler', function (done) {
+			var test = '<script src="foo.js" inline></script>'
+			inline(test, {handlers: function (source, next) {
+				if (source.type == 'js') source.content = 'foo';
+				next();
+			}}, function (err, html) {
+				html.should.eql('<script>foo</script>');
 				done();
 			});
 		});

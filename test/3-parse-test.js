@@ -11,7 +11,7 @@ describe('parse', function () {
 		ctx = {
 			attribute: 'inline',
 			html: '',
-			ignore: [],
+			ignore: { tag: [], type: [] },
 			re: utils.getTagRegExp('inline'),
 			rootpath: path.resolve('./test'),
 			sources: []
@@ -82,9 +82,9 @@ describe('parse', function () {
 			done();
 		});
 	});
-	it('should not generate a source object if tag is included in options.ignore', function (done) {
+	it('should not generate a source object if tag is included in options.ignore.tag', function (done) {
 		ctx.html = '<script inline></script>';
-		ctx.ignore = ['script'];
+		ctx.ignore.tag = ['script'];
 		parse(ctx, function (err) {
 			should.not.exist(err);
 			ctx.sources.should.have.length(0);

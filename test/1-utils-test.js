@@ -78,4 +78,22 @@ describe('utils', function () {
 			utils.getAttributeString({ foo: 'foo', inline: true, src: 'foo.js' }, 'inline', true).should.eql(' foo="foo"');
 		});
 	});
+
+	describe('isIgnored()', function () {
+		it('should return "false" for default ignore values', function () {
+			utils.isIgnored({ tag: [], type: [] }, 'foo', 'foo').should.be.false;
+		});
+		it('should return "true" for tag in ignore Array', function () {
+			utils.isIgnored({ tag: ['foo'], type: [] }, 'foo', 'foo').should.be.true;
+		});
+		it('should return "true" for tag as String ignore', function () {
+			utils.isIgnored({ tag: 'foo', type: [] }, 'foo', 'foo').should.be.true;
+		});
+		it('should return "true" for type in ignore Array', function () {
+			utils.isIgnored({ tag: [], type: ['foo'] }, 'foo', 'foo').should.be.true;
+		});
+		it('should return "true" for type as String ignore', function () {
+			utils.isIgnored({ tag: [], type: 'foo' }, 'foo', 'foo').should.be.true;
+		});
+	});
 });
