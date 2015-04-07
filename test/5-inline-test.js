@@ -128,15 +128,12 @@ describe('inline', function () {
 				done();
 			});
 		});
-		it.skip('should inline content when options.inlineJS is "true"', function (done) {
+		it('should not inline content when options.ignore includes "script"', function (done) {
 			var test = '<script inline src="./nested/foo.js"></script>';
-			html = inline(path.resolve('index.html'), test, {inlineJS: true});
-			html.should.eql('<script>var foo=this;</script>');
-		});
-		it.skip('should not inline content when options.inlineJS is "false"', function (done) {
-			var test = '<script inline src="./nested/foo.js"></script>';
-			html = inline(path.resolve('index.html'), test, {inlineJS: false});
-			html.should.eql('<script inline src="./nested/foo.js"></script>');
+			inline(test, { compress: true, ignore: ['script'] }, function (err, html) {
+				html.should.eql('<script inline src="./nested/foo.js"></script>');
+				done();
+			});
 		});
 		it('should preserve whitespace while inlining content when options.pretty is "true"', function (done) {
 			inline(path.resolve('multiline.html'), { pretty: true, compress: false }, function (err, html) {
@@ -204,10 +201,12 @@ describe('inline', function () {
 				done();
 			});
 		});
-		it.skip('should inline content when options.inlineCSS is "true"', function (done) {
+		it('should not inline content when options.ignore includes "link"', function (done) {
 			var test = '<link inline rel="stylesheet" href="foo.css">';
-			html = inline(path.resolve('index.html'), test, {inlineCSS: true});
-			html.should.eql('<style>body{background-color:#fff}</style>');
+			inline(test, { compress: true, ignore: ['link'] }, function (err, html) {
+				html.should.eql('<link inline rel="stylesheet" href="foo.css">');
+				done();
+			});
 		});
 		it.skip('should not inline content when options.inlineCSS is "false"', function (done) {
 			var test = '<link inline rel="stylesheet" href="foo.css">';

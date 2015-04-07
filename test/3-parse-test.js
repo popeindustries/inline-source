@@ -11,6 +11,7 @@ describe('parse', function () {
 		ctx = {
 			attribute: 'inline',
 			html: '',
+			ignore: [],
 			re: utils.getTagRegExp('inline'),
 			rootpath: path.resolve('./test'),
 			sources: []
@@ -78,6 +79,15 @@ describe('parse', function () {
 			should.not.exist(err);
 			ctx.sources.should.have.length(1);
 			ctx.sources[0].should.have.property('compress', true);
+			done();
+		});
+	});
+	it('should not generate a source object if tag is included in options.ignore', function (done) {
+		ctx.html = '<script inline></script>';
+		ctx.ignore = ['script'];
+		parse(ctx, function (err) {
+			should.not.exist(err);
+			ctx.sources.should.have.length(0);
 			done();
 		});
 	});
