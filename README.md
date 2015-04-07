@@ -3,26 +3,24 @@
 
 # inline-source
 
-Inline and compress all `<script>` or `<link>` tags that contain the `inline` attribute.
+Inline and compress all tags (`<script>`, `<link>`, or anything other tag you'd like) that contain the `inline` attribute.
 
-**Note:** Resources are loaded *synchronously*, so these operations are best done during a build or template precompile step, and not per server request.
+## 1.x to 2.x migration
 
 ## Usage
 
-**inline(htmlpath, [html], [options])**: synchronously parse `html` content for `<script>` and `<link>` tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
+**inline(htmlpath, [options], callback(err, html))**: asynchronously parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
 
-If `html` content is omitted, content will be loaded from `htmlpath`.
+`htmlpath` can be either a filepath *or* a string of html content.
 
 Available `options` include:
-- `compress`: enable/disable compression of inlined content (default `true`)
-- `swallowErrors`: enable/disable suppression of errors (default `true`)
-- `rootpath`: directory path used for resolving absolute inlineable paths (default `process.cwd()`)
 - `attribute`: attribute used to parse sources (default `inline`)
-- `inlineJS`: enable/disable inlining of `<script>` tags (default `true`)
-- `inlineCSS`: enable/disable inlining of `<link>` tags (default `true`)
+- `compress`: enable/disable compression of inlined content (default `true`)
+- `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
+- `ignore`: disable inlining based on `tag` and/or `type` (default `{ tag: [], type: [] }`)
 - `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
-
-**NOTE:** If an error is encoutered when inlining a tag, the `inline` attribute will be removed and the remaining tag contents will be left untouched *unless* `options.swallowErrors = false` (in which case an `Error` will be thrown).
+- `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
+- `swallowErrors`: enable/disable suppression of errors (default `false`)
 
 ```bash
 $ npm install inline-source
@@ -32,12 +30,10 @@ $ npm install inline-source
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- inline project/www/css/inlineStyle.css -->
+  <link inline href="css/inlineStyle.css">
   <!-- inline project/src/js/inlineScript.js -->
-  <script inline src="../js/inlineScript.js"></script>
-  <!-- inline project/www/js/inlineScript.js -->
-  <script inline src="/js/inlineScript.js"></script>
-  <!-- inline project/src/css/inlineStyle.css -->
-  <link inline rel="../css/inlineStyle.css"></link>
+  <script inline src="../src/js/inlineScript.js"></script>
 </head>
 </html>
 ```
@@ -47,9 +43,16 @@ var inline = require('inline-source')
   , path = require('path')
   , htmlpath = path.resolve('project/src/html/index.html');
 
-var html = inline(htmlpath, {
+inline(htmlpath, {
   compress: true,
-  swallowErrors: false,
   rootpath: path.resolve('www')
+}, function (err, html) {
+  // Do something with html
 });
 ```
+
+### Custom Handlers
+
+### Props
+
+## Examples
