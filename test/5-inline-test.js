@@ -8,10 +8,11 @@ describe('inline', function () {
 		process.chdir('./test/fixtures');
 	});
 	describe('<script> tag inlining', function () {
-		it.skip('should ignore commented sources', function () {
+		it('should ignore commented sources', function () {
 			var test = '<!-- <script inline src="foo.js"></script> -->';
-			html = inline(process.cwd(), test);
-			html.should.eql(test);
+			inline(test, function (err, html) {
+				html.should.eql(test);
+			});
 		});
 		it('should ignore sources that don\'t contain an "inline" attribute', function () {
 			var test = '<script src="foo.js"></script>'
@@ -131,10 +132,11 @@ describe('inline', function () {
 	});
 
 	describe('<link> tag inlining', function () {
-		it.skip('should ignore commented sources', function () {
+		it('should ignore commented sources', function () {
 			var test = '<!-- <link inline rel="stylesheet" href="foo.css"> -->';
-			html = inline(process.cwd(), test, {compress: true});
-			html.should.eql(test);
+			inline(test, { compress: true }, function (err, html) {
+				html.should.eql(test);
+			});
 		});
 		it('should ignore sources that don\'t contain an "inline" attribute', function () {
 			var test = '<link rel="stylesheet" href="foo.js">';
