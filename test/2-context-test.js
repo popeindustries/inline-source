@@ -6,7 +6,7 @@ describe('context', function () {
 		ctx.should.have.property('attribute', 'inline');
 		ctx.should.have.property('compress', true);
 		ctx.should.have.property('pretty', false);
-		ctx.should.have.property('swallowErrors', true);
+		ctx.should.have.property('swallowErrors', false);
 	});
 	it('should allow overriding defaults with "options"', function () {
 		var ctx = context.create({ compress: false })

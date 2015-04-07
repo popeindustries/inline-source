@@ -39,6 +39,7 @@ describe('utils', function () {
 		});
 		it('should return "false" for a single line html string', function () {
 			utils.isFilepath('<html></html>').should.be.false;
+			utils.isFilepath('<link rel="stylesheet" href="foo.css" inline>').should.be.false;
 		});
 		it('should return "false" for a multiline html string', function () {
 			utils.isFilepath('<html>\n</html>').should.be.false;
@@ -65,16 +66,16 @@ describe('utils', function () {
 
 	describe('getAttributeString()', function () {
 		it('should return stringified attributes', function () {
-			utils.getAttributeString({ foo: 'foo' }, 'inline').should.eql(' foo="foo"');
+			utils.getAttributeString({ foo: 'foo' }, 'inline', true).should.eql(' foo="foo"');
 		});
 		it('should return stringified boolean attributes', function () {
-			utils.getAttributeString({ foo: true }, 'inline').should.eql(' foo');
+			utils.getAttributeString({ foo: true }, 'inline', true).should.eql(' foo');
 		});
 		it('should ignore prefixed attributes', function () {
-			utils.getAttributeString({ foo: 'foo', inline: true}, 'inline').should.eql(' foo="foo"');
+			utils.getAttributeString({ foo: 'foo', inline: true }, 'inline', true).should.eql(' foo="foo"');
 		});
 		it('should ignore blacklisted attributes', function () {
-			utils.getAttributeString({ foo: 'foo', inline: true, src: 'foo.js'}, 'inline').should.eql(' foo="foo"');
+			utils.getAttributeString({ foo: 'foo', inline: true, src: 'foo.js' }, 'inline', true).should.eql(' foo="foo"');
 		});
 	});
 });
