@@ -23,10 +23,7 @@ module.exports = function inlineSource (htmlpath, options, fn) {
 				parse(ctx, function (err) {
 					if (err) return fn(err);
 					if (ctx.sources.length) {
-						run(ctx.sources, ctx.swallowErrors, function (err) {
-							if (err) return fn(err);
-							return fn(null, ctx.html);
-						});
+						run(ctx.html, ctx.sources, ctx.swallowErrors, fn);
 					} else {
 						return fn(null, ctx.html);
 					}
