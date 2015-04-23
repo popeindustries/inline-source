@@ -31,7 +31,8 @@ module.exports = function inlineSource (htmlpath, options, fn) {
 			};
 
 	if (utils.isFilepath(htmlpath)) {
-		fs.readFile(htmlpath, 'utf8', function (err, content) {
+		context.htmlpath = path.resolve(htmlpath);
+		fs.readFile(context.htmlpath, 'utf8', function (err, content) {
 			if (err) return fn(err);
 			next(content);
 		});
