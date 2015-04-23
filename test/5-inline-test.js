@@ -268,7 +268,7 @@ describe('inline', function () {
 		it('should inline sources with custom handler and special props', function (done) {
 			var test = '<script type="application/json" src="foo.json" inline inline-var="window.foo"></script>'
 			inline(test, { handlers: function (source, next) {
-				if (source.type == 'json') source.content = source.props['var'] + ' = ' + source.filecontent;
+				if (source.type == 'json') source.content = source.props['var'] + ' = ' + source.fileContent;
 				next();
 			} }, function (err, html) {
 				html.should.eql('<script type="application/json">window.foo = {\n  "foo": "foo"\n}</script>');
