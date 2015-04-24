@@ -18,9 +18,9 @@ describe('run', function () {
 		var idx = 0;
 		ctx.sources.push({
 			parentContext: ctx,
-			stack: [function (source, next) { idx++; next(); }]
+			stack: [function (source, context, next) { idx++; next(); }]
 		});
-		run(ctx.html, ctx.sources, false, function (err) {
+		run(ctx, ctx.sources, false, function (err) {
 			should.not.exist(err);
 			idx.should.equal(1);
 			done();
@@ -31,11 +31,11 @@ describe('run', function () {
 		ctx.sources.push({
 			parentContext: ctx,
 			stack: [
-				function (source, next) { idx++; next(); },
-				function (source, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(); },
 			]
 		});
-		run(ctx.html, ctx.sources, false, function (err) {
+		run(ctx, ctx.sources, false, function (err) {
 			should.not.exist(err);
 			idx.should.equal(2);
 			done();
@@ -46,18 +46,18 @@ describe('run', function () {
 		ctx.sources.push({
 			parentContext: ctx,
 			stack: [
-				function (source, next) { idx++; next(); },
-				function (source, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(); },
 			]
 		},
 		{
 			parentContext: ctx,
 			stack: [
-				function (source, next) { idx++; next(); },
-				function (source, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(); },
 			]
 		});
-		run(ctx.html, ctx.sources, false, function (err) {
+		run(ctx, ctx.sources, false, function (err) {
 			should.not.exist(err);
 			idx.should.equal(4);
 			done();
@@ -68,11 +68,11 @@ describe('run', function () {
 		ctx.sources.push({
 			parentContext: ctx,
 			stack: [
-				function (source, next) { idx++; next(new Error('oops')); },
-				function (source, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(new Error('oops')); },
+				function (source, context, next) { idx++; next(); },
 			]
 		});
-		run(ctx.html, ctx.sources, false, function (err) {
+		run(ctx, ctx.sources, false, function (err) {
 			should.exist(err);
 			idx.should.equal(1);
 			done();
@@ -83,18 +83,18 @@ describe('run', function () {
 		ctx.sources.push({
 			parentContext: ctx,
 			stack: [
-				function (source, next) { idx++; next(new Error('oops')); },
-				function (source, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(new Error('oops')); },
+				function (source, context, next) { idx++; next(); },
 			]
 		},
 		{
 			parentContext: ctx,
 			stack: [
-				function (source, next) { idx++; next(new Error('oops')); },
-				function (source, next) { idx++; next(); },
+				function (source, context, next) { idx++; next(new Error('oops')); },
+				function (source, context, next) { idx++; next(); },
 			]
 		});
-		run(ctx.html, ctx.sources, false, function (err) {
+		run(ctx, ctx.sources, false, function (err) {
 			should.exist(err);
 			idx.should.equal(1);
 			done();

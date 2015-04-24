@@ -247,7 +247,7 @@ describe('inline', function () {
 		});
 		it('should inline sources for custom tags and custom handler', function (done) {
 			var test = '<foo inline></foo>'
-			inline(test, {handlers: function (source, next) {
+			inline(test, {handlers: function (source, context, next) {
 				if (source.tag == 'foo') source.content = 'foo';
 				next();
 			}}, function (err, html) {
@@ -257,7 +257,7 @@ describe('inline', function () {
 		});
 		it('should inline sources with overridden js handler', function (done) {
 			var test = '<script src="foo.js" inline></script>'
-			inline(test, {handlers: function (source, next) {
+			inline(test, {handlers: function (source, context, next) {
 				if (source.type == 'js') source.content = 'foo';
 				next();
 			}}, function (err, html) {
@@ -267,7 +267,7 @@ describe('inline', function () {
 		});
 		it('should inline sources with custom handler and special props', function (done) {
 			var test = '<script type="application/json" src="foo.json" inline inline-var="window.foo"></script>'
-			inline(test, { handlers: function (source, next) {
+			inline(test, { handlers: function (source, context, next) {
 				if (source.type == 'json') source.content = source.props['var'] + ' = ' + source.fileContent;
 				next();
 			} }, function (err, html) {
