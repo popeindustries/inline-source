@@ -161,6 +161,13 @@ describe('inline', function () {
 				done();
 			});
 		});
+		it('should escape closing <script> tags in content', function (done) {
+			var test = '<script src="scriptTag.js" inline></script>';
+			inline(test, { compress: false }, function (err, html) {
+				html.should.eql("<script>(a='<script>document.domain=\"'+document.domain+'\";\x3c/script>');</script>");
+				done();
+			});
+		});
 	});
 
 	describe('<link>', function () {
