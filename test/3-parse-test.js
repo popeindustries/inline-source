@@ -50,7 +50,17 @@ describe('parse', function () {
 		ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
 		parse(ctx, function (err) {
 			should.not.exist(err);
-			ctx.sources.should.have.length(10);
+			ctx.sources.should.have.length(11);
+			done();
+		});
+	});
+	it('should generate a source object for a matching inline <link> tag inside an ie conditional comment', function (done) {
+		ctx.html = '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
+		parse(ctx, function (err) {
+			should.not.exist(err);
+			ctx.sources.should.have.length(1);
+			ctx.sources[0].should.have.property('tag', 'link');
+			ctx.sources[0].should.have.property('type', 'css');
 			done();
 		});
 	});
