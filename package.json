@@ -16,12 +16,14 @@
     "uglify-js": "2.4.20"
   },
   "devDependencies": {
+    "eslint": "*",
     "should": "3.3.2",
     "mocha": "*"
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec --require should"
+    "test": "mocha --reporter spec --require should",
+    "lint": "eslint lib test"
   },
   "engines": {
     "node": ">=0.10"
