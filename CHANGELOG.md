@@ -1,5 +1,9 @@
 # Changelog
 
+**3.0.0** - May 17, 2015
+* add sync api
+* update uglify-js dependency
+
 **2.1.0** - May 2, 2015
 * allow tags in conditional comments to be parsed
 * update lodash dependency
