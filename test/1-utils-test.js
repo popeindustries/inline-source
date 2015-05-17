@@ -1,5 +1,6 @@
-var path = require('path')
-	, utils = require('../lib/utils');
+'use strict';
+
+var utils = require('../lib/utils');
 
 describe('utils', function () {
 	describe('isFilepath()', function () {
