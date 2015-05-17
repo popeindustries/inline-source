@@ -49,6 +49,20 @@ inline(htmlpath, {
 });
 ```
 
+**inline.sync(htmlpath, [options])**: same as `inline`, but synchronously returns string of html content.
+
+```javascript
+var inline = require('inline-source').sync
+  , fs = require('fs')
+  , path = require('path')
+  , htmlpath = path.resolve('project/src/html/index.html');
+
+var html = inline(htmlpath, {
+  compress: true,
+  rootpath: path.resolve('www')
+});
+```
+
 ### Custom Handlers
 
 Custom handlers are simple middleware-type functions that enable you to provide new, or override existing, inlining behaviour. All handlers have the following signature: `function handler (source, context, next) {}`
