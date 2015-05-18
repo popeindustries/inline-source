@@ -1,5 +1,9 @@
 # Changelog
 
+**4.0.0** - May 18, 2015
+* simplify `ignore` option to accept string or array of tags/types/format
+* add support for inlining images (base64) and svg (inline `<svg>` or base64 via `options.svgAsImage`)
+
 **3.0.0** - May 17, 2015
 * add sync api
 * update uglify-js dependency
