@@ -3,7 +3,7 @@
 
 # inline-source
 
-Inline and compress all tags (`<script>`, `<link>`, or any other tag you'd like) that contain the `inline` attribute.
+Inline and compress tags that contain the `inline` attribute. Supports `<script>`, `<link>`, and `<img>` (including `*.svg` sources) tags by default, and is easily extensible to handle others.
 
 ## Usage
 
