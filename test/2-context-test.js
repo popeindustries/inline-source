@@ -22,6 +22,6 @@ describe('context', function () {
 				}
 			]
 		});
-		ctx.stack.should.have.length(6);
+		ctx.stack.should.have.length(7);
 	});
 });

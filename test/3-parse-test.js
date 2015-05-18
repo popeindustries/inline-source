@@ -52,14 +52,14 @@ describe('parse', function () {
 		ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
 		parse(ctx, function (err) {
 			should.not.exist(err);
-			ctx.sources.should.have.length(11);
+			ctx.sources.should.have.length(12);
 			done();
 		});
 	});
 	it('should synchronously generate source objects for all tags with "inline" attribute', function () {
 		ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
 		parse(ctx);
-		ctx.sources.should.have.length(11);
+		ctx.sources.should.have.length(12);
 	});
 	it('should generate a source object for a matching inline <link> tag inside an ie conditional comment', function (done) {
 		ctx.html = '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
