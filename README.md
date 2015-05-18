@@ -15,10 +15,11 @@ Available `options` include:
 - `attribute`: attribute used to parse sources (default `inline`)
 - `compress`: enable/disable compression of inlined content (default `true`)
 - `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
-- `ignore`: disable inlining based on `tag` and/or `type` (default `{ tag: [], type: [] }`)
+- `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
 - `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
 - `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
 - `swallowErrors`: enable/disable suppression of errors (default `false`)
+- `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
 
 ```bash
 $ npm install inline-source
@@ -28,10 +29,14 @@ $ npm install inline-source
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- inline project/www/css/inlineStyle.css -->
+  <!-- inline project/www/css/inlineStyle.css as <style> -->
   <link inline href="css/inlineStyle.css">
-  <!-- inline project/src/js/inlineScript.js -->
+  <!-- inline project/src/js/inlineScript.js as <script> -->
   <script inline src="../js/inlineScript.js"></script>
+  <!-- inline project/www/images/inlineImage.png as base64 <img> -->
+  <img inline src="images/inlineImage.png" />
+  <!-- inline project/www/images/inlineImage.svg as <svg> -->
+  <img inline src="images/inlineImage.svg" />
 </head>
 </html>
 ```
@@ -43,7 +48,9 @@ var inline = require('inline-source')
 
 inline(htmlpath, {
   compress: true,
-  rootpath: path.resolve('www')
+  rootpath: path.resolve('www'),
+  // Skip all css types and png formats
+  ignore: ['css', 'png']
 }, function (err, html) {
   // Do something with html
 });
@@ -59,7 +66,9 @@ var inline = require('inline-source').sync
 
 var html = inline(htmlpath, {
   compress: true,
-  rootpath: path.resolve('www')
+  rootpath: path.resolve('www'),
+  // Skip all script tags
+  ignore: 'script'
 });
 ```
 
@@ -71,15 +80,17 @@ Custom handlers are simple middleware-type functions that enable you to provide 
   - `attributes`: the parsed tag attributes object
   - `compress`: the compress flag (may be overriden at the tag level via [props](#props))
   - `content`: the processed `fileContent` string
+  - `extension`: the file extension
   - `fileContent`: the loaded file content string
   - `filepath`: the fully qualified path string
+  - `format`: the format string (`jpg`, `gif`, `svg+xml`, etc)
   - `match`: the matched html tag string, including closing tag if appropriate
   - `props`: the parsed namespaced attributes object (see [props](#props))
   - `replace`: the tag wrapped `content` string to replace `match`
   - `tag`: the tag string (`script`, `link`, etc)
   - `type`: the content type based on `type` mime-type attribute, or `tag` (`js` for `application/javascript`, `css` for `text/css`, etc)
 
-- `context`: the global context object storing all configuration options (`attribute`, `compress`, `ignore`, `pretty`, `rootpath`, `swallowErrors`), in addtion to:
+- `context`: the global context object storing all configuration options (`attribute`, `compress`, `ignore`, `pretty`, `rootpath`, `swallowErrors`, `svgAsImage`), in addtion to:
   - `html`: the html file's content string
   - `htmlpath`: the html file's path string
   - `sources`: the array of `source` objects
