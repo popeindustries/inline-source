@@ -369,6 +369,14 @@ describe('inline', function () {
 					done();
 				});
 			});
+			it('should not inline content when options.ignore includes "svg"', function (done) {
+				var test = '<img inline src="foo.svg" />';
+				inline(test, { compress: true, ignore: ['svg'] }, function (err, html) {
+					should.not.exist(err);
+					html.should.eql('<img inline src="foo.svg" />');
+					done();
+				});
+			});
 			it('should inline png sources that contain an "inline" attribute', function (done) {
 				var test = '<img inline src="foo.png" />';
 				inline(test, { compress: true }, function (err, html) {
