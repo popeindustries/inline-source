@@ -101,7 +101,7 @@ describe('parse', function () {
 	});
 	it('should not generate a source object if tag is included in options.ignore.tag', function (done) {
 		ctx.html = '<script inline></script>';
-		ctx.ignore.tag = ['script'];
+		ctx.ignore = ['script'];
 		parse(ctx, function (err) {
 			should.not.exist(err);
 			ctx.sources.should.have.length(0);
