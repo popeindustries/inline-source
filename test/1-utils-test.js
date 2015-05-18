@@ -82,7 +82,7 @@ describe('utils', function () {
 
 	describe('isIgnored()', function () {
 		it('should return "false" for default ignore values', function () {
-			utils.isIgnored('', 'foo', 'foo').should.be.false;
+			utils.isIgnored([], 'foo', 'foo').should.be.false;
 		});
 		it('should return "true" for tag in ignore Array', function () {
 			utils.isIgnored(['foo'], 'foo', 'bar').should.be.true;
