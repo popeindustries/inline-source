@@ -68,6 +68,14 @@ describe('inline', function () {
 					done();
 				});
 			});
+			it('should inline sources that contain an "inline" attribute at the end of the <script> tag and the file name contains number', function (done) {
+				var test = '<script src="foo01.js" inline></script>';	
+				inline(test, { compress: true }, function (err, html) {
+					should.not.exist(err);
+					html.should.eql('<script>var foo=this;console.log(foo);</script>');
+					done();
+				});
+			});
 			it('should inline sources that contain an "inline" attribute at the end of the <script> tag surrounded by whitespace', function (done) {
 				var test = '<script src="foo.js" inline ></script>';
 				inline(test, { compress: true }, function (err, html) {
