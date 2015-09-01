@@ -419,9 +419,17 @@ describe('inline', function () {
 			});
 			it('should inline svg sources as base64 if options.svgAsImage="true"', function (done) {
 				var test = '<img inline src="foo.svg" />';
-				inline(test, { svgAsImage: true }, function (err, html) {
+				inline(test, { svgAsImage: true, compress: true }, function (err, html) {
 					should.not.exist(err);
-					html.should.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+					html.should.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
+					done();
+				});
+			});
+			it('should inline svg sources as base64 if svgAsImage="true"', function (done) {
+				var test = '<img inline inline-svgAsImage src="foo.svg" />';
+				inline(test, { compress: true }, function (err, html) {
+					should.not.exist(err);
+					html.should.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
 					done();
 				});
 			});
@@ -455,8 +463,13 @@ describe('inline', function () {
 			});
 			it('should inline svg sources as base64 if options.svgAsImage="true"', function () {
 				var test = '<img inline src="foo.svg" />';
-				var html = inlineSync(test, { svgAsImage: true });
-				html.should.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+				var html = inlineSync(test, { svgAsImage: true, compress: true });
+				html.should.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
+			});
+			it('should inline svg sources as base64 if svgAsImage="true"', function () {
+				var test = '<img inline inline-svgAsImage src="foo.svg" />';
+				var html = inlineSync(test, { compress: true });
+				html.should.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
 			});
 		});
 	});
