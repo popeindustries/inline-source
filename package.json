@@ -18,12 +18,12 @@
   },
   "devDependencies": {
     "eslint": "*",
-    "should": "3.3.2",
+    "expect.js": "*",
     "mocha": "*"
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec --require should",
+    "test": "mocha --reporter spec",
     "lint": "eslint lib test"
   },
   "engines": {

@@ -1,18 +1,19 @@
 'use strict';
 
-var context = require('../lib/context');
+var expect = require('expect.js')
+	, context = require('../lib/context');
 
 describe('context', function () {
 	it('should return a default context', function () {
 		var ctx = context.create();
-		ctx.should.have.property('attribute', 'inline');
-		ctx.should.have.property('compress', true);
-		ctx.should.have.property('pretty', false);
-		ctx.should.have.property('swallowErrors', false);
+		expect(ctx).to.have.property('attribute', 'inline');
+		expect(ctx).to.have.property('compress', true);
+		expect(ctx).to.have.property('pretty', false);
+		expect(ctx).to.have.property('swallowErrors', false);
 	});
 	it('should allow overriding defaults with "options"', function () {
 		var ctx = context.create({ compress: false });
-		ctx.should.have.property('compress', false);
+		expect(ctx).to.have.property('compress', false);
 	});
 	it('should allow adding handlers', function () {
 		var ctx = context.create({
@@ -22,6 +23,6 @@ describe('context', function () {
 				}
 			]
 		});
-		ctx.stack.should.have.length(7);
+		expect(ctx.stack).to.have.length(7);
 	});
 });

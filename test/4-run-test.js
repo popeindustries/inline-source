@@ -1,8 +1,8 @@
 'use strict';
 
-var path = require('path')
+var expect = require('expect.js')
+	, path = require('path')
 	, run = require('../lib/run')
-	, should = require('should')
 
 	, ctx;
 
@@ -28,8 +28,8 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false, function (err) {
-			should.not.exist(err);
-			idx.should.equal(1);
+			expect(err).to.be(null);
+			expect(idx).to.equal(1);
 			done();
 		});
 	});
@@ -44,7 +44,7 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false);
-		idx.should.equal(1);
+		expect(idx).to.equal(1);
 	});
 	it('should process a complex stack', function (done) {
 		var idx = 0;
@@ -62,8 +62,8 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false, function (err) {
-			should.not.exist(err);
-			idx.should.equal(2);
+			expect(err).to.be(null);
+			expect(idx).to.equal(2);
 			done();
 		});
 	});
@@ -81,7 +81,7 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false);
-		idx.should.equal(2);
+		expect(idx).to.equal(2);
 	});
 	it('should process multiple sources in parallel', function (done) {
 		var idx = 0;
@@ -112,8 +112,8 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false, function (err) {
-			should.not.exist(err);
-			idx.should.equal(4);
+			expect(err).to.be(null);
+			expect(idx).to.equal(4);
 			done();
 		});
 	});
@@ -142,7 +142,7 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false);
-		idx.should.equal(4);
+		expect(idx).to.equal(4);
 	});
 	it('should handle errors', function (done) {
 		var idx = 0;
@@ -159,8 +159,8 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false, function (err) {
-			should.exist(err);
-			idx.should.equal(1);
+			expect(err).to.be.an(Error);
+			expect(idx).to.equal(1);
 			done();
 		});
 	});
@@ -181,8 +181,8 @@ describe('run', function () {
 		try {
 			run(ctx, ctx.sources, false);
 		} catch (err) {
-			should.exist(err);
-			idx.should.equal(1);
+			expect(err).to.be.an(Error);
+			expect(idx).to.equal(1);
 		}
 	});
 	it('should handle multiple errors', function (done) {
@@ -214,8 +214,8 @@ describe('run', function () {
 			]
 		});
 		run(ctx, ctx.sources, false, function (err) {
-			should.exist(err);
-			idx.should.equal(1);
+			expect(err).to.be.an(Error);
+			expect(idx).to.equal(1);
 			done();
 		});
 	});
