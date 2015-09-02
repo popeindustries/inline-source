@@ -1,5 +1,8 @@
 # Changelog
 
+**4.1.1** - Sept 2, 2015
+* update dependencies
+
 **4.1.0** - Sept 2, 2015
 * correctly set attributes when inlining svg
 * add support for setting `svgAsImage` via attribute (`inline-svgAsImage`, for example)
