@@ -1,5 +1,9 @@
 # Changelog
 
+**4.1.0** - Sept 2, 2015
+* correctly set attributes when inlining svg
+* add support for setting `svgAsImage` via attribute (`inline-svgAsImage`, for example)
+
 **4.0.0** - May 18, 2015
 * simplify `ignore` option to accept string or array of tags/types/format
 * add support for inlining images (base64) and svg (inline `<svg>` or base64 via `options.svgAsImage`)
