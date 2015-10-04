@@ -397,7 +397,7 @@ describe('inline', function () {
 				var test = '<img inline src="foo.svg" />';
 				inline(test, { compress: false }, function (err, html) {
 					expect(err).to.be(null)
-					expect(html).to.eql('<svg x=\"0\" y=\"0\" viewbox=\"0 0 100 100\">\n<circle cx=\"50\" cy=\"50\" r=\"25\"/>\n</svg>');
+					expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" version="1.1" enable-background="new 0 0 100 100" xml:space="preserve">\n<circle cx="50" cy="50" r="25"/>\n</svg>');
 					done();
 				});
 			});
@@ -405,7 +405,7 @@ describe('inline', function () {
 				var test = '<img id="foo" class="foo bar" inline src="foo.svg" />';
 				inline(test, { compress: false }, function (err, html) {
 					expect(err).to.be(null)
-					expect(html).to.eql('<svg id=\"foo\" class=\"foo bar\" x=\"0\" y=\"0\" viewbox=\"0 0 100 100\">\n<circle cx=\"50\" cy=\"50\" r=\"25\"/>\n</svg>');
+					expect(html).to.eql('<svg id="foo" class="foo bar" x="100px" y="100px" viewBox="0 0 200 200" version="1.1" enable-background="new 0 0 100 100" xml:space="preserve">\n<circle cx="50" cy="50" r="25"/>\n</svg>');
 					done();
 				});
 			});
@@ -413,7 +413,7 @@ describe('inline', function () {
 				var test = '<img inline src="foo.svg" />';
 				inline(test, { compress: true }, function (err, html) {
 					expect(err).to.be(null)
-					expect(html).to.eql('<svg x=\"0\" y=\"0\" viewbox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"25\"/></svg>');
+					expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" version="1.1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
 					done();
 				});
 			});
@@ -421,7 +421,7 @@ describe('inline', function () {
 				var test = '<img inline src="foo.svg" />';
 				inline(test, { svgAsImage: true, compress: true }, function (err, html) {
 					expect(err).to.be(null)
-					expect(html).to.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
+					expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
 					done();
 				});
 			});
@@ -429,7 +429,7 @@ describe('inline', function () {
 				var test = '<img inline inline-svgAsImage src="foo.svg" />';
 				inline(test, { compress: true }, function (err, html) {
 					expect(err).to.be(null)
-					expect(html).to.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
+					expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
 					done();
 				});
 			});
@@ -449,27 +449,27 @@ describe('inline', function () {
 			it('should inline svg sources that contain an "inline" attribute', function () {
 				var test = '<img inline src="foo.svg" />';
 				var html = inlineSync(test, { compress: false });
-				expect(html).to.eql('<svg x=\"0\" y=\"0\" viewbox=\"0 0 100 100\">\n<circle cx=\"50\" cy=\"50\" r=\"25\"/>\n</svg>');
+				expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" version="1.1" enable-background="new 0 0 100 100" xml:space="preserve">\n<circle cx="50" cy="50" r="25"/>\n</svg>');
 			});
 			it('should inline svg sources that contain an "inline" attribute, preserving other attributes', function () {
 				var test = '<img id="foo" class="foo bar" inline src="foo.svg" />';
 				var html = inlineSync(test, { compress: false });
-				expect(html).to.eql('<svg id=\"foo\" class=\"foo bar\" x=\"0\" y=\"0\" viewbox=\"0 0 100 100\">\n<circle cx=\"50\" cy=\"50\" r=\"25\"/>\n</svg>');
+				expect(html).to.eql('<svg id="foo" class="foo bar" x="100px" y="100px" viewBox="0 0 200 200" version="1.1" enable-background="new 0 0 100 100" xml:space="preserve">\n<circle cx="50" cy="50" r="25"/>\n</svg>');
 			});
 			it('should inline compressed svg sources with options.compressed="true"', function () {
 				var test = '<img inline src="foo.svg" />';
 				var html = inlineSync(test, { compress: true });
-				expect(html).to.eql('<svg x=\"0\" y=\"0\" viewbox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"25\"/></svg>');
+				expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" version="1.1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
 			});
 			it('should inline svg sources as base64 if options.svgAsImage="true"', function () {
 				var test = '<img inline src="foo.svg" />';
 				var html = inlineSync(test, { svgAsImage: true, compress: true });
-				expect(html).to.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
+				expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
 			});
 			it('should inline svg sources as base64 if svgAsImage="true"', function () {
 				var test = '<img inline inline-svgAsImage src="foo.svg" />';
 				var html = inlineSync(test, { compress: true });
-				expect(html).to.eql('<img src=\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E\" />');
+				expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
 			});
 		});
 	});
