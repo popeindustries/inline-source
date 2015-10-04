@@ -1,5 +1,9 @@
 # Changelog
 
+**4.2.0** - Oct 4, 2015
+* fix handling of svg attributes
+* add support for inlining svg with `<object>` tag
+
 **4.1.1** - Sept 2, 2015
 * update dependencies
 
