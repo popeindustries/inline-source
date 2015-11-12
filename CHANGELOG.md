@@ -1,5 +1,9 @@
 # Changelog
 
+**4.2.1** - Nov 12, 2015
+* fix inlining of svg images when `<svg>` contains a line break (looking at you Illustrator!)
+* update dependencies
+
 **4.2.0** - Oct 4, 2015
 * fix handling of svg attributes
 * add support for inlining svg with `<object>` tag
