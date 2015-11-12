@@ -401,6 +401,14 @@ describe('inline', function () {
 					done();
 				});
 			});
+			it('should inline svg sources that contain an "inline" attribute and line break in <svg> tag', function (done) {
+				var test = '<img inline src="bar.svg" />';
+				inline(test, { compress: false }, function (err, html) {
+					expect(err).to.be(null)
+					expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" version="1.1" baseprofile="basic" id="bar" xml:space="preserve">\n<rect y="0.7" width="12.3" height="35.1"/>\n</svg>');
+					done();
+				});
+			});
 			it('should inline svg sources that contain an "inline" attribute, preserving other attributes', function (done) {
 				var test = '<img id="foo" class="foo bar" inline src="foo.svg" />';
 				inline(test, { compress: false }, function (err, html) {
@@ -450,6 +458,11 @@ describe('inline', function () {
 				var test = '<img inline src="foo.svg" />';
 				var html = inlineSync(test, { compress: false });
 				expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" version="1.1" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve">\n<circle cx="50" cy="50" r="25"/>\n</svg>');
+			});
+			it('should inline svg sources that contain an "inline" attribute and line break in <svg> tag', function () {
+				var test = '<img inline src="bar.svg" />';
+				var html = inlineSync(test, { compress: false });
+				expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" version="1.1" baseprofile="basic" id="bar" xml:space="preserve">\n<rect y="0.7" width="12.3" height="35.1"/>\n</svg>');
 			});
 			it('should inline svg sources that contain an "inline" attribute, preserving other attributes', function () {
 				var test = '<img id="foo" class="foo bar" inline src="foo.svg" />';
