@@ -13,8 +13,8 @@
     "csso": "1.4.2",
     "htmlparser2": "3.8.3",
     "lodash": "3.10.1",
-    "svgo": "0.6.0",
-    "uglify-js": "2.5.0"
+    "svgo": "0.6.1",
+    "uglify-js": "2.6.1"
   },
   "devDependencies": {
     "expect.js": "*",
