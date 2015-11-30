@@ -425,6 +425,14 @@ describe('inline', function () {
 					done();
 				});
 			});
+			it('should inline compressed svg symbol sources with options.compressed="true"', function (done) {
+				var test = '<img inline src="foo-symbol.svg" />';
+				inline(test, { compress: true }, function (err, html) {
+					expect(err).to.be(null)
+					expect(html).to.eql('<svg x="0" y="0" viewBox="0 0 100 100"><symbol id="foo"><circle cx="50" cy="50" r="30"/></symbol></svg>');
+					done();
+				});
+			});
 			it('should inline svg sources as base64 if options.svgAsImage="true"', function (done) {
 				var test = '<img inline src="foo.svg" />';
 				inline(test, { svgAsImage: true, compress: true }, function (err, html) {
@@ -473,6 +481,11 @@ describe('inline', function () {
 				var test = '<img inline src="foo.svg" />';
 				var html = inlineSync(test, { compress: true });
 				expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" version="1.1" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
+			});
+			it('should inline compressed svg symbol sources with options.compressed="true"', function () {
+				var test = '<img inline src="foo-symbol.svg" />';
+				var html = inlineSync(test, { compress: true });
+				expect(html).to.eql('<svg x="0" y="0" viewBox="0 0 100 100"><symbol id="foo"><circle cx="50" cy="50" r="30"/></symbol></svg>');
 			});
 			it('should inline svg sources as base64 if options.svgAsImage="true"', function () {
 				var test = '<img inline src="foo.svg" />';
