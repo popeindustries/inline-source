@@ -1,5 +1,9 @@
 # Changelog
 
+**4.2.2** - Nov 30, 2015
+* fix inlining of svg images when content includes unused `<symbol>` elements (enables inlining of symbol definitions file for use with inline icons, for example)
+* update dependencies
+
 **4.2.1** - Nov 12, 2015
 * fix inlining of svg images when `<svg>` contains a line break (looking at you Illustrator!)
 * update dependencies
