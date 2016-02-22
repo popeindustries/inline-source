@@ -5,6 +5,8 @@
 
 Inline and compress tags that contain the `inline` attribute. Supports `<script>`, `<link>`, and `<img>` (including `*.svg` sources) tags by default, and is easily extensible to handle others.
 
+> You can use [inline-source-cli](https://github.com/developit/inline-source-cli) to run `inline-source` from the command line or NPM Scripts.
+
 ## Usage
 
 **inline(htmlpath, [options], callback(err, html))**: asynchronously parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
