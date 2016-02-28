@@ -1,11 +1,11 @@
 'use strict';
 
 var context = require('./lib/context')
-	, fs = require('fs')
-	, path = require('path')
-	, parse = require('./lib/parse')
-	, run = require('./lib/run')
-	, utils = require('./lib/utils');
+  , fs = require('fs')
+  , path = require('path')
+  , parse = require('./lib/parse')
+  , run = require('./lib/run')
+  , utils = require('./lib/utils');
 
 /**
  * Inline sources found in 'htmlpath'
@@ -14,35 +14,35 @@ var context = require('./lib/context')
  * @param {Function} fn(err, html)
  */
 module.exports = function inlineSource (htmlpath, options, fn) {
-	if ('function' == typeof options) {
-		fn = options;
-		options = {};
-	}
+  if ('function' == typeof options) {
+    fn = options;
+    options = {};
+  }
 
-	var ctx = context.create(options)
-		, next = function (html) {
-				ctx.html = html;
-				parse(ctx, function (err) {
-					if (err) return fn(err);
-					if (ctx.sources.length) {
-						run(ctx, ctx.sources, ctx.swallowErrors, fn);
-					} else {
-						return fn(null, ctx.html);
-					}
-				});
-			};
+  var ctx = context.create(options)
+    , next = function (html) {
+        ctx.html = html;
+        parse(ctx, function (err) {
+          if (err) return fn(err);
+          if (ctx.sources.length) {
+            run(ctx, ctx.sources, ctx.swallowErrors, fn);
+          } else {
+            return fn(null, ctx.html);
+          }
+        });
+      };
 
-	if (utils.isFilepath(htmlpath)) {
-		ctx.htmlpath = path.resolve(htmlpath);
-		fs.readFile(ctx.htmlpath, 'utf8', function (err, content) {
-			if (err) return fn(err);
-			next(content);
-		});
+  if (utils.isFilepath(htmlpath)) {
+    ctx.htmlpath = path.resolve(htmlpath);
+    fs.readFile(ctx.htmlpath, 'utf8', function (err, content) {
+      if (err) return fn(err);
+      next(content);
+    });
 
-	// Passed file content instead of path
-	} else {
-		next(htmlpath);
-	}
+  // Passed file content instead of path
+  } else {
+    next(htmlpath);
+  }
 };
 
 /**
@@ -52,22 +52,22 @@ module.exports = function inlineSource (htmlpath, options, fn) {
  * @returns {String}
  */
 module.exports.sync = function inlineSourceSync (htmlpath, options) {
-	options = options || {};
+  options = options || {};
 
-	var ctx = context.create(options);
+  var ctx = context.create(options);
 
-	if (utils.isFilepath(htmlpath)) {
-		ctx.htmlpath = path.resolve(htmlpath);
-		ctx.html = fs.readFileSync(ctx.htmlpath, 'utf8');
+  if (utils.isFilepath(htmlpath)) {
+    ctx.htmlpath = path.resolve(htmlpath);
+    ctx.html = fs.readFileSync(ctx.htmlpath, 'utf8');
 
-	// Passed file content instead of path
-	} else {
-		ctx.html = htmlpath;
-	}
+  // Passed file content instead of path
+  } else {
+    ctx.html = htmlpath;
+  }
 
-	parse(ctx);
+  parse(ctx);
 
-	return (ctx.sources.length)
-		? run(ctx, ctx.sources, ctx.swallowErrors)
-		: ctx.html;
+  return (ctx.sources.length)
+    ? run(ctx, ctx.sources, ctx.swallowErrors)
+    : ctx.html;
 };
