@@ -1,5 +1,9 @@
 # Changelog
 
+**4.2.3** - Feb 28, 2016
+* fix inlining of svg images when content includes `<image>` elements (enables fallbacks for inlined svg)
+* update dependencies
+
 **4.2.2** - Nov 30, 2015
 * fix inlining of svg images when content includes unused `<symbol>` elements (enables inlining of symbol definitions file for use with inline icons, for example)
 * update dependencies
