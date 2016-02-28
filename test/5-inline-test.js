@@ -421,7 +421,7 @@ describe('inline', function () {
         var test = '<img id="boo" inline src="boo.svg" />';
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" id="boo" width="25px" height="25px" xml:space="preserve"><g><path d="M0 0.7H12.3V35.800000000000004H0z"/></g><image src="boo.png" xlink:href="#"/></svg>');
+          expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" id="boo" width="25px" height="25px" xml:space="preserve"><path d="M0 0h10v25H0z"/><image src="boo.png" xlink:href="#"/></svg>');
           done();
         });
       });
@@ -445,7 +445,7 @@ describe('inline', function () {
         var test = '<img inline src="foo.svg" />';
         inline(test, { svgAsImage: true, compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
           done();
         });
       });
@@ -453,7 +453,7 @@ describe('inline', function () {
         var test = '<img inline inline-svgAsImage src="foo.svg" />';
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
           done();
         });
       });
@@ -498,12 +498,12 @@ describe('inline', function () {
       it('should inline svg sources as base64 if options.svgAsImage="true"', function () {
         var test = '<img inline src="foo.svg" />';
         var html = inlineSync(test, { svgAsImage: true, compress: true });
-        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
       });
       it('should inline svg sources as base64 if svgAsImage="true"', function () {
         var test = '<img inline inline-svgAsImage src="foo.svg" />';
         var html = inlineSync(test, { compress: true });
-        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
       });
     });
   });
@@ -538,7 +538,7 @@ describe('inline', function () {
         var test = '<object inline type="image/svg+xml" data="foo.svg"></object>';
         inline(test, { svgAsImage: true, compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
           done();
         });
       });
@@ -546,7 +546,7 @@ describe('inline', function () {
         var test = '<object inline inline-svgAsImage type="image/svg+xml" data="foo.svg"></object>';
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+          expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
           done();
         });
       });
@@ -570,12 +570,12 @@ describe('inline', function () {
       it('should inline svg sources as base64 if options.svgAsImage="true"', function () {
         var test = '<object inline type="image/svg+xml" data="foo.svg"></object>';
         var html = inlineSync(test, { svgAsImage: true, compress: true });
-        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
       });
       it('should inline svg sources as base64 if svgAsImage="true"', function () {
         var test = '<object inline inline-svgAsImage type="image/svg+xml" data="foo.svg"></object>';
         var html = inlineSync(test, { compress: true });
-        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20enable-background%3D%22new%200%200%20100%20100%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
+        expect(html).to.eql('<img src="data:image/svg+xml;utf8,%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20x%3D%22100%22%20y%3D%22100%22%20viewBox%3D%220%200%20200%20200%22%20xml%3Aspace%3D%22preserve%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2225%22%2F%3E%3C%2Fsvg%3E" />');
       });
 
     });
