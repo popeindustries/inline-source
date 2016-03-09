@@ -473,7 +473,7 @@ describe('inline', function () {
 
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" id="boo" width="25px" height="25px" xml:space="preserve"><g><path d="M0 0H10V25H0z"/></g><image src="boo.png" xlink:href=""/></svg>');
+          expect(html).to.contain('<image src="boo.png" xlink:href=""/>');
           done();
         });
       });
