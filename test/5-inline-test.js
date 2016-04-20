@@ -233,9 +233,9 @@ describe('inline', function () {
       it('should escape closing <script> tags in content', function (done) {
         var test = '<script src="scriptTag.js" inline></script>';
 
-        inline(test, { compress: false }, function (err, html) {
+        inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql("<script>(a='<script>document.domain=\"'+document.domain+'\";\x3c/script>');</script>");
+          expect(html).to.equal("<script>a='<script>document.domain=\"'+document.domain+'\";\x3c/script>';</script>");
           done();
         });
       });
