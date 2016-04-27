@@ -1,5 +1,11 @@
 # Changelog
 
+**4.2.5** - Apr 27, 2016
+* update dependencies
+
+**4.2.4** - Mar 9, 2016
+* prevent removal of empty `<svg>` attributes (fixes `<image>` fallback hack)
+
 **4.2.3** - Feb 28, 2016
 * fix inlining of svg images when content includes `<image>` elements (enables fallbacks for inlined svg)
 * update dependencies
