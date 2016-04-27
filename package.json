@@ -13,7 +13,7 @@
     "csso": "2.0.0",
     "htmlparser2": "3.9.0",
     "lodash": "4.11.1",
-    "svgo": "0.6.4",
+    "svgo": "0.6.6",
     "uglify-js": "2.6.2"
   },
   "devDependencies": {
