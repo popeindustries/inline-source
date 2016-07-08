@@ -1,5 +1,9 @@
 # Changelog
 
+**4.2.6** - July 8, 2016
+* update dependencies
+* fix parse error [#38](https://github.com/popeindustries/inline-source/issues/38)
+
 **4.2.5** - Apr 27, 2016
 * update dependencies
 
