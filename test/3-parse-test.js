@@ -28,6 +28,14 @@ describe('parse', function () {
       done();
     });
   });
+  it('should ignore html with inlined style tag and "inline-block"', function (done) {
+    ctx.html = '<span style="display: inline-block;" ng-if="x>0"></span>';
+    parse(ctx, function (err) {
+      expect(err).to.be(undefined);
+      expect(ctx.sources).to.have.length(0);
+      done();
+    });
+  });
   it('should generate a source object for a matching inline <script> tag', function (done) {
     ctx.html = '<script inline></script>';
     parse(ctx, function (err) {
