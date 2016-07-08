@@ -1,11 +1,11 @@
 'use strict';
 
-var context = require('./lib/context')
-  , fs = require('fs')
-  , path = require('path')
-  , parse = require('./lib/parse')
-  , run = require('./lib/run')
-  , utils = require('./lib/utils');
+var context = require('./lib/context');
+var fs = require('fs');
+var path = require('path');
+var parse = require('./lib/parse');
+var run = require('./lib/run');
+var utils = require('./lib/utils');
 
 /**
  * Inline sources found in 'htmlpath'
@@ -19,18 +19,18 @@ module.exports = function inlineSource (htmlpath, options, fn) {
     options = {};
   }
 
-  var ctx = context.create(options)
-    , next = function (html) {
-        ctx.html = html;
-        parse(ctx, function (err) {
-          if (err) return fn(err);
-          if (ctx.sources.length) {
-            run(ctx, ctx.sources, ctx.swallowErrors, fn);
-          } else {
-            return fn(null, ctx.html);
-          }
-        });
-      };
+  var ctx = context.create(options);
+  var next = function (html) {
+    ctx.html = html;
+    parse(ctx, function (err) {
+      if (err) return fn(err);
+      if (ctx.sources.length) {
+        run(ctx, ctx.sources, ctx.swallowErrors, fn);
+      } else {
+        return fn(null, ctx.html);
+      }
+    });
+  };
 
   if (utils.isFilepath(htmlpath)) {
     ctx.htmlpath = path.resolve(htmlpath);
