@@ -7,12 +7,13 @@
     "inline",
     "html",
     "js",
-    "css"
+    "css",
+    "svg"
   ],
   "dependencies": {
-    "csso": "2.2.0",
+    "csso": "2.2.1",
     "htmlparser2": "3.9.1",
-    "lodash": "4.13.1",
+    "lodash": "4.14.2",
     "svgo": "0.6.6",
     "uglify-js": "2.7.0"
   },
