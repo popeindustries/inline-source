@@ -1,5 +1,9 @@
 # Changelog
 
+**4.3.0** - Aug 9, 2016
+* update dependencies
+* add support for inlining favicons [#39](https://github.com/popeindustries/inline-source/issues/39)
+
 **4.2.6** - July 8, 2016
 * update dependencies
 * fix parse error [#38](https://github.com/popeindustries/inline-source/issues/38)
