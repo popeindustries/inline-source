@@ -1,8 +1,8 @@
 'use strict';
 
-var expect = require('expect.js')
-  , path = require('path')
-  , utils = require('../lib/utils');
+const expect = require('expect.js');
+const path = require('path');
+const utils = require('../lib/utils');
 
 describe('utils', function () {
   describe('isFilepath()', function () {
@@ -84,22 +84,25 @@ describe('utils', function () {
 
   describe('getSourcepath()', function () {
     it('should return a resolved path for relative source path and default rootpath', function () {
-      expect(utils.getSourcepath('./foo.css', path.resolve('./index.html'), process.cwd())).to.eql(path.resolve(process.cwd(), 'foo.css'));
-      expect(utils.getSourcepath('../css/foo.css', path.resolve('./html/index.html'), process.cwd())).to.eql(path.resolve(process.cwd(), 'css/foo.css'));
+      expect(utils.getSourcepath('./foo.css', path.resolve('./index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'foo.css'), '']);
+      expect(utils.getSourcepath('../css/foo.css', path.resolve('./html/index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'css/foo.css'), '']);
     });
     it('should return a resolved path for relative source path and custom rootpath', function () {
-      expect(utils.getSourcepath('./foo.css', path.resolve('./index.html'), path.resolve('www'))).to.eql(path.resolve(process.cwd(), 'foo.css'));
-      expect(utils.getSourcepath('../css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))).to.eql(path.resolve(process.cwd(), 'css/foo.css'));
+      expect(utils.getSourcepath('./foo.css', path.resolve('./index.html'), path.resolve('www'))).to.eql([path.resolve(process.cwd(), 'foo.css'), '']);
+      expect(utils.getSourcepath('../css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))).to.eql([path.resolve(process.cwd(), 'css/foo.css'), '']);
     });
     it('should return a resolved path for absolute source path and default rootpath', function () {
-      expect(utils.getSourcepath('/foo.css', path.resolve('./index.html'), process.cwd())).to.eql(path.resolve(process.cwd(), 'foo.css'));
-      expect(utils.getSourcepath('/css/foo.css', path.resolve('./html/index.html'), process.cwd())).to.eql(path.resolve(process.cwd(), 'css/foo.css'));
+      expect(utils.getSourcepath('/foo.css', path.resolve('./index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'foo.css'), '']);
+      expect(utils.getSourcepath('/css/foo.css', path.resolve('./html/index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'css/foo.css'), '']);
     });
     it('should return a resolved path for absolute source path and custom rootpath', function () {
-      expect(utils.getSourcepath('/dist/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))).to.eql(path.resolve('dist/dist/images/foo.png'));
-      expect(utils.getSourcepath('/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))).to.eql(path.resolve('dist/images/foo.png'));
-      expect(utils.getSourcepath('/foo.css', path.resolve('./index.html'), path.resolve('www'))).to.eql(path.resolve('www', 'foo.css'));
-      expect(utils.getSourcepath('/css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))).to.eql(path.resolve('www', 'css/foo.css'));
+      expect(utils.getSourcepath('/dist/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))).to.eql([path.resolve('dist/dist/images/foo.png'), '']);
+      expect(utils.getSourcepath('/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))).to.eql([path.resolve('dist/images/foo.png'), '']);
+      expect(utils.getSourcepath('/foo.css', path.resolve('./index.html'), path.resolve('www'))).to.eql([path.resolve('www', 'foo.css'), '']);
+      expect(utils.getSourcepath('/css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))).to.eql([path.resolve('www', 'css/foo.css'), '']);
+    });
+    it('should return anchor if present', function () {
+      expect(utils.getSourcepath('./foo.svg#foo,bar', path.resolve('./index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'foo.svg'), 'foo,bar']);
     });
   });
 
