@@ -27,7 +27,7 @@
     "lint": "eslint lib test"
   },
   "engines": {
-    "node": ">=0.10"
+    "node": ">=4"
   },
   "repository": "git://github.com/popeindustries/inline-source.git",
   "readmeFilename": "README.md",
