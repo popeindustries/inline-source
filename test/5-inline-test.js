@@ -49,6 +49,15 @@ describe('inline', function () {
           done();
         });
       });
+      it('should inline sources that contain an "inline=true" attribute', function (done) {
+        var test = '<script inline="true" src="foo.js"></script>';
+
+        inline(test, { compress: true }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');
+          done();
+        });
+      });
       it('should inline multiple sources that contain an "inline" attribute', function (done) {
         var test = '<script inline src="foo.js"></script>' + eol + '<script inline src="bar.js"></script>';
 
