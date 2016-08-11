@@ -236,7 +236,7 @@ describe('inline', function () {
       it('should parse html templates for inlineable content', function (done) {
         inline(path.resolve('head.nunjs'), function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<head>' + eol +  '  <meta charset="utf-8">' + eol +  '  <title>{{ title }}</title>' + eol +  '  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />' + eol + eol +  '  {% if js %}' + eol +  '    <script>var foo=this;console.log(foo);</script>' + eol +  '  {% endif %}' + eol + eol +  '  <link rel="stylesheet" href={{ assets[\'index.css\'] }}>' + eol + eol +  '</head>');
+          expect(html).to.eql('<head>' + eol + '  <meta charset="utf-8">' + eol + '  <title>{{ title }}</title>' + eol + '  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />' + eol + eol + '  {% if js %}' + eol + '    <script>var foo=this;console.log(foo);</script>' + eol + '  {% endif %}' + eol + eol + '  <link rel="stylesheet" href={{ assets[\'index.css\'] }}>' + eol + eol + '</head>');
           done();
         });
       });
@@ -265,19 +265,19 @@ describe('inline', function () {
         expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');
       });
       it('should inline multiple sources that contain an "inline" attribute', function () {
-        const test = '<script inline src="foo.js"></script>' + eol +  '<script inline src="bar.js"></script>';
+        const test = '<script inline src="foo.js"></script>' + eol + '<script inline src="bar.js"></script>';
         const html = inlineSync(test, { compress: true });
 
-        expect(html).to.eql('<script>var foo=this;console.log(foo);</script>' + eol +  '<script>var bar=this;console.log(bar);</script>');
+        expect(html).to.eql('<script>var foo=this;console.log(foo);</script>' + eol + '<script>var bar=this;console.log(bar);</script>');
       });
       it('should remove the "inline" attribute for sources that can\'t be found when options.swallowErrors is "true"', function () {
-        const test = '<script inline src="baz.js"></script>' + eol +  '<script inline src="foo.js"></script>';
+        const test = '<script inline src="baz.js"></script>' + eol + '<script inline src="foo.js"></script>';
         const html = inlineSync(test, { compress: true, swallowErrors: true });
 
-        expect(html).to.eql('<script src="baz.js"></script>' + eol +  '<script>var foo=this;console.log(foo);</script>');
+        expect(html).to.eql('<script src="baz.js"></script>' + eol + '<script>var foo=this;console.log(foo);</script>');
       });
       it('should return an error when options.swallowErrors is "false"', function () {
-        const test = '<script inline src="baz.js"></script>' + eol +  '<script inline src="foo.js"></script>';
+        const test = '<script inline src="baz.js"></script>' + eol + '<script inline src="foo.js"></script>';
 
         try {
           const html = inlineSync(test, { compress: true });
@@ -288,10 +288,10 @@ describe('inline', function () {
         }
       });
       it('should preserve order of multiple inlined items', function () {
-        const test = '<script inline src="bar.js"></script>' + eol +  '<script inline src="foo.js"></script>';
+        const test = '<script inline src="bar.js"></script>' + eol + '<script inline src="foo.js"></script>';
         const html = inlineSync(test, { compress: true });
 
-        expect(html).to.eql('<script>var bar=this;console.log(bar);</script>' + eol +  '<script>var foo=this;console.log(foo);</script>');
+        expect(html).to.eql('<script>var bar=this;console.log(bar);</script>' + eol + '<script>var foo=this;console.log(foo);</script>');
       });
       it('should load html source content if none specified', function () {
         const html = inlineSync(path.resolve('test.html'));
@@ -301,7 +301,7 @@ describe('inline', function () {
       it('should parse html templates for inlineable content', function () {
         const html = inlineSync(path.resolve('head.nunjs'));
 
-        expect(html).to.eql('<head>' + eol +  '  <meta charset="utf-8">' + eol +  '  <title>{{ title }}</title>' + eol +  '  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />' + eol + eol +  '  {% if js %}' + eol +  '    <script>var foo=this;console.log(foo);</script>' + eol +  '  {% endif %}' + eol + eol +  '  <link rel="stylesheet" href={{ assets[\'index.css\'] }}>' + eol + eol +  '</head>');
+        expect(html).to.eql('<head>' + eol + '  <meta charset="utf-8">' + eol + '  <title>{{ title }}</title>' + eol + '  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />' + eol + eol + '  {% if js %}' + eol + '    <script>var foo=this;console.log(foo);</script>' + eol + '  {% endif %}' + eol + eol + '  <link rel="stylesheet" href={{ assets[\'index.css\'] }}>' + eol + eol + '</head>');
       });
     });
   });
@@ -465,7 +465,7 @@ describe('inline', function () {
 
         inline(test, { compress: false }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+          expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
           done();
         });
       });
@@ -474,7 +474,7 @@ describe('inline', function () {
 
         inline(test, { compress: false }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" id="bar" xml:space="preserve">' + eol +  '<rect y="0.7" width="12.3" height="35.1"/>' + eol +  '</svg>');
+          expect(html).to.eql('<svg id="bar" x="0px" y="0px" xml:space="preserve" viewBox="0 0 100 36">' + eol + '<rect y="0.7" width="12.3" height="35.1"/>' + eol + '</svg>');
           done();
         });
       });
@@ -483,7 +483,7 @@ describe('inline', function () {
 
         inline(test, { compress: false }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="foo" enable-background="new 0 0 100 100" xml:space="preserve" class="foo bar">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+          expect(html).to.eql('<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
           done();
         });
       });
@@ -501,7 +501,7 @@ describe('inline', function () {
 
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
+          expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200"><circle cx="50" cy="50" r="25"/></svg>');
           done();
         });
       });
@@ -551,25 +551,25 @@ describe('inline', function () {
         const test = '<img inline src="foo.svg" />';
         const html = inlineSync(test, { compress: false });
 
-        expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+        expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
       });
       it('should inline svg sources that contain an "inline" attribute and line break in <svg> tag', function () {
         const test = '<img inline src="bar.svg" />';
         const html = inlineSync(test, { compress: false });
 
-        expect(html).to.eql('<svg x="0px" y="0px" viewBox="0 0 100 36" id="bar" xml:space="preserve">' + eol +  '<rect y="0.7" width="12.3" height="35.1"/>' + eol +  '</svg>');
+        expect(html).to.eql('<svg id="bar" x="0px" y="0px" xml:space="preserve" viewBox="0 0 100 36">' + eol + '<rect y="0.7" width="12.3" height="35.1"/>' + eol + '</svg>');
       });
       it('should inline svg sources that contain an "inline" attribute, preserving other attributes', function () {
         const test = '<img id="foo" class="foo bar" inline src="foo.svg" />';
         const html = inlineSync(test, { compress: false });
 
-        expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="foo" enable-background="new 0 0 100 100" xml:space="preserve" class="foo bar">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+        expect(html).to.eql('<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
       });
       it('should inline compressed svg sources with options.compressed="true"', function () {
         const test = '<img inline src="foo.svg" />';
         const html = inlineSync(test, { compress: true });
 
-        expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
+        expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200"><circle cx="50" cy="50" r="25"/></svg>');
       });
       it('should inline compressed svg symbol sources with options.compressed="true"', function () {
         const test = '<img inline src="foo-symbol.svg" />';
@@ -599,7 +599,7 @@ describe('inline', function () {
 
         inline(test, { compress: false }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+          expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
           done();
         });
       });
@@ -608,7 +608,7 @@ describe('inline', function () {
 
         inline(test, { compress: false }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="foo" enable-background="new 0 0 100 100" xml:space="preserve" class="foo bar">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+          expect(html).to.eql('<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
           done();
         });
       });
@@ -617,7 +617,7 @@ describe('inline', function () {
 
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
+          expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200"><circle cx="50" cy="50" r="25"/></svg>');
           done();
         });
       });
@@ -645,19 +645,19 @@ describe('inline', function () {
         const test = '<object inline type="image/svg+xml" data="foo.svg"></object>';
         const html = inlineSync(test, { compress: false });
 
-        expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+        expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
       });
       it('should inline svg sources that contain an "inline" attribute, preserving other attributes', function () {
         const test = '<object inline id="foo" class="foo bar" type="image/svg+xml" data="foo.svg"></object>';
         const html = inlineSync(test, { compress: false });
 
-        expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="foo" enable-background="new 0 0 100 100" xml:space="preserve" class="foo bar">' + eol +  '<circle cx="50" cy="50" r="25"/>' + eol +  '</svg>');
+        expect(html).to.eql('<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
       });
       it('should inline compressed svg sources with options.compressed="true"', function () {
         const test = '<object inline type="image/svg+xml" data="foo.svg"></object>';
         const html = inlineSync(test, { compress: true });
 
-        expect(html).to.eql('<svg x="100px" y="100px" viewBox="0 0 200 200" id="Layer_1" enable-background="new 0 0 100 100" xml:space="preserve"><circle cx="50" cy="50" r="25"/></svg>');
+        expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200"><circle cx="50" cy="50" r="25"/></svg>');
       });
       it('should inline svg sources as base64 if options.svgAsImage="true"', function () {
         const test = '<object inline type="image/svg+xml" data="foo.svg"></object>';
@@ -718,7 +718,7 @@ describe('inline', function () {
           next();
         } }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.eql('<script type="application/json">window.foo = {' + eol +  '  "foo": "foo"' + eol +  '}</script>');
+          expect(html).to.eql('<script type="application/json">window.foo = {' + eol + '  "foo": "foo"' + eol + '}</script>');
           done();
         });
       });
@@ -753,7 +753,7 @@ describe('inline', function () {
           if (source.type == 'json') source.content = source.props.var + ' = ' + source.fileContent;
         } });
 
-        expect(html).to.eql('<script type="application/json">window.foo = {' + eol +  '  "foo": "foo"' + eol +  '}</script>');
+        expect(html).to.eql('<script type="application/json">window.foo = {' + eol + '  "foo": "foo"' + eol + '}</script>');
       });
     });
   });
