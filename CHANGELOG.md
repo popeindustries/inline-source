@@ -1,5 +1,8 @@
 # Changelog
 
+**4.4.0** - Aug 11, 2016
+* add support for "inline='true'" attribute [#42](https://github.com/popeindustries/inline-source/pull/42)
+
 **4.3.0** - Aug 9, 2016
 * update dependencies
 * add support for inlining favicons [#39](https://github.com/popeindustries/inline-source/issues/39)
