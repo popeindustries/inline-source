@@ -1,6 +1,6 @@
 'use strict';
 
-const eol = require("os").EOL;
+const eol = require('os').EOL;
 const expect = require('expect.js');
 const inline = require('..');
 const inlineSync = require('..').sync;
@@ -529,6 +529,15 @@ describe('inline', function () {
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
           expect(html).to.contain('<img src="data:image/svg+xml;utf8');
+          done();
+        });
+      });
+      it('should inline svg sources fragments', function (done) {
+        const test = '<img inline src="symbols.svg#icon-close,icon-minus,icon-plus" />';
+
+        inline(test, { compress: false }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<svg id="symbols" style="display:none;">' + eol + '  <symbol id="icon-close">' + eol + '    <polygon points="80.76,24.19 75.81,19.24 50,45.05 24.19,19.24 19.24,24.19 45.05,50 19.24,75.81 24.19,80.76 50,54.95 75.81,80.76 80.76,75.81 54.95,50 "/>' + eol + '  </symbol>' + eol + '  ' + eol + '  <symbol id="icon-minus">' + eol + '      <rect x="10" y="46.5" width="80" height="7"/>' + eol + '  </symbol>' + eol + '  <symbol id="icon-plus">' + eol + '    <polygon points="90,46.5 53.5,46.5 53.5,10 46.5,10 46.5,46.5 10,46.5 10,53.5 46.5,53.5 46.5,90 53.5,90 53.5,53.5 90,53.5 "/>' + eol + '  </symbol>' + eol + '  ' + eol + '  ' + eol + '</svg>');
           done();
         });
       });
