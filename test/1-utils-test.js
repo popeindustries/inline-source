@@ -1,8 +1,8 @@
 'use strict';
 
-var expect = require('expect.js')
-  , path = require('path')
-  , utils = require('../lib/utils');
+const expect = require('expect.js');
+const path = require('path');
+const utils = require('../lib/utils');
 
 describe('utils', function () {
   describe('isFilepath()', function () {

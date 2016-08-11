@@ -1,12 +1,12 @@
 'use strict';
 
-var expect = require('expect.js')
-  , fs = require('fs')
-  , path = require('path')
-  , parse = require('../lib/parse')
-  , utils = require('../lib/utils')
+const expect = require('expect.js');
+const fs = require('fs');
+const path = require('path');
+const parse = require('../lib/parse');
+const utils = require('../lib/utils');
 
-  , ctx;
+let ctx;
 
 describe('parse', function () {
   beforeEach(function () {

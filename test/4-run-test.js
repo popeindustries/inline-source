@@ -1,10 +1,10 @@
 'use strict';
 
-var expect = require('expect.js')
-  , path = require('path')
-  , run = require('../lib/run')
+const expect = require('expect.js');
+const path = require('path');
+const run = require('../lib/run');
 
-  , ctx;
+let ctx;
 
 describe('run', function () {
   beforeEach(function () {
@@ -17,7 +17,8 @@ describe('run', function () {
   });
 
   it('should process a simple stack', function (done) {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -34,7 +35,8 @@ describe('run', function () {
     });
   });
   it('should synchronously process a simple stack', function () {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -47,7 +49,8 @@ describe('run', function () {
     expect(idx).to.equal(1);
   });
   it('should process a complex stack', function (done) {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -68,7 +71,8 @@ describe('run', function () {
     });
   });
   it('should synchronously process a complex stack', function () {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -84,7 +88,8 @@ describe('run', function () {
     expect(idx).to.equal(2);
   });
   it('should process multiple sources in parallel', function (done) {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -118,7 +123,8 @@ describe('run', function () {
     });
   });
   it('should synchronously process multiple sources in parallel', function () {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -145,7 +151,8 @@ describe('run', function () {
     expect(idx).to.equal(4);
   });
   it('should handle errors', function (done) {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -165,7 +172,8 @@ describe('run', function () {
     });
   });
   it('should handle errors for synchronous calls', function () {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
@@ -186,7 +194,8 @@ describe('run', function () {
     }
   });
   it('should handle multiple errors', function (done) {
-    var idx = 0;
+    let idx = 0;
+
     ctx.sources.push({
       parentContext: ctx,
       stack: [
