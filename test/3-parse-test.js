@@ -60,14 +60,14 @@ describe('parse', function () {
     ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
     parse(ctx, function (err) {
       expect(err).to.be(undefined);
-      expect(ctx.sources).to.have.length(13);
+      expect(ctx.sources).to.have.length(14);
       done();
     });
   });
   it('should synchronously generate source objects for all tags with "inline" attribute', function () {
     ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
     parse(ctx);
-    expect(ctx.sources).to.have.length(13);
+    expect(ctx.sources).to.have.length(14);
   });
   it('should generate a source object for a matching inline <link> tag inside an ie conditional comment', function (done) {
     ctx.html = '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
@@ -81,6 +81,16 @@ describe('parse', function () {
   });
   it('should generate a source object for a matching inline <link> tag with "inline=true"', function (done) {
     ctx.html = '<link inline="true">';
+    parse(ctx, function (err) {
+      expect(err).to.be(undefined);
+      expect(ctx.sources).to.have.length(1);
+      expect(ctx.sources[0]).to.have.property('tag', 'link');
+      expect(ctx.sources[0]).to.have.property('type', 'css');
+      done();
+    });
+  });
+  it('should generate a source object for a matching inline <link> tag with "inline=inline"', function (done) {
+    ctx.html = '<link inline="inline">';
     parse(ctx, function (err) {
       expect(err).to.be(undefined);
       expect(ctx.sources).to.have.length(1);
