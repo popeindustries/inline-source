@@ -1,5 +1,9 @@
 # Changelog
 
+**5.0.1** - Aug 29, 2016
+* update dependencies
+* add support for "inline='inline'" attribute [#42](https://github.com/popeindustries/inline-source/pull/44)
+
 **5.0.0** - Aug 11, 2016
 * remove default svg attributes [#41](https://github.com/popeindustries/inline-source/issues/41)
 * add support for inlining svg symbol fragments [#31](https://github.com/popeindustries/inline-source/issues/31)
