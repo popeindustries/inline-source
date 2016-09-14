@@ -1,5 +1,8 @@
 # Changelog
 
+**5.0.2** - Sept 14, 2016
+* fix escaping of `</script>` tags in inlined js content
+
 **5.0.1** - Aug 29, 2016
 * update dependencies
 * add support for "inline='inline'" attribute [#42](https://github.com/popeindustries/inline-source/pull/44)
