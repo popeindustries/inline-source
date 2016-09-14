@@ -1,1 +1,2 @@
-(a='<script>document.domain="'+document.domain+'";</script>');
+var foo = 'foo';
+document.write('<script>document.title="'+foo+'"</script>');

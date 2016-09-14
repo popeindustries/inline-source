@@ -254,7 +254,7 @@ describe('inline', function () {
 
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
-          expect(html).to.equal("<script>a='<script>document.domain=\"'+document.domain+'\";\x3c/script>';</script>");
+          expect(html).to.equal('<script>var foo="foo";document.write(\'<script>document.title="\'+foo+\'"\\x3C/script>\');</script>');
           done();
         });
       });
