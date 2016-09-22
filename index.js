@@ -1,7 +1,6 @@
 'use strict';
 
 var context = require('./lib/context');
-var fs = require('fs');
 var path = require('path');
 var parse = require('./lib/parse');
 var run = require('./lib/run');
@@ -18,6 +17,8 @@ module.exports = function inlineSource (htmlpath, options, fn) {
     fn = options;
     options = {};
   }
+  //compatible memory fs
+  var fs = options.fs || require('fs');
 
   var ctx = context.create(options);
   var next = function (html) {
@@ -53,6 +54,9 @@ module.exports = function inlineSource (htmlpath, options, fn) {
  */
 module.exports.sync = function inlineSourceSync (htmlpath, options) {
   options = options || {};
+  
+  //compatible memory fs
+  var fs = options.fs || require('fs');
 
   var ctx = context.create(options);
 
