@@ -1,8 +1,5 @@
 # Changelog
 
-**5.0.3** - Sept 22, 2016
-* compatible anyother fileSystem to read the file
-
 **5.0.2** - Sept 14, 2016
 * fix escaping of `</script>` tags in inlined js content
 
