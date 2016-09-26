@@ -1,11 +1,14 @@
 # Changelog
 
+**5.1.0** - Sept 26, 2016
+* expose configuration of `fs` library for integration with Webpack, for example (via [memory-fs](https://github.com/webpack/memory-fs)) [#47](https://github.com/popeindustries/inline-source/pull/47)
+
 **5.0.2** - Sept 14, 2016
 * fix escaping of `</script>` tags in inlined js content
 
 **5.0.1** - Aug 29, 2016
 * update dependencies
-* add support for "inline='inline'" attribute [#42](https://github.com/popeindustries/inline-source/pull/44)
+* add support for "inline='inline'" attribute [#44](https://github.com/popeindustries/inline-source/pull/44)
 
 **5.0.0** - Aug 11, 2016
 * remove default svg attributes [#41](https://github.com/popeindustries/inline-source/issues/41)
