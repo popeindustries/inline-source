@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "expect.js": "*",
+    "memory-fs": "^0.3.0",
     "mocha": "*"
   },
   "main": "index.js",

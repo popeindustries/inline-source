@@ -4,6 +4,7 @@ const eol = require('os').EOL;
 const expect = require('expect.js');
 const inline = require('..');
 const inlineSync = require('..').sync;
+const MemoryFileSystem = require('memory-fs');
 const path = require('path');
 
 describe('inline', function () {
@@ -255,6 +256,20 @@ describe('inline', function () {
         inline(test, { compress: true }, function (err, html) {
           expect(err).to.be(null);
           expect(html).to.equal('<script>var foo="foo";document.write(\'<script>document.title="\'+foo+\'"\\x3C/script>\');</script>');
+          done();
+        });
+      });
+      it('should inline sources from memory file system.', function (done) {
+        const cwd = process.cwd();
+        const mfs = new MemoryFileSystem();
+        const test = '<script src="memory.js" inline ></script>';
+
+        mfs.mkdirpSync(cwd);
+        mfs.writeFileSync(`${cwd}/memory.js`, 'console.log(123);', 'utf8');
+
+        inline(test, { compress: true, fs: mfs }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<script>console.log(123);</script>');
           done();
         });
       });
