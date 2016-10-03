@@ -1,5 +1,9 @@
 # Changelog
 
+**5.1.1** - Oct 3, 2016
+* update/prune dependencies
+* lazily initialise compressors
+
 **5.1.0** - Sept 26, 2016
 * expose configuration of `fs` library for integration with Webpack, for example (via [memory-fs](https://github.com/webpack/memory-fs)) [#47](https://github.com/popeindustries/inline-source/pull/47)
 
