@@ -1,10 +1,10 @@
 'use strict';
 
-var context = require('./lib/context');
-var path = require('path');
-var parse = require('./lib/parse');
-var run = require('./lib/run');
-var utils = require('./lib/utils');
+const context = require('./lib/context');
+const path = require('path');
+const parse = require('./lib/parse');
+const run = require('./lib/run');
+const utils = require('./lib/utils');
 
 /**
  * Inline sources found in 'htmlpath'
@@ -27,8 +27,8 @@ module.exports = function inlineSource (htmlpath, options, fn) {
     options = {};
   }
 
-  var ctx = context.create(options);
-  var next = function (html) {
+  const ctx = context.create(options);
+  const next = function (html) {
     ctx.html = html;
     parse(ctx, function (err) {
       if (err) return fn(err);
@@ -40,6 +40,7 @@ module.exports = function inlineSource (htmlpath, options, fn) {
     });
   };
 
+  // Load html content
   if (utils.isFilepath(htmlpath)) {
     ctx.htmlpath = path.resolve(htmlpath);
     ctx.fs.readFile(ctx.htmlpath, 'utf8', function (err, content) {
@@ -71,8 +72,9 @@ module.exports = function inlineSource (htmlpath, options, fn) {
 module.exports.sync = function inlineSourceSync (htmlpath, options) {
   options = options || {};
 
-  var ctx = context.create(options);
+  const ctx = context.create(options);
 
+  // Load html content
   if (utils.isFilepath(htmlpath)) {
     ctx.htmlpath = path.resolve(htmlpath);
     ctx.html = ctx.fs.readFileSync(ctx.htmlpath, 'utf8');
