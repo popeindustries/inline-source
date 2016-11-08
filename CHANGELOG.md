@@ -1,5 +1,8 @@
 # Changelog
 
+**5.1.2** - Nov 8, 2016
+* update dependencies
+
 **5.1.1** - Oct 3, 2016
 * update/prune dependencies
 * lazily initialise compressors
