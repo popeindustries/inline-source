@@ -1,5 +1,8 @@
 # Changelog
 
+**5.1.3** - Dec 16, 2016
+* fix handling of source paths with query params [#49](https://github.com/popeindustries/inline-source/issues/49)
+
 **5.1.2** - Nov 8, 2016
 * update dependencies
 
