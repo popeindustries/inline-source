@@ -104,6 +104,10 @@ describe('utils', function () {
     it('should return anchor if present', function () {
       expect(utils.getSourcepath('./foo.svg#foo,bar', path.resolve('./index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'foo.svg'), 'foo,bar']);
     });
+    it('should strip query params if present', function () {
+      expect(utils.getSourcepath('./foo.css?v=12345', path.resolve('./index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'foo.css'), '']);
+      expect(utils.getSourcepath('./foo.svg?v=12345#foo,bar', path.resolve('./index.html'), process.cwd())).to.eql([path.resolve(process.cwd(), 'foo.svg'), 'foo,bar']);
+    });
   });
 
   describe('isIgnored()', function () {

@@ -164,6 +164,15 @@ describe('inline', function () {
           done();
         });
       });
+      it('should inline sources referenced by path containing query params', function (done) {
+        const test = '<script inline src="./nested/foo.js?foo=bar"></script>';
+
+        inline(test, { compress: true }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');
+          done();
+        });
+      });
       it('should inline sources referenced by absolute path relative to project directory', function (done) {
         const test = '<script inline src="/nested/foo.js"></script>';
 
