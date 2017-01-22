@@ -282,6 +282,24 @@ describe('inline', function () {
           done();
         });
       });
+      it('should inline sources when attribute=false', function (done) {
+        const test = '<script src="foo.js"></script>';
+
+        inline(test, { attribute: false, compress: true }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');
+          done();
+        });
+      });
+      it('should not inline sources when attribute=false and missing src', function (done) {
+        const test = '<script>var foo="foo";</script>';
+
+        inline(test, { attribute: false, compress: true }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<script>var foo="foo";</script>');
+          done();
+        });
+      });
     });
 
     describe('sync', function () {
@@ -440,6 +458,15 @@ describe('inline', function () {
           done();
         });
       });
+      it('should inline sources when attribute=false', function (done) {
+        const test = '<link rel="stylesheet" href="foo.css">';
+
+        inline(test, { attribute: false, compress: true }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<style>body{background-color:#fff}</style>');
+          done();
+        });
+      });
     });
 
     describe('sync', function () {
@@ -571,6 +598,15 @@ describe('inline', function () {
         inline(test, { compress: false }, function (err, html) {
           expect(err).to.be(null);
           expect(html).to.eql('<svg id="symbols" style="display:none;">' + eol + '  <symbol id="icon-close">' + eol + '    <polygon points="80.76,24.19 75.81,19.24 50,45.05 24.19,19.24 19.24,24.19 45.05,50 19.24,75.81 24.19,80.76 50,54.95 75.81,80.76 80.76,75.81 54.95,50 "/>' + eol + '  </symbol>' + eol + '  ' + eol + '  <symbol id="icon-minus">' + eol + '      <rect x="10" y="46.5" width="80" height="7"/>' + eol + '  </symbol>' + eol + '  <symbol id="icon-plus">' + eol + '    <polygon points="90,46.5 53.5,46.5 53.5,10 46.5,10 46.5,46.5 10,46.5 10,53.5 46.5,53.5 46.5,90 53.5,90 53.5,53.5 90,53.5 "/>' + eol + '  </symbol>' + eol + '  ' + eol + '  ' + eol + '</svg>');
+          done();
+        });
+      });
+      it('should inline svg sources when attribute=false', function (done) {
+        const test = '<img src="foo.svg" />';
+
+        inline(test, { attribute: false, compress: false }, function (err, html) {
+          expect(err).to.be(null);
+          expect(html).to.eql('<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">' + eol + '<circle cx="50" cy="50" r="25"/>' + eol + '</svg>');
           done();
         });
       });

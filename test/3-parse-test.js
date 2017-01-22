@@ -8,16 +8,20 @@ const utils = require('../lib/utils');
 
 let ctx;
 
+function createContext (attribute) {
+  return {
+    attribute: attribute,
+    html: '',
+    ignore: { tag: [], type: [] },
+    re: utils.getTagRegExp(attribute),
+    rootpath: path.resolve('./test'),
+    sources: []
+  };
+}
+
 describe('parse', function () {
   beforeEach(function () {
-    ctx = {
-      attribute: 'inline',
-      html: '',
-      ignore: { tag: [], type: [] },
-      re: utils.getTagRegExp('inline'),
-      rootpath: path.resolve('./test'),
-      sources: []
-    };
+    ctx = createContext('inline');
   });
 
   it('should ignore html with no matching inline tags', function (done) {
@@ -46,7 +50,29 @@ describe('parse', function () {
       done();
     });
   });
+  it('should generate a source object for a matching inline <script> tag when attribute=false', function (done) {
+    ctx = createContext(false);
+    ctx.html = '<script></script>';
+    parse(ctx, function (err) {
+      expect(err).to.be(undefined);
+      expect(ctx.sources).to.have.length(1);
+      expect(ctx.sources[0]).to.have.property('tag', 'script');
+      expect(ctx.sources[0]).to.have.property('type', 'js');
+      done();
+    });
+  });
   it('should generate a source object for a matching inline <link> tag', function (done) {
+    ctx.html = '<link inline>';
+    parse(ctx, function (err) {
+      expect(err).to.be(undefined);
+      expect(ctx.sources).to.have.length(1);
+      expect(ctx.sources[0]).to.have.property('tag', 'link');
+      expect(ctx.sources[0]).to.have.property('type', 'css');
+      done();
+    });
+  });
+  it('should generate a source object for a matching inline <link> tag when attribute=false', function (done) {
+    ctx = createContext(false);
     ctx.html = '<link inline>';
     parse(ctx, function (err) {
       expect(err).to.be(undefined);
@@ -58,6 +84,15 @@ describe('parse', function () {
   });
   it('should generate source objects for all tags with "inline" attribute', function (done) {
     ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
+    parse(ctx, function (err) {
+      expect(err).to.be(undefined);
+      expect(ctx.sources).to.have.length(14);
+      done();
+    });
+  });
+  it('should generate source objects for all tags when attribute=false', function (done) {
+    ctx = createContext(false);
+    ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match-any.html'), 'utf-8');
     parse(ctx, function (err) {
       expect(err).to.be(undefined);
       expect(ctx.sources).to.have.length(14);

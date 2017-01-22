@@ -13,8 +13,8 @@
   "dependencies": {
     "csso": "2.3.x",
     "htmlparser2": "3.9.x",
-    "is-plain-obj": "1.1.0",
-    "object-assign": "4.1.0",
+    "is-plain-obj": "1.1.x",
+    "object-assign": "4.1.x",
     "svgo": "0.7.x",
     "uglify-js": "2.7.x"
   },
@@ -25,7 +25,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec --bail"
   },
   "engines": {
     "node": ">=4"

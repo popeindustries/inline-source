@@ -16,15 +16,17 @@ Inline and compress tags that contain the `inline` attribute. Supports `<script>
 `htmlpath` can be either a filepath *or* a string of html content.
 
 Available `options` include:
-- `attribute`: attribute used to parse sources (default `inline`)
+- `attribute`: attribute used to parse sources (default `'inline'`)
 - `compress`: enable/disable compression of inlined content (default `true`)
-- `fs`: specify `fs` implementation (default is Node core `fs`)
+- `fs`: specify `fs` implementation (default is Node core `'fs'`)
 - `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
 - `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
 - `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
 - `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
 - `swallowErrors`: enable/disable suppression of errors (default `false`)
 - `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
+
+*__Note__: you can parse __all__ `script|link|img|object` tags by setting `options.attributes=false`.*
 
 ```bash
 $ npm install inline-source

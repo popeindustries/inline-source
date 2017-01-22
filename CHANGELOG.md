@@ -1,5 +1,7 @@
 # Changelog
 
+***Release notes have moved to GitHub [releases page](https://github.com/popeindustries/inline-source/releases)***
+
 **5.1.4** - Jan 03, 2017
 * improve handling of source paths with query params
 

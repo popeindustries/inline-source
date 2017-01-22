@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>match</title>
+	<!-- These match -->
+	<script type="text/javascript" src="foo.js"></script>
+	<script src="foo.js"></script>
+	<script src="foo.js" ></script>
+	<script src="foo.js"></script>
+	<script src="foo.js"></script>
+	<script src="foo.js"></script>
+	<link rel="stylesheet" type="text/css" href="foo.css">
+	<link href="foo.css">
+	<link
+		href="foo.css"
+		>
+	<!--[if IE 8 ]>
+	  <link rel="stylesheet" href="css/ie.min.css" >
+	<![endif]-->
+
+	<!-- These don't match -->
+	<!-- <script src="foo.js" inline></script> -->
+	<!--
+		<script src="foo.js" inline></script>
+		<link inline href="foo.css">
+	-- >
+</head>
+<body>
+	<!-- These match -->
+	<img src="foo.jpg" />
+	<img type="image/svg+xml" src="foo.svg" />
+	<script
+		src="foo"
+		>
+	</script>
+	<p>this is text with 'inline'</p><script src="foo.js"></script>
+
+	<!-- These don't match -->
+</body>
+</html>
