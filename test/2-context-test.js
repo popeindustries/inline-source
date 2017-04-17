@@ -3,8 +3,8 @@
 const expect = require('expect.js');
 const context = require('../lib/context');
 
-describe('context', function () {
-  it('should return a default context', function () {
+describe('context', function() {
+  it('should return a default context', function() {
     const ctx = context.create();
 
     expect(ctx).to.have.property('attribute', 'inline');
@@ -12,15 +12,15 @@ describe('context', function () {
     expect(ctx).to.have.property('pretty', false);
     expect(ctx).to.have.property('swallowErrors', false);
   });
-  it('should allow overriding defaults with "options"', function () {
+  it('should allow overriding defaults with "options"', function() {
     const ctx = context.create({ compress: false });
 
     expect(ctx).to.have.property('compress', false);
   });
-  it('should allow adding handlers', function () {
+  it('should allow adding handlers', function() {
     const ctx = context.create({
       handlers: [
-        function (source, next) {
+        function(source, next) {
           next();
         }
       ]
