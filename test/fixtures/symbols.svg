@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg id="symbols" style="display:none;">
-  <symbol id="icon-close">
+  <symbol id="icon-close" viewBox="0 0 50 50">
     <polygon points="80.76,24.19 75.81,19.24 50,45.05 24.19,19.24 19.24,24.19 45.05,50 19.24,75.81 24.19,80.76 50,54.95 75.81,80.76 80.76,75.81 54.95,50 "/>
   </symbol>
   <symbol id="icon-down">
