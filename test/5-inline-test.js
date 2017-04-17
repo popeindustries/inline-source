@@ -333,10 +333,9 @@ describe('inline', function() {
         const test = '<script src="scriptTag.js" inline></script>';
 
         inline(test, { compress: true }, function(err, html) {
-          console.log(html);
           expect(err).to.be(null);
           expect(html).to.equal(
-            '<script>var foo="foo";document.write(\'<script>document.title="\'+foo+\'"<\\/script>\');</script>'
+            '<script>var foo="foo";document.write(\'<script>document.title="\'+foo+\'"\\x3C/script>\');</script>'
           );
           done();
         });
