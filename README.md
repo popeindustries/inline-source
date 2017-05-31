@@ -26,7 +26,7 @@ Available `options` include:
 - `swallowErrors`: enable/disable suppression of errors (default `false`)
 - `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
 
-*__Note__: you can parse __all__ `script|link|img|object` tags by setting `options.attributes=false`.*
+*__Note__: you can parse __all__ `script|link|img|object` tags by setting `options.attribute=false`.*
 
 ```bash
 $ npm install inline-source
