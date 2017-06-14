@@ -11,12 +11,12 @@
     "svg"
   ],
   "dependencies": {
-    "csso": "3.0.x",
-    "htmlparser2": "3.9.x",
-    "is-plain-obj": "1.1.x",
-    "object-assign": "4.1.x",
-    "svgo": "0.7.x",
-    "uglify-js": "2.8.x"
+    "csso": "3.1.1",
+    "htmlparser2": "3.9.2",
+    "is-plain-obj": "1.1.0",
+    "object-assign": "4.1.1",
+    "svgo": "0.7.2",
+    "uglify-js": "3.0.15"
   },
   "devDependencies": {
     "expect.js": "*",
