@@ -16,7 +16,7 @@
     "is-plain-obj": "1.1.0",
     "object-assign": "4.1.1",
     "svgo": "0.7.2",
-    "uglify-js": "3.0.15"
+    "uglify-js": "3.0.x"
   },
   "devDependencies": {
     "expect.js": "*",
