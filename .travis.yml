@@ -3,11 +3,6 @@ node_js:
   - "4"
   - "6"
   - "8"
-install:
-  - npm -g install yarn
-  - yarn install
-script:
-  - yarn run test
 cache:
   directories:
     - ~/.yarn
