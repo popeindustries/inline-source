@@ -1,6 +1,6 @@
 'use strict';
 
-const { expect } = require('chai');
+const expect = require('chai').expect;
 const eol = require('os').EOL;
 const inline = require('..');
 const inlineSync = require('..').sync;

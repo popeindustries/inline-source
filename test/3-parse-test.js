@@ -1,6 +1,6 @@
 'use strict';
 
-const { expect } = require('chai');
+const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
 const parse = require('../lib/parse');
