@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('expect.js');
+const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const parse = require('../lib/parse');
@@ -27,7 +27,7 @@ describe('parse', function() {
   it('should ignore html with no matching inline tags', function(done) {
     ctx.html = '<p>foo</p>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(0);
       done();
     });
@@ -35,7 +35,7 @@ describe('parse', function() {
   it('should ignore html with inlined style tag and "inline-block"', function(done) {
     ctx.html = '<span style="display: inline-block;" ng-if="x>0"></span>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(0);
       done();
     });
@@ -43,7 +43,7 @@ describe('parse', function() {
   it('should generate a source object for a matching inline <script> tag', function(done) {
     ctx.html = '<script inline></script>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'script');
       expect(ctx.sources[0]).to.have.property('type', 'js');
@@ -54,7 +54,7 @@ describe('parse', function() {
     ctx = createContext(false);
     ctx.html = '<script></script>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'script');
       expect(ctx.sources[0]).to.have.property('type', 'js');
@@ -64,7 +64,7 @@ describe('parse', function() {
   it('should generate a source object for a matching inline <link> tag', function(done) {
     ctx.html = '<link inline>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'link');
       expect(ctx.sources[0]).to.have.property('type', 'css');
@@ -75,7 +75,7 @@ describe('parse', function() {
     ctx = createContext(false);
     ctx.html = '<link inline>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'link');
       expect(ctx.sources[0]).to.have.property('type', 'css');
@@ -85,7 +85,7 @@ describe('parse', function() {
   it('should generate source objects for all tags with "inline" attribute', function(done) {
     ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(14);
       done();
     });
@@ -94,7 +94,7 @@ describe('parse', function() {
     ctx = createContext(false);
     ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match-any.html'), 'utf-8');
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(14);
       done();
     });
@@ -109,7 +109,7 @@ describe('parse', function() {
   ) {
     ctx.html = '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'link');
       expect(ctx.sources[0]).to.have.property('type', 'css');
@@ -119,7 +119,7 @@ describe('parse', function() {
   it('should generate a source object for a matching inline <link> tag with "inline=true"', function(done) {
     ctx.html = '<link inline="true">';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'link');
       expect(ctx.sources[0]).to.have.property('type', 'css');
@@ -129,7 +129,7 @@ describe('parse', function() {
   it('should generate a source object for a matching inline <link> tag with "inline=inline"', function(done) {
     ctx.html = '<link inline="inline">';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('tag', 'link');
       expect(ctx.sources[0]).to.have.property('type', 'css');
@@ -139,7 +139,7 @@ describe('parse', function() {
   it("should parse an inline <script>'s source path", function(done) {
     ctx.html = '<script src="foo.js" inline></script>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('filepath', path.resolve('./test/foo.js'));
       done();
@@ -148,7 +148,7 @@ describe('parse', function() {
   it("should parse an inline <script>'s type", function(done) {
     ctx.html = '<script type="application/json" src="foo.json" inline></script>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('type', 'json');
       done();
@@ -158,7 +158,7 @@ describe('parse', function() {
     ctx.compress = false;
     ctx.html = '<script src="foo.js" inline inline-compress></script>';
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(1);
       expect(ctx.sources[0]).to.have.property('compress', true);
       done();
@@ -168,7 +168,7 @@ describe('parse', function() {
     ctx.html = '<script inline></script>';
     ctx.ignore = ['script'];
     parse(ctx, function(err) {
-      expect(err).to.be(undefined);
+      expect(err).to.equal(undefined);
       expect(ctx.sources).to.have.length(0);
       done();
     });

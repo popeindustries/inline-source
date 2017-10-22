@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('expect.js');
+const { expect } = require('chai');
 const path = require('path');
 const run = require('../lib/run');
 
@@ -29,7 +29,7 @@ describe('run', function() {
       ]
     });
     run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.be(null);
+      expect(err).to.eql(null);
       expect(idx).to.equal(1);
       done();
     });
@@ -65,7 +65,7 @@ describe('run', function() {
       ]
     });
     run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.be(null);
+      expect(err).to.eql(null);
       expect(idx).to.equal(2);
       done();
     });
@@ -119,7 +119,7 @@ describe('run', function() {
       }
     );
     run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.be(null);
+      expect(err).to.eql(null);
       expect(idx).to.equal(4);
       done();
     });
@@ -171,7 +171,7 @@ describe('run', function() {
       ]
     });
     run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.be.an(Error);
+      expect(err).to.be.an('error');
       expect(idx).to.equal(1);
       done();
     });
@@ -194,7 +194,7 @@ describe('run', function() {
     try {
       run(ctx, ctx.sources, false);
     } catch (err) {
-      expect(err).to.be.an(Error);
+      expect(err).to.be.an('error');
       expect(idx).to.equal(1);
     }
   });
@@ -230,7 +230,7 @@ describe('run', function() {
       }
     );
     run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.be.an(Error);
+      expect(err).to.be.an('error');
       expect(idx).to.equal(1);
       done();
     });

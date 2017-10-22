@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('expect.js');
+const { expect } = require('chai');
 const context = require('../lib/context');
 
 describe('context', function() {

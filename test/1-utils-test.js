@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('expect.js');
+const { expect } = require('chai');
 const path = require('path');
 const utils = require('../lib/utils');
 

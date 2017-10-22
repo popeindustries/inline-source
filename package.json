@@ -19,7 +19,7 @@
     "uglify-js": "3.1.x"
   },
   "devDependencies": {
-    "expect.js": "*",
+    "chai": "^4.1.2",
     "memory-fs": "*",
     "mocha": "*"
   },
