@@ -672,6 +672,36 @@ describe('inline', function() {
           done();
         });
       });
+      it('should inline svg sources that contain an "inline" attribute, removing the alt attribute', function (done) {
+        const test = '<img inline src="foo.svg" alt="foo"/>';
+
+        inline(test, {compress: false}, function (err, html) {
+          expect(err).to.eql(null);
+          expect(html).to.eql(
+            '<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">' +
+            eol +
+            '<circle cx="50" cy="50" r="25"/>' +
+            eol +
+            '</svg>'
+          );
+          done();
+        });
+      });
+      it('should inline svg sources that contain an "inline" attribute, removing the alt attribute and preserving others', function (done) {
+        const test = '<img id="foo" class="foo bar" inline src="foo.svg" alt="foo"/>';
+
+        inline(test, {compress: false}, function (err, html) {
+          expect(err).to.eql(null);
+          expect(html).to.eql(
+            '<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">' +
+            eol +
+            '<circle cx="50" cy="50" r="25"/>' +
+            eol +
+            '</svg>'
+          );
+          done();
+        });
+      });
       it('should inline svg sources that contain an "inline" attribute, preserving nested "src" attributes', function(
         done
       ) {
