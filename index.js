@@ -18,7 +18,7 @@ const utils = require('./lib/utils');
  *  - {Boolean} pretty
  *  - {String} rootpath
  *  - {Boolean} swallowErrors
- *  - {Boolean} saveAsImage
+ *  - {Boolean} svgAsImage
  * @param {Function} fn(err, html)
  */
 module.exports = function inlineSource (htmlpath, options, fn) {
@@ -66,7 +66,7 @@ module.exports = function inlineSource (htmlpath, options, fn) {
  *  - {Boolean} pretty
  *  - {String} rootpath
  *  - {Boolean} swallowErrors
- *  - {Boolean} saveAsImage
+ *  - {Boolean} svgAsImage
  * @returns {String}
  */
 module.exports.sync = function inlineSourceSync (htmlpath, options) {
