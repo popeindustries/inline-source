@@ -1,15 +1,9 @@
 {
   "name": "inline-source",
   "description": "Inline all flagged js, css, image source files",
-  "version": "5.2.6",
+  "version": "5.2.7",
   "author": "popeindustries <alex@pope-industries.com>",
-  "keywords": [
-    "inline",
-    "html",
-    "js",
-    "css",
-    "svg"
-  ],
+  "keywords": ["inline", "html", "js", "css", "svg"],
   "dependencies": {
     "csso": "3.4.x",
     "htmlparser2": "3.9.x",
