@@ -19,18 +19,24 @@ const utils = require('./lib/utils');
  *  - {String} rootpath
  *  - {Boolean} swallowErrors
  *  - {Boolean} svgAsImage
- * @param {Function} fn(err, html)
+ * @param {Function} [fn]
+ * @returns {Promise}
  */
-module.exports = function inlineSource (htmlpath, options, fn) {
+exports.inlineSource = function inlineSource(htmlpath, options, fn) {
+  let asPromise = false;
+
   if ('function' == typeof options) {
     fn = options;
     options = {};
   }
+  if (fn === undefined) {
+    asPromise = true;
+  }
 
   const ctx = context.create(options);
-  const next = function (html) {
+  const next = function(html) {
     ctx.html = html;
-    parse(ctx, function (err) {
+    parse(ctx, function(err) {
       if (err) return fn(err);
       if (ctx.sources.length) {
         run(ctx, ctx.sources, ctx.swallowErrors, fn);
@@ -43,50 +49,25 @@ module.exports = function inlineSource (htmlpath, options, fn) {
   // Load html content
   if (utils.isFilepath(htmlpath)) {
     ctx.htmlpath = path.resolve(htmlpath);
-    ctx.fs.readFile(ctx.htmlpath, 'utf8', function (err, content) {
+    ctx.fs.readFile(ctx.htmlpath, 'utf8', function(err, content) {
       if (err) return fn(err);
       next(content);
     });
 
-  // Passed file content instead of path
+    // Passed file content instead of path
   } else {
     next(htmlpath);
   }
 };
 
-/**
- * Synchronously inline sources found in 'htmlpath'
- * @param {String} htmlpath
- * @param {Object} options
- *  - {String} attribute
- *  - {Boolean} compress
- *  - {Object} fs
- *  - {Array} handlers
- *  - {Array} ignore
- *  - {Boolean} pretty
- *  - {String} rootpath
- *  - {Boolean} swallowErrors
- *  - {Boolean} svgAsImage
- * @returns {String}
- */
-module.exports.sync = function inlineSourceSync (htmlpath, options) {
-  options = options || {};
+async function parseAndRun(html, ctx) {
+  ctx.html = html;
 
-  const ctx = context.create(options);
+  await parse(ctx);
 
-  // Load html content
-  if (utils.isFilepath(htmlpath)) {
-    ctx.htmlpath = path.resolve(htmlpath);
-    ctx.html = ctx.fs.readFileSync(ctx.htmlpath, 'utf8');
-
-  // Passed file content instead of path
-  } else {
-    ctx.html = htmlpath;
+  if (ctx.sources.length > 0) {
+    await run(ctx, ctx.sources, ctx.swallowErrors);
   }
 
-  parse(ctx);
-
-  return (ctx.sources.length)
-    ? run(ctx, ctx.sources, ctx.swallowErrors)
-    : ctx.html;
-};
+  return ctx.html;
+}
