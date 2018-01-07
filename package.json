@@ -11,17 +11,17 @@
     "svg"
   ],
   "dependencies": {
-    "csso": "3.3.x",
+    "csso": "3.4.x",
     "htmlparser2": "3.9.x",
     "is-plain-obj": "1.1.x",
     "object-assign": "4.1.x",
     "svgo": "0.7.x",
-    "uglify-js": "3.1.x"
+    "uglify-js": "3.3.x"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "memory-fs": "*",
-    "mocha": "*"
+    "mocha": "^4.1.0"
   },
   "main": "index.js",
   "scripts": {
