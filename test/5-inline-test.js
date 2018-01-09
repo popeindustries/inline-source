@@ -364,6 +364,15 @@ describe('inline', function() {
           done();
         });
       });
+      it('should throw on compression error', function(done) {
+        const test = '<script src="es6.js" inline></script>';
+
+        inline(test, { compress: true }, function(err, html) {
+          expect(err).to.exist;
+          expect(err.message).to.eql('Unexpected token: keyword (const)');
+          done();
+        });
+      });
     });
 
     describe('sync', function() {
@@ -393,7 +402,7 @@ describe('inline', function() {
 
         expect(html).to.eql('<script src="baz.js"></script>' + eol + '<script>var foo=this;console.log(foo);</script>');
       });
-      it('should return an error when options.swallowErrors is "false"', function() {
+      it('should throw an error when options.swallowErrors is "false"', function() {
         const test = '<script inline src="baz.js"></script>' + eol + '<script inline src="foo.js"></script>';
 
         try {
@@ -442,6 +451,18 @@ describe('inline', function() {
             eol +
             '</head>'
         );
+      });
+      it('should throw on compression error', function() {
+        const test = '<script src="es6.js" inline></script>';
+
+        try {
+          const html = inlineSync(test, { compress: true });
+
+          expect(html).to.eql(null);
+        } catch (err) {
+          expect(err).to.exist;
+          expect(err.message).to.eql('Unexpected token: keyword (const)');
+        }
       });
     });
   });
