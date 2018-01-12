@@ -1,10 +1,10 @@
 'use strict';
 
+const { isFilepath } = require('./lib/utils');
 const context = require('./lib/context');
 const path = require('path');
 const parse = require('./lib/parse');
 const run = require('./lib/run');
-const utils = require('./lib/utils');
 
 /**
  * Inline sources found in 'htmlpath'
@@ -19,55 +19,34 @@ const utils = require('./lib/utils');
  *  - {String} rootpath
  *  - {Boolean} swallowErrors
  *  - {Boolean} svgAsImage
- * @param {Function} [fn]
- * @returns {Promise}
+ * @returns {Promise<String>}
  */
-exports.inlineSource = function inlineSource(htmlpath, options, fn) {
-  let asPromise = false;
+exports.inlineSource = function inlineSource(htmlpath, options = {}) {
+  return new Promise(async (resolve, reject) => {
+    const ctx = context.create(options);
 
-  if ('function' == typeof options) {
-    fn = options;
-    options = {};
-  }
-  if (fn === undefined) {
-    asPromise = true;
-  }
-
-  const ctx = context.create(options);
-  const next = function(html) {
-    ctx.html = html;
-    parse(ctx, function(err) {
-      if (err) return fn(err);
-      if (ctx.sources.length) {
-        run(ctx, ctx.sources, ctx.swallowErrors, fn);
-      } else {
-        return fn(null, ctx.html);
+    // Load html content
+    if (isFilepath(htmlpath)) {
+      ctx.htmlpath = path.resolve(htmlpath);
+      try {
+        ctx.html = ctx.fs.readFileSync(ctx.htmlpath, 'utf8');
+      } catch (err) {
+        return reject(err);
       }
-    });
-  };
+      // Passed file content instead of path
+    } else {
+      ctx.html = htmlpath;
+    }
 
-  // Load html content
-  if (utils.isFilepath(htmlpath)) {
-    ctx.htmlpath = path.resolve(htmlpath);
-    ctx.fs.readFile(ctx.htmlpath, 'utf8', function(err, content) {
-      if (err) return fn(err);
-      next(content);
-    });
+    try {
+      await parse(ctx);
+      if (ctx.sources.length > 0) {
+        await run(ctx, ctx.sources, ctx.swallowErrors);
+      }
+    } catch (err) {
+      return reject(err);
+    }
 
-    // Passed file content instead of path
-  } else {
-    next(htmlpath);
-  }
+    resolve(ctx.html);
+  });
 };
-
-async function parseAndRun(html, ctx) {
-  ctx.html = html;
-
-  await parse(ctx);
-
-  if (ctx.sources.length > 0) {
-    await run(ctx, ctx.sources, ctx.swallowErrors);
-  }
-
-  return ctx.html;
-}
