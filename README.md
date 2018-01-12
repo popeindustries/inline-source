@@ -2,7 +2,6 @@
 [![Build Status](https://img.shields.io/travis/popeindustries/inline-source.svg?style=flat)](https://travis-ci.org/popeindustries/inline-source)
 [![Downloads](https://img.shields.io/npm/dt/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
 
-
 # inline-source
 
 Inline and compress tags that contain the `inline` attribute. Supports `<script>`, `<link>`, and `<img>` (including `*.svg` sources) tags by default, and is easily extensible to handle others.
@@ -11,26 +10,28 @@ Inline and compress tags that contain the `inline` attribute. Supports `<script>
 
 ## Usage
 
-**inline(htmlpath, [options], callback(err, html))**: asynchronously parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
+**inline(htmlpath, [options]): Promise**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
 
-`htmlpath` can be either a filepath *or* a string of html content.
+`htmlpath` can be either a filepath _or_ a string of html content.
 
 Available `options` include:
-- `attribute`: attribute used to parse sources (default `'inline'`)
-- `compress`: enable/disable compression of inlined content (default `true`)
-- `fs`: specify `fs` implementation (default is Node core `'fs'`)
-- `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
-- `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
-- `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
-- `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
-- `swallowErrors`: enable/disable suppression of errors (default `false`)
-- `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
 
-*__Note__: you can parse __all__ `script|link|img|object` tags by setting `options.attribute=false`.*
+* `attribute`: attribute used to parse sources (default `'inline'`)
+* `compress`: enable/disable compression of inlined content (default `true`)
+* `fs`: specify `fs` implementation (default is Node core `'fs'`)
+* `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
+* `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
+* `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
+* `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
+* `swallowErrors`: enable/disable suppression of errors (default `false`)
+* `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
+
+_**Note**: you can parse **all** `script|link|img` tags by setting `options.attribute=false`._
 
 ```bash
 $ npm install inline-source
 ```
+
 ```html
 <!-- located at project/src/html/index.html -->
 <!DOCTYPE html>
@@ -47,75 +48,60 @@ $ npm install inline-source
 </head>
 </html>
 ```
+
 ```javascript
-var inline = require('inline-source')
-  , fs = require('fs')
-  , path = require('path')
-  , htmlpath = path.resolve('project/src/html/index.html');
+const inline = require('inline-source');
+const fs = require('fs');
+const path = require('path');
+const htmlpath = path.resolve('project/src/html/index.html');
 
 inline(htmlpath, {
   compress: true,
   rootpath: path.resolve('www'),
   // Skip all css types and png formats
   ignore: ['css', 'png']
-}, function (err, html) {
-  // Do something with html
-});
-```
-
-**inline.sync(htmlpath, [options])**: same as `inline`, but synchronously returns string of html content.
-
-```javascript
-var inline = require('inline-source').sync
-  , fs = require('fs')
-  , path = require('path')
-  , htmlpath = path.resolve('project/src/html/index.html');
-
-var html = inline(htmlpath, {
-  compress: true,
-  rootpath: path.resolve('www'),
-  // Skip all script tags
-  ignore: 'script'
-});
+})
+  .then(html => {
+    // Do something with html
+  })
+  .catch(err => {
+    // Handle error
+  });
 ```
 
 ### Custom Handlers
 
-Custom handlers are simple middleware-type functions that enable you to provide new, or override existing, inlining behaviour. All handlers have the following signature: `function handler (source, context, next) {}`
+Custom handlers are simple middleware-type functions that enable you to provide new, or override existing, inlining behaviour. All handlers have the following signature: `(source, context) => Promise`
 
-- `source`: the current source object to act upon
-  - `attributes`: the parsed tag attributes object
-  - `compress`: the compress flag (may be overriden at the tag level via [props](#props))
-  - `content`: the processed `fileContent` string
-  - `extension`: the file extension
-  - `fileContent`: the loaded file content string
-  - `filepath`: the fully qualified path string
-  - `format`: the format string (`jpg`, `gif`, `svg+xml`, etc)
-  - `match`: the matched html tag string, including closing tag if appropriate
-  - `props`: the parsed namespaced attributes object (see [props](#props))
-  - `replace`: the tag wrapped `content` string to replace `match`
-  - `tag`: the tag string (`script`, `link`, etc)
-  - `type`: the content type based on `type` mime-type attribute, or `tag` (`js` for `application/javascript`, `css` for `text/css`, etc)
+* `source`: the current source object to act upon
 
-- `context`: the global context object storing all configuration options (`attribute`, `compress`, `ignore`, `pretty`, `rootpath`, `swallowErrors`, `svgAsImage`), in addtion to:
-  - `html`: the html file's content string
-  - `htmlpath`: the html file's path string
-  - `sources`: the array of `source` objects
+  * `attributes`: the parsed tag attributes object
+  * `compress`: the compress flag (may be overriden at the tag level via [props](#props))
+  * `content`: the processed `fileContent` string
+  * `extension`: the file extension
+  * `fileContent`: the loaded file content string
+  * `filepath`: the fully qualified path string
+  * `format`: the format string (`jpg`, `gif`, `svg+xml`, etc)
+  * `match`: the matched html tag string, including closing tag if appropriate
+  * `props`: the parsed namespaced attributes object (see [props](#props))
+  * `replace`: the tag wrapped `content` string to replace `match`
+  * `tag`: the tag string (`script`, `link`, etc)
+  * `type`: the content type based on `type` mime-type attribute, or `tag` (`js` for `application/javascript`, `css` for `text/css`, etc)
 
-- `next(err)`: a function to be called to advance to the next middleware function. Accepts an optional `error` object with behaviour determined by `swallowErrors` flag (stops all processing if `false`, skips current `source` if `true`)
+* `context`: the global context object storing all configuration options (`attribute`, `compress`, `ignore`, `pretty`, `rootpath`, `swallowErrors`, `svgAsImage`), in addtion to:
+
+  * `html`: the html file's content string
+  * `htmlpath`: the html file's path string
+  * `sources`: the array of `source` objects
 
 Custom handlers are inserted before the defaults, enabling overriding of default behaviour:
 
 ```js
-module.exports = function customjs (source, context, next) {
-  if (source.fileContent
-    && !source.content
-    && (source.type == 'js')) {
-      source.content = "Hey! I'm overriding the file's content!";
-      next();
-  } else {
-    next();
+module.exports = function customjs(source, context) {
+  if (source.fileContent && !source.content && source.type == 'js') {
+    source.content = "Hey! I'm overriding the file's content!";
   }
+  return Promise.resolve();
 };
 ```
 
@@ -128,21 +114,18 @@ Source `props` are a subset of `attributes` that are namespaced with the current
 ```html
 <script inline inline-foo="foo" inline-compress src="../js/inlineScript.js"></script>
 ```
+
 ```js
-module.exports = function customjs (source, context, next) {
-  if (source.fileContent
-    && !source.content
-    && (source.type == 'js')) {
-      // The `inline-compress` attribute automatically overrides the global flag
-      if (source.compress) {
-        // compress content
-      }
-      if (source.props.foo == 'foo') {
-        // foo content
-      }
-      next();
-  } else {
-    next();
+module.exports = function customjs(source, context) {
+  if (source.fileContent && !source.content && source.type == 'js') {
+    // The `inline-compress` attribute automatically overrides the global flag
+    if (source.compress) {
+      // compress content
+    }
+    if (source.props.foo == 'foo') {
+      // foo content
+    }
   }
+  return Promise.resolve();
 };
 ```
