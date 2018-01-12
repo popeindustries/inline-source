@@ -1,20 +1,15 @@
-declare namespace inline {
-	function sync(htmlpath: string, options?: Partial<Options>): void;
-}
-
 interface Options {
-	compress: boolean;
-	rootpath: string;
-	ignore: string[] | { [key: string]: string; };
-	swallowErrors: boolean;
-	attribute: string | boolean;
-	pretty: boolean;
-	fs: any;	// like MemoryFileSystem
+  attribute: string | boolean;
+  compress: boolean;
+  fs: any; // like MemoryFileSystem
+  handlers: [(object, object) => Promise];
+  ignore: string[] | { [key: string]: string };
+  pretty: boolean;
+  rootpath: string;
+  svgAsImage: boolean;
+  swallowErrors: boolean;
 }
 
-type Callback = (err: Error, html: string) => void;
-
-declare function inline(htmlpath: string, options: Partial<Options>, fn: Callback): void;
-declare function inline(htmlpath: string, fn: Callback): void;
+declare function inline(htmlpath: string, options: Partial<Options>): Promise<string>;
 
 export = inline;
