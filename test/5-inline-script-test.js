@@ -220,6 +220,15 @@ describe('inline <script>', () => {
     expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(true);
     fs.unlinkSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'));
   });
+  it('should not save a copy of an inlined remote source when options.saveRemote is "false"', async () => {
+    nock('https://cdnjs.cloudflare.com')
+      .get('/ajax/libs/preact/8.2.7/preact.min.js')
+      .reply(200, 'preact;');
+    const test = '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
+    const html = await inline(test, { compress: true, saveRemote: false });
+    expect(html).to.eql('<script>preact;</script>');
+    expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(false);
+  });
   it('should remove the "inline" attribute for remote sources that can\'t be found when options.swallowErrors is "true"', async () => {
     nock('https://cdnjs.cloudflare.com')
       .get('/ajax/libs/preact/8.2.7/preact.min.js')

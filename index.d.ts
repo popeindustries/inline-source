@@ -2,10 +2,11 @@ interface Options {
   attribute: string | boolean;
   compress: boolean;
   fs: any; // like MemoryFileSystem
-  handlers: [(object, object) => Promise];
+  handlers: [({}, {}) => Promise<any>];
   ignore: string[] | { [key: string]: string };
   pretty: boolean;
   rootpath: string;
+  saveRemote: boolean;
   svgAsImage: boolean;
   swallowErrors: boolean;
 }
