@@ -2,7 +2,9 @@
 
 const { expect } = require('chai');
 const { inlineSource: inline } = require('..');
+const fs = require('fs');
 const MemoryFileSystem = require('memory-fs');
+const nock = require('nock');
 const path = require('path');
 
 function normaliseNewLine(str) {
@@ -206,6 +208,36 @@ describe('inline <script>', () => {
       expect(html).to.not.exist;
     } catch (err) {
       expect(err.message).to.eql('Unexpected token: keyword (const)');
+    }
+  });
+  it('should inline remote sources', async () => {
+    nock('https://cdnjs.cloudflare.com')
+      .get('/ajax/libs/preact/8.2.7/preact.min.js')
+      .reply(200, 'preact;');
+    const test = '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
+    const html = await inline(test, { compress: true });
+    expect(html).to.eql('<script>preact;</script>');
+    expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(true);
+    fs.unlinkSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'));
+  });
+  it('should remove the "inline" attribute for remote sources that can\'t be found when options.swallowErrors is "true"', async () => {
+    nock('https://cdnjs.cloudflare.com')
+      .get('/ajax/libs/preact/8.2.7/preact.min.js')
+      .reply(404);
+    const test = '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
+    const html = await inline(test, { compress: true, swallowErrors: true });
+    expect(html).to.eql('<script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>');
+  });
+  it('should throw on error inlining remote sources', async () => {
+    nock('https://cdnjs.cloudflare.com')
+      .get('/blah.js')
+      .reply(404);
+    const test = '<script inline src="https://cdnjs.cloudflare.com/blah.js"></script>';
+    try {
+      const html = await inline(test, { compress: true });
+      expect(html).to.not.exist;
+    } catch (err) {
+      expect(err.message).to.eql('Not Found');
     }
   });
 });
