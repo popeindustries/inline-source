@@ -16,17 +16,16 @@ Inline and compress tags that contain the `inline` attribute. Supports `<script>
 
 Available `options` include:
 
-* `attribute`: attribute used to parse sources (default `'inline'`)
+* `attribute`: attribute used to parse sources (all tags will be parsed if set to `false`. Default `'inline'`)
 * `compress`: enable/disable compression of inlined content (default `true`)
 * `fs`: specify `fs` implementation (default is Node core `'fs'`)
 * `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
 * `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
 * `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
 * `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
+* `saveRemote`: enable/disable saving a local copy of remote sources (default `true`)
 * `swallowErrors`: enable/disable suppression of errors (default `false`)
 * `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
-
-_**Note**: you can parse **all** `script|link|img` tags by setting `options.attribute=false`._
 
 ```bash
 $ npm install inline-source
@@ -41,6 +40,8 @@ $ npm install inline-source
   <link inline href="css/inlineStyle.css">
   <!-- inline project/src/js/inlineScript.js as <script> -->
   <script inline src="../js/inlineScript.js"></script>
+  <!-- inline remote file as <script> -->
+  <script inline src="http://js/inlineScript.js"></script>
   <!-- inline project/www/images/inlineImage.png as base64 <img> -->
   <img inline src="images/inlineImage.png" />
   <!-- inline project/www/images/inlineImage.svg as <svg> -->
