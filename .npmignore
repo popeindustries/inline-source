@@ -1,4 +1,6 @@
 .git*
 test/
 .DS_Store
-package-lock.json
+yarn.lock
+.travis.hml
+CHANGELOG.md

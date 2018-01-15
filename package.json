@@ -1,34 +1,28 @@
 {
   "name": "inline-source",
   "description": "Inline all flagged js, css, image source files",
-  "version": "5.2.6",
+  "version": "6.1.0",
   "author": "popeindustries <alex@pope-industries.com>",
-  "keywords": [
-    "inline",
-    "html",
-    "js",
-    "css",
-    "svg"
-  ],
+  "keywords": ["inline", "html", "js", "css", "svg"],
   "dependencies": {
-    "csso": "3.3.x",
+    "csso": "3.4.x",
     "htmlparser2": "3.9.x",
-    "is-plain-obj": "1.1.x",
-    "object-assign": "4.1.x",
-    "svgo": "0.7.x",
-    "uglify-js": "3.1.x"
+    "superagent": "^3.8.2",
+    "svgo": "1.0.x",
+    "uglify-js": "3.3.x"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "memory-fs": "*",
-    "mocha": "*"
+    "mocha": "^4.1.0",
+    "nock": "^9.1.6"
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec --bail"
+    "test": "NODE_ENV=test mocha --reporter spec --bail"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=8.6"
   },
   "repository": "git://github.com/popeindustries/inline-source.git",
   "readmeFilename": "README.md",

@@ -1,10 +1,10 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const context = require('../lib/context');
 
-describe('context', function() {
-  it('should return a default context', function() {
+describe('context', () => {
+  it('should return a default context', () => {
     const ctx = context.create();
 
     expect(ctx).to.have.property('attribute', 'inline');
@@ -12,16 +12,16 @@ describe('context', function() {
     expect(ctx).to.have.property('pretty', false);
     expect(ctx).to.have.property('swallowErrors', false);
   });
-  it('should allow overriding defaults with "options"', function() {
+  it('should allow overriding defaults with "options"', () => {
     const ctx = context.create({ compress: false });
 
     expect(ctx).to.have.property('compress', false);
   });
-  it('should allow adding handlers', function() {
+  it('should allow adding handlers', () => {
     const ctx = context.create({
       handlers: [
-        function(source, next) {
-          next();
+        function(source, context) {
+          return Promise.resolve();
         }
       ]
     });

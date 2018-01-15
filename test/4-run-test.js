@@ -1,13 +1,13 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const path = require('path');
 const run = require('../lib/run');
 
 let ctx;
 
-describe('run', function() {
-  beforeEach(function() {
+describe('run', () => {
+  beforeEach(() => {
     ctx = {
       attribute: 'inline',
       html: '',
@@ -16,223 +16,200 @@ describe('run', function() {
     };
   });
 
-  it('should process a simple stack', function(done) {
+  it('should process a simple stack', async () => {
     let idx = 0;
 
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context, next) {
+        function(source, context) {
           idx++;
-          next();
+          return Promise.resolve();
         }
       ]
     });
-    run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.eql(null);
-      expect(idx).to.equal(1);
-      done();
-    });
-  });
-  it('should synchronously process a simple stack', function() {
-    let idx = 0;
-
-    ctx.sources.push({
-      parentContext: ctx,
-      stack: [
-        function(source, context, next) {
-          idx++;
-        }
-      ]
-    });
-    run(ctx, ctx.sources, false);
+    await run(ctx, ctx.sources, false);
     expect(idx).to.equal(1);
   });
-  it('should process a complex stack', function(done) {
+  it('should process a complex stack', async () => {
     let idx = 0;
 
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context, next) {
-          idx++;
-          next();
+        function(source, context) {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              idx++;
+              resolve();
+            }, 50);
+          });
         },
-        function(source, context, next) {
+        function(source, context) {
           idx++;
-          next();
+          return Promise.resolve();
         }
       ]
     });
-    run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.eql(null);
-      expect(idx).to.equal(2);
-      done();
-    });
-  });
-  it('should synchronously process a complex stack', function() {
-    let idx = 0;
-
-    ctx.sources.push({
-      parentContext: ctx,
-      stack: [
-        function(source, context, next) {
-          idx++;
-        },
-        function(source, context, next) {
-          idx++;
-        }
-      ]
-    });
-    run(ctx, ctx.sources, false);
+    await run(ctx, ctx.sources, false);
     expect(idx).to.equal(2);
   });
-  it('should process multiple sources in parallel', function(done) {
+  it('should process multiple sources in parallel', async () => {
+    const stack = [];
     let idx = 0;
 
     ctx.sources.push(
       {
         parentContext: ctx,
         stack: [
-          function(source, context, next) {
-            idx++;
-            next();
+          function(source, context) {
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                idx++;
+                stack.push('1a');
+                resolve();
+              }, 50);
+            });
           },
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next();
+            stack.push('1b');
+            return Promise.resolve();
           }
         ]
       },
       {
         parentContext: ctx,
         stack: [
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next();
+            stack.push('2a');
+            return Promise.resolve();
           },
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next();
+            stack.push('2b');
+            return Promise.resolve();
           }
         ]
       }
     );
-    run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.eql(null);
-      expect(idx).to.equal(4);
-      done();
-    });
-  });
-  it('should synchronously process multiple sources in parallel', function() {
-    let idx = 0;
-
-    ctx.sources.push(
-      {
-        parentContext: ctx,
-        stack: [
-          function(source, context, next) {
-            idx++;
-          },
-          function(source, context, next) {
-            idx++;
-          }
-        ]
-      },
-      {
-        parentContext: ctx,
-        stack: [
-          function(source, context, next) {
-            idx++;
-          },
-          function(source, context, next) {
-            idx++;
-          }
-        ]
-      }
-    );
-    run(ctx, ctx.sources, false);
+    await run(ctx, ctx.sources, false);
     expect(idx).to.equal(4);
+    expect(stack).to.eql(['2a', '2b', '1a', '1b']);
   });
-  it('should handle errors', function(done) {
+  it('should handle errors', async () => {
     let idx = 0;
 
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context, next) {
+        function(source, context) {
           idx++;
-          next(new Error('oops'));
+          return Promise.reject(new Error('oops'));
         },
-        function(source, context, next) {
+        function(source, context) {
           idx++;
-          next();
-        }
-      ]
-    });
-    run(ctx, ctx.sources, false, function(err) {
-      expect(err).to.be.an('error');
-      expect(idx).to.equal(1);
-      done();
-    });
-  });
-  it('should handle errors for synchronous calls', function() {
-    let idx = 0;
-
-    ctx.sources.push({
-      parentContext: ctx,
-      stack: [
-        function(source, context, next) {
-          idx++;
-          throw new Error('oops');
-        },
-        function(source, context, next) {
-          idx++;
+          return Promise.resolve();
         }
       ]
     });
     try {
-      run(ctx, ctx.sources, false);
+      await run(ctx, ctx.sources, false);
     } catch (err) {
       expect(err).to.be.an('error');
-      expect(idx).to.equal(1);
     }
+    expect(idx).to.equal(1);
   });
-  it('should handle multiple errors', function(done) {
+  it('should handle swallowed errors', async () => {
+    let idx = 0;
+
+    ctx.sources.push({
+      parentContext: ctx,
+      stack: [
+        function(source, context) {
+          idx++;
+          return Promise.reject(new Error('oops'));
+        },
+        function(source, context) {
+          idx++;
+          return Promise.resolve();
+        }
+      ]
+    });
+    await run(ctx, ctx.sources, true);
+    expect(idx).to.equal(2);
+  });
+  it('should handle multiple errors', async () => {
     let idx = 0;
 
     ctx.sources.push(
       {
         parentContext: ctx,
         stack: [
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next(new Error('oops'));
+            return Promise.reject(new Error('oops'));
           },
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next();
+            return Promise.resolve();
           }
         ]
       },
       {
         parentContext: ctx,
         stack: [
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next(new Error('oops'));
+            return Promise.reject(new Error('oops'));
           },
-          function(source, context, next) {
+          function(source, context) {
             idx++;
-            next();
+            return Promise.resolve();
           }
         ]
       }
     );
-    run(ctx, ctx.sources, false, function(err) {
+    try {
+      await run(ctx, ctx.sources, false);
+    } catch (err) {
       expect(err).to.be.an('error');
-      expect(idx).to.equal(1);
-      done();
-    });
+    }
+    expect(idx).to.equal(2);
+  });
+  it('should handle multiple swallowed errors', async () => {
+    let idx = 0;
+
+    ctx.sources.push(
+      {
+        parentContext: ctx,
+        stack: [
+          function(source, context) {
+            idx++;
+            return Promise.reject(new Error('oops'));
+          },
+          function(source, context) {
+            idx++;
+            return Promise.resolve();
+          }
+        ]
+      },
+      {
+        parentContext: ctx,
+        stack: [
+          function(source, context) {
+            idx++;
+            return Promise.reject(new Error('oops'));
+          },
+          function(source, context) {
+            idx++;
+            return Promise.resolve();
+          }
+        ]
+      }
+    );
+    await run(ctx, ctx.sources, true);
+    expect(idx).to.equal(4);
   });
 });
