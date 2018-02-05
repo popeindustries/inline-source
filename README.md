@@ -51,7 +51,7 @@ $ npm install inline-source
 ```
 
 ```javascript
-const inline = require('inline-source');
+const { inlineSource: inline } = require('inline-source');
 const fs = require('fs');
 const path = require('path');
 const htmlpath = path.resolve('project/src/html/index.html');
