@@ -21,7 +21,7 @@ const run = require('./lib/run');
  *  - {Boolean} svgAsImage
  * @returns {Promise<String>}
  */
-exports.inlineSource = function inlineSource(htmlpath, options = {}) {
+module.exports = function inlineSource(htmlpath, options = {}) {
   return new Promise(async (resolve, reject) => {
     const ctx = context.create(options);
 
