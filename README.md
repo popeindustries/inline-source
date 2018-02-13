@@ -10,7 +10,7 @@ Inline and compress tags that contain the `inline` attribute. Supports `<script>
 
 ## Usage
 
-**inline(htmlpath, [options]): Promise**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
+**inlineSource(htmlpath, [options]): Promise<string>**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
 
 `htmlpath` can be either a filepath _or_ a string of html content.
 
@@ -51,12 +51,12 @@ $ npm install inline-source
 ```
 
 ```javascript
-const inline = require('inline-source');
+const { inlineSource } = require('inline-source');
 const fs = require('fs');
 const path = require('path');
 const htmlpath = path.resolve('project/src/html/index.html');
 
-inline(htmlpath, {
+inlineSource(htmlpath, {
   compress: true,
   rootpath: path.resolve('www'),
   // Skip all css types and png formats
