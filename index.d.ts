@@ -11,4 +11,4 @@ export interface Options {
 	swallowErrors: boolean;
 }
 
-export function inlineSource(htmlpath: string, options?: Partial<inline.Options>): Promise<string>;
+export function inlineSource(htmlpath: string, options?: Partial<Options>): Promise<string>;
