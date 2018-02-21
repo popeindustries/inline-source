@@ -1,6 +1,6 @@
 [![NPM Version](https://img.shields.io/npm/v/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
 [![Build Status](https://img.shields.io/travis/popeindustries/inline-source.svg?style=flat)](https://travis-ci.org/popeindustries/inline-source)
-[![Downloads](https://img.shields.io/npm/dt/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
+[![Downloads](https://img.shields.io/npm/dm/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
 
 # inline-source
 
