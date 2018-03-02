@@ -99,6 +99,11 @@ describe('inline <script>', () => {
     const html = await inline(test, { compress: true, attribute: 'data-inline' });
     expect(html).to.eql('<script>var bar=this;console.log(bar);</script>');
   });
+  it('should allow override of compression setting', async () => {
+    const test = '<script inline inline-compress=false src="bar.js"></script>';
+    const html = await inline(test, { compress: true });
+    expect(html).to.eql('<script>var bar = this;\nconsole.log(bar);</script>');
+  });
   it('should load html source content if none specified', async () => {
     const html = await inline(path.resolve('test.html'));
     expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');

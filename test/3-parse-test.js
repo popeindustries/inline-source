@@ -114,11 +114,11 @@ describe('parse', () => {
     expect(ctx.sources[0]).to.have.property('type', 'json');
   });
   it('should generate a source object with custom compression setting', async () => {
-    ctx.compress = false;
-    ctx.html = '<script src="foo.js" inline inline-compress></script>';
+    ctx.compress = true;
+    ctx.html = '<script src="foo.js" inline inline-compress=false></script>';
     await parse(ctx);
     expect(ctx.sources).to.have.length(1);
-    expect(ctx.sources[0]).to.have.property('compress', true);
+    expect(ctx.sources[0]).to.have.property('compress', false);
   });
   it('should not generate a source object if tag is included in options.ignore.tag', async () => {
     ctx.html = '<script inline></script>';
