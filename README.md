@@ -113,15 +113,15 @@ In general, default file content processing will be skipped if `source.content` 
 Source `props` are a subset of `attributes` that are namespaced with the current global `attribute` ('inline' by default), and allow declaratively passing data or settings to handlers:
 
 ```html
-<script inline inline-foo="foo" inline-compress src="../js/inlineScript.js"></script>
+<script inline inline-foo="foo" inline-compress=false src="../js/inlineScript.js"></script>
 ```
 
 ```js
 module.exports = function customjs(source, context) {
   if (source.fileContent && !source.content && source.type == 'js') {
     // The `inline-compress` attribute automatically overrides the global flag
-    if (source.compress) {
-      // compress content
+    if (!source.compress) {
+      // do something
     }
     if (source.props.foo == 'foo') {
       // foo content
