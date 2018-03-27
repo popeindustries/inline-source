@@ -5,7 +5,7 @@
   "author": "popeindustries <alex@pope-industries.com>",
   "keywords": ["inline", "html", "js", "css", "svg"],
   "dependencies": {
-    "csso": "3.4.x",
+    "csso": "3.5.x",
     "htmlparser2": "3.9.x",
     "superagent": "^3.8.2",
     "svgo": "1.0.x",
