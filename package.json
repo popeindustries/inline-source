@@ -3,7 +3,13 @@
   "description": "Inline all flagged js, css, image source files",
   "version": "6.1.3",
   "author": "popeindustries <alex@pope-industries.com>",
-  "keywords": ["inline", "html", "js", "css", "svg"],
+  "keywords": [
+    "inline",
+    "html",
+    "js",
+    "css",
+    "svg"
+  ],
   "dependencies": {
     "csso": "3.5.x",
     "htmlparser2": "3.9.x",
@@ -14,7 +20,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "memory-fs": "*",
-    "mocha": "^4.1.0",
+    "mocha": "^5.0.0",
     "nock": "^9.1.6"
   },
   "main": "index.js",
