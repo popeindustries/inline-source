@@ -11,18 +11,18 @@
     "svg"
   ],
   "dependencies": {
-    "csso": "3.5.x",
-    "htmlparser2": "3.9.x",
-    "superagent": "^3.8.2",
-    "svgo": "1.0.x",
-    "uglify-js": "3.3.x"
+    "csso": "~3.5.0",
+    "htmlparser2": "~3.9.0",
+    "superagent": "^3.8.3",
+    "svgo": "~1.0.5",
+    "uglify-js": "~3.3.25"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "handlebars": "^4.0.11",
     "memory-fs": "*",
-    "mocha": "^5.0.0",
-    "nock": "^9.1.6"
+    "mocha": "^5.1.1",
+    "nock": "^9.2.6"
   },
   "main": "index.js",
   "scripts": {
