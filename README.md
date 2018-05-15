@@ -6,11 +6,13 @@
 
 Inline and compress tags that contain the `inline` attribute. Supports `<script>`, `<link>`, and `<img>` (including `*.svg` sources) tags by default, and is easily extensible to handle others.
 
+**NOTE**: since version 6, the API is now Promise based, and compatible with `async/await`, requiring a minimum Node version of 7.6
+
 > You can use [inline-source-cli](https://github.com/developit/inline-source-cli) to run `inline-source` from the command line or NPM Scripts.
 
 ## Usage
 
-**inlineSource(htmlpath, [options]): Promise<string>**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
+**`inlineSource(htmlpath, [options]): Promise<string>`**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
 
 `htmlpath` can be either a filepath _or_ a string of html content.
 
@@ -61,13 +63,33 @@ inlineSource(htmlpath, {
   rootpath: path.resolve('www'),
   // Skip all css types and png formats
   ignore: ['css', 'png']
-})
-  .then(html => {
-    // Do something with html
-  })
-  .catch(err => {
-    // Handle error
+}).then(html => {
+  // Do something with html
+}).catch(err => {
+  // Handle error
+});
+```
+
+...or preferably using `async/await`:
+
+```javascript
+const { inlineSource } = require('inline-source');
+const fs = require('fs');
+const path = require('path');
+const htmlpath = path.resolve('project/src/html/index.html');
+let html;
+
+try {
+  html = await inlineSource(htmlpath, {
+    compress: true,
+    rootpath: path.resolve('www'),
+    // Skip all css types and png formats
+    ignore: ['css', 'png']
   });
+  // Do something with html
+} catch(err) {
+  // Handle error
+}
 ```
 
 ### Custom Handlers
