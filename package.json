@@ -29,7 +29,7 @@
     "test": "NODE_ENV=test mocha --reporter spec --bail"
   },
   "engines": {
-    "node": ">=8.6"
+    "node": ">=7.6"
   },
   "repository": "git://github.com/popeindustries/inline-source.git",
   "readmeFilename": "README.md",
