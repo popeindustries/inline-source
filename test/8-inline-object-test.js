@@ -21,7 +21,8 @@ describe('inline <object>', () => {
 </svg>`);
   });
   it('should inline svg sources that contain an "inline" attribute, preserving other attributes', async () => {
-    const test = '<object inline id="foo" class="foo bar" type="image/svg+xml" data="foo.svg"></object>';
+    const test =
+      '<object inline id="foo" class="foo bar" type="image/svg+xml" data="foo.svg"></object>';
     const html = normaliseNewLine(await inline(test, { compress: false }));
     expect(html).to
       .eql(`<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">

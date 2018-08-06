@@ -81,7 +81,8 @@ describe('parse', () => {
     expect(ctx.sources).to.have.length(14);
   });
   it('should generate a source object for a matching inline <link> tag inside an ie conditional comment', async () => {
-    ctx.html = '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
+    ctx.html =
+      '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
     await parse(ctx);
     expect(ctx.sources).to.have.length(1);
     expect(ctx.sources[0]).to.have.property('tag', 'link');

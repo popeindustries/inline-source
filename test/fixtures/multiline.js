@@ -1,7 +1,7 @@
-var foo = 'foo'
-  , bar = 'bar';
+var foo = 'foo',
+  bar = 'bar';
 
-function baz () {
+function baz() {
   console.log(foo, bar);
 }
 

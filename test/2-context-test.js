@@ -20,7 +20,7 @@ describe('context', () => {
   it('should allow adding handlers', () => {
     const ctx = context.create({
       handlers: [
-        function(source, context) {
+        function() {
           return Promise.resolve();
         }
       ]

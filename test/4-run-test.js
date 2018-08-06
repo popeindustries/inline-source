@@ -22,7 +22,7 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context) {
+        function() {
           idx++;
           return Promise.resolve();
         }
@@ -37,15 +37,15 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context) {
-          return new Promise((resolve, reject) => {
+        function() {
+          return new Promise((resolve) => {
             setTimeout(() => {
               idx++;
               resolve();
             }, 50);
           });
         },
-        function(source, context) {
+        function() {
           idx++;
           return Promise.resolve();
         }
@@ -62,8 +62,8 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function(source, context) {
-            return new Promise((resolve, reject) => {
+          function() {
+            return new Promise((resolve) => {
               setTimeout(() => {
                 idx++;
                 stack.push('1a');
@@ -71,7 +71,7 @@ describe('run', () => {
               }, 50);
             });
           },
-          function(source, context) {
+          function() {
             idx++;
             stack.push('1b');
             return Promise.resolve();
@@ -81,12 +81,12 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function(source, context) {
+          function() {
             idx++;
             stack.push('2a');
             return Promise.resolve();
           },
-          function(source, context) {
+          function() {
             idx++;
             stack.push('2b');
             return Promise.resolve();
@@ -104,11 +104,11 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context) {
+        function() {
           idx++;
           return Promise.reject(new Error('oops'));
         },
-        function(source, context) {
+        function() {
           idx++;
           return Promise.resolve();
         }
@@ -127,11 +127,11 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function(source, context) {
+        function() {
           idx++;
           return Promise.reject(new Error('oops'));
         },
-        function(source, context) {
+        function() {
           idx++;
           return Promise.resolve();
         }
@@ -147,11 +147,11 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function(source, context) {
+          function() {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function(source, context) {
+          function() {
             idx++;
             return Promise.resolve();
           }
@@ -160,11 +160,11 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function(source, context) {
+          function() {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function(source, context) {
+          function() {
             idx++;
             return Promise.resolve();
           }
@@ -185,11 +185,11 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function(source, context) {
+          function() {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function(source, context) {
+          function() {
             idx++;
             return Promise.resolve();
           }
@@ -198,11 +198,11 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function(source, context) {
+          function() {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function(source, context) {
+          function() {
             idx++;
             return Promise.resolve();
           }

@@ -1,2 +1,3 @@
+/* global document */
 var foo = 'foo';
-document.write('<script>document.title="'+foo+'"</script>');
+document.write('<script>document.title="' + foo + '"</script>');

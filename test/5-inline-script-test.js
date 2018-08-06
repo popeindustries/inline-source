@@ -76,7 +76,9 @@ describe('inline <script>', () => {
   it('should remove the "inline" attribute for sources that can\'t be found when options.swallowErrors is "true"', async () => {
     const test = '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
     const html = normaliseNewLine(await inline(test, { compress: true, swallowErrors: true }));
-    expect(html).to.eql('<script src="baz.js"></script>\n<script>var foo=this;console.log(foo);</script>');
+    expect(html).to.eql(
+      '<script src="baz.js"></script>\n<script>var foo=this;console.log(foo);</script>'
+    );
   });
   it('should return an error when options.swallowErrors is "false"', async () => {
     const test = '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
@@ -149,7 +151,9 @@ describe('inline <script>', () => {
     expect(html).to.eql('<script inline src="./nested/foo.js"></script>');
   });
   it('should preserve whitespace while inlining content when options.pretty is "true"', async () => {
-    const html = normaliseNewLine(await inline(path.resolve('multiline.html'), { pretty: true, compress: false }));
+    const html = normaliseNewLine(
+      await inline(path.resolve('multiline.html'), { pretty: true, compress: false })
+    );
     expect(html).to.eql(`<!DOCTYPE html>
 <html>
 <head>
@@ -219,7 +223,8 @@ describe('inline <script>', () => {
     nock('https://cdnjs.cloudflare.com')
       .get('/ajax/libs/preact/8.2.7/preact.min.js')
       .reply(200, 'preact;');
-    const test = '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
+    const test =
+      '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
     const html = await inline(test, { compress: true });
     expect(html).to.eql('<script>preact;</script>');
     expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(true);
@@ -229,7 +234,8 @@ describe('inline <script>', () => {
     nock('https://cdnjs.cloudflare.com')
       .get('/ajax/libs/preact/8.2.7/preact.min.js')
       .reply(200, 'preact;');
-    const test = '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
+    const test =
+      '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
     const html = await inline(test, { compress: true, saveRemote: false });
     expect(html).to.eql('<script>preact;</script>');
     expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(false);
@@ -238,9 +244,12 @@ describe('inline <script>', () => {
     nock('https://cdnjs.cloudflare.com')
       .get('/ajax/libs/preact/8.2.7/preact.min.js')
       .reply(404);
-    const test = '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
+    const test =
+      '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
     const html = await inline(test, { compress: true, swallowErrors: true });
-    expect(html).to.eql('<script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>');
+    expect(html).to.eql(
+      '<script src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>'
+    );
   });
   it('should throw on error inlining remote sources', async () => {
     nock('https://cdnjs.cloudflare.com')

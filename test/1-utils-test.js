@@ -85,7 +85,9 @@ describe('utils', () => {
       expect(getAttributeString({ foo: 'foo', inline: true }, 'inline', true)).to.eql(' foo="foo"');
     });
     it('should ignore blacklisted attributes', () => {
-      expect(getAttributeString({ foo: 'foo', inline: true, src: 'foo.js' }, 'inline', true)).to.eql(' foo="foo"');
+      expect(
+        getAttributeString({ foo: 'foo', inline: true, src: 'foo.js' }, 'inline', true)
+      ).to.eql(' foo="foo"');
     });
   });
 
@@ -95,72 +97,66 @@ describe('utils', () => {
         path.resolve(process.cwd(), 'foo.css'),
         ''
       ]);
-      expect(getSourcepath('../css/foo.css', path.resolve('./html/index.html'), process.cwd())).to.eql([
-        path.resolve(process.cwd(), 'css/foo.css'),
-        ''
-      ]);
+      expect(
+        getSourcepath('../css/foo.css', path.resolve('./html/index.html'), process.cwd())
+      ).to.eql([path.resolve(process.cwd(), 'css/foo.css'), '']);
     });
     it('should return a resolved path for relative source path and custom rootpath', () => {
       expect(getSourcepath('./foo.css', path.resolve('./index.html'), path.resolve('www'))).to.eql([
         path.resolve(process.cwd(), 'foo.css'),
         ''
       ]);
-      expect(getSourcepath('../css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))).to.eql([
-        path.resolve(process.cwd(), 'css/foo.css'),
-        ''
-      ]);
+      expect(
+        getSourcepath('../css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))
+      ).to.eql([path.resolve(process.cwd(), 'css/foo.css'), '']);
     });
     it('should return a resolved path for absolute source path and default rootpath', () => {
       expect(getSourcepath('/foo.css', path.resolve('./index.html'), process.cwd())).to.eql([
         path.resolve(process.cwd(), 'foo.css'),
         ''
       ]);
-      expect(getSourcepath('/css/foo.css', path.resolve('./html/index.html'), process.cwd())).to.eql([
-        path.resolve(process.cwd(), 'css/foo.css'),
-        ''
-      ]);
+      expect(
+        getSourcepath('/css/foo.css', path.resolve('./html/index.html'), process.cwd())
+      ).to.eql([path.resolve(process.cwd(), 'css/foo.css'), '']);
     });
     it('should return a resolved path for absolute source path and custom rootpath', () => {
-      expect(getSourcepath('/dist/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))).to.eql([
-        path.resolve('dist/dist/images/foo.png'),
-        ''
-      ]);
-      expect(getSourcepath('/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))).to.eql([
-        path.resolve('dist/images/foo.png'),
-        ''
-      ]);
+      expect(
+        getSourcepath(
+          '/dist/images/foo.png',
+          path.resolve('./dist/index.html'),
+          path.resolve('./dist')
+        )
+      ).to.eql([path.resolve('dist/dist/images/foo.png'), '']);
+      expect(
+        getSourcepath('/images/foo.png', path.resolve('./dist/index.html'), path.resolve('./dist'))
+      ).to.eql([path.resolve('dist/images/foo.png'), '']);
       expect(getSourcepath('/foo.css', path.resolve('./index.html'), path.resolve('www'))).to.eql([
         path.resolve('www', 'foo.css'),
         ''
       ]);
-      expect(getSourcepath('/css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))).to.eql([
-        path.resolve('www', 'css/foo.css'),
-        ''
-      ]);
+      expect(
+        getSourcepath('/css/foo.css', path.resolve('./html/index.html'), path.resolve('www'))
+      ).to.eql([path.resolve('www', 'css/foo.css'), '']);
     });
     it('should return anchor if present', () => {
-      expect(getSourcepath('./foo.svg#foo,bar', path.resolve('./index.html'), process.cwd())).to.eql([
-        path.resolve(process.cwd(), 'foo.svg'),
-        'foo,bar'
-      ]);
+      expect(
+        getSourcepath('./foo.svg#foo,bar', path.resolve('./index.html'), process.cwd())
+      ).to.eql([path.resolve(process.cwd(), 'foo.svg'), 'foo,bar']);
     });
     it('should strip query params if present', () => {
-      expect(getSourcepath('./foo.css?v=12345', path.resolve('./index.html'), process.cwd())).to.eql([
-        path.resolve(process.cwd(), 'foo.css'),
-        ''
-      ]);
+      expect(
+        getSourcepath('./foo.css?v=12345', path.resolve('./index.html'), process.cwd())
+      ).to.eql([path.resolve(process.cwd(), 'foo.css'), '']);
       expect(getSourcepath('./foo.css?', path.resolve('./index.html'), process.cwd())).to.eql([
         path.resolve(process.cwd(), 'foo.css'),
         ''
       ]);
-      expect(getSourcepath('./foo.svg?v=12345#foo,bar', path.resolve('./index.html'), process.cwd())).to.eql([
-        path.resolve(process.cwd(), 'foo.svg'),
-        'foo,bar'
-      ]);
-      expect(getSourcepath('./foo.svg?#foo,bar', path.resolve('./index.html'), process.cwd())).to.eql([
-        path.resolve(process.cwd(), 'foo.svg'),
-        'foo,bar'
-      ]);
+      expect(
+        getSourcepath('./foo.svg?v=12345#foo,bar', path.resolve('./index.html'), process.cwd())
+      ).to.eql([path.resolve(process.cwd(), 'foo.svg'), 'foo,bar']);
+      expect(
+        getSourcepath('./foo.svg?#foo,bar', path.resolve('./index.html'), process.cwd())
+      ).to.eql([path.resolve(process.cwd(), 'foo.svg'), 'foo,bar']);
     });
   });
 

@@ -20,7 +20,7 @@ describe('inline <custom>', () => {
   it('should inline sources for custom tags and custom handler', async () => {
     const test = '<foo inline></foo>';
     const html = await inline(test, {
-      handlers(source, context) {
+      handlers(source) {
         if (source.tag == 'foo') source.content = 'foo';
         return Promise.resolve();
       }
@@ -30,7 +30,7 @@ describe('inline <custom>', () => {
   it('should inline sources with overridden js handler', async () => {
     const test = '<script src="foo.js" inline></script>';
     const html = await inline(test, {
-      handlers(source, context) {
+      handlers(source) {
         if (source.type == 'js') source.content = 'foo';
         return Promise.resolve();
       }
@@ -42,9 +42,8 @@ describe('inline <custom>', () => {
       '<script type="application/json" src="foo.json" inline inline-var="window.foo"></script>';
     const html = normaliseNewLine(
       await inline(test, {
-        handlers(source, context) {
-          if (source.type == 'json')
-            source.content = source.props.var + ' = ' + source.fileContent;
+        handlers(source) {
+          if (source.type == 'json') source.content = source.props.var + ' = ' + source.fileContent;
           return Promise.resolve();
         }
       })
@@ -54,15 +53,12 @@ describe('inline <custom>', () => {
     );
   });
   it('should inline handlebars sources with custom handler', async () => {
-    const test =
-      '<script type="text/x-handlebars-template" src="foo.handlebars" inline></script>';
+    const test = '<script type="text/x-handlebars-template" src="foo.handlebars" inline></script>';
     const html = normaliseNewLine(
       await inline(test, {
         handlers: [require('./fixtures/handlebarsHandler')]
       })
     );
-    expect(html).to.contain(
-      'container.escapeExpression(((helper = (helper = helpers.title'
-    );
+    expect(html).to.contain('container.escapeExpression(((helper = (helper = helpers.title');
   });
 });
