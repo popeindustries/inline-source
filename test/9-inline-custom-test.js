@@ -49,7 +49,7 @@ describe('inline <custom>', () => {
       })
     );
     expect(html).to.eql(
-      '<script type="application/json">window.foo = {\n  "foo": "foo"\n}</script>'
+      '<script type="application/json">window.foo = {\n  "foo": "foo"\n}\n</script>'
     );
   });
   it('should inline handlebars sources with custom handler', async () => {

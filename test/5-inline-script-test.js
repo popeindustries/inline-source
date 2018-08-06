@@ -104,7 +104,7 @@ describe('inline <script>', () => {
   it('should allow override of compression setting', async () => {
     const test = '<script inline inline-compress=false src="bar.js"></script>';
     const html = await inline(test, { compress: true });
-    expect(html).to.eql('<script>var bar = this;\nconsole.log(bar);</script>');
+    expect(html).to.eql('<script>var bar = this;\nconsole.log(bar);\n</script>');
   });
   it('should load html source content if none specified', async () => {
     const html = await inline(path.resolve('test.html'));
@@ -133,12 +133,12 @@ describe('inline <script>', () => {
   it('should not compress inlined content when options.compressed is "false"', async () => {
     const test = '<script inline src="./nested/foo.js"></script>';
     const html = normaliseNewLine(await inline(test, { compress: false }));
-    expect(html).to.eql('<script>var foo = this;\nconsole.log(foo);</script>');
+    expect(html).to.eql('<script>var foo = this;\nconsole.log(foo);\n</script>');
   });
   it('should replace content ignoring special string.replace tokens', async () => {
     const test = '<script inline src="./nested/tokens.js"></script>';
     const html = await inline(test, { compress: false });
-    expect(html).to.eql('<script>e&$&&(doSomething());</script>');
+    expect(html).to.eql('<script>/* eslint no-undef:0 */\ne & $ && doSomething();\n</script>');
   });
   it('should not inline content when options.ignore includes "script"', async () => {
     const test = '<script inline src="./nested/foo.js"></script>';
@@ -159,14 +159,15 @@ describe('inline <script>', () => {
 <head>
   <title></title>
   <script>
-  var foo = 'foo'
-    , bar = 'bar';
+  var foo = 'foo',
+    bar = 'bar';
 
-  function baz () {
+  function baz() {
     console.log(foo, bar);
   }
 
   baz();
+
   </script>
 </head>
 <body>
