@@ -41,7 +41,7 @@ $ npm install inline-source
   <!-- inline project/www/css/inlineStyle.css as <style> -->
   <link inline href="css/inlineStyle.css">
   <!-- inline project/src/js/inlineScript.js as <script> -->
-  <script inline src="../js/inlineScript.js"></script>
+  <script inline src="../src/js/inlineScript.js"></script>
   <!-- inline remote file as <script> -->
   <script inline src="http://js/inlineScript.js"></script>
   <!-- inline project/www/images/inlineImage.png as base64 <img> -->
@@ -135,7 +135,7 @@ In general, default file content processing will be skipped if `source.content` 
 Source `props` are a subset of `attributes` that are namespaced with the current global `attribute` ('inline' by default), and allow declaratively passing data or settings to handlers:
 
 ```html
-<script inline inline-foo="foo" inline-compress="false" src="../js/inlineScript.js"></script>
+<script inline inline-foo="foo" inline-compress="false" src="../src/js/inlineScript.js"></script>
 ```
 
 ```js
