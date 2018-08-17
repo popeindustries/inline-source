@@ -1,7 +1,7 @@
 {
   "name": "inline-source",
   "description": "Inline all flagged js, css, image source files",
-  "version": "6.1.6",
+  "version": "6.1.7",
   "author": "popeindustries <alex@pope-industries.com>",
   "keywords": [
     "inline",
@@ -19,15 +19,15 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "eslint": "^5.3.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
     "handlebars": "^4.0.11",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
     "memory-fs": "*",
     "mocha": "^5.2.0",
     "nock": "^9.4.4",
-    "eslint": "^5.3.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.2",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.2.0",
     "prettier": "^1.14.0"
   },
   "main": "index.js",
