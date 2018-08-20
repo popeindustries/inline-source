@@ -98,12 +98,12 @@ describe('inline <img>', () => {
   it('should inline svg sources as base64 if options.svgAsImage="true"', async () => {
     const test = '<img inline src="foo.svg" />';
     const html = await inline(test, { svgAsImage: true, compress: true });
-    expect(html).to.contain('<img src="data:image/svg+xml;utf8');
+    expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });
   it('should inline svg sources as base64 if svgAsImage="true"', async () => {
     const test = '<img inline inline-svgAsImage src="foo.svg" />';
     const html = await inline(test, { compress: true });
-    expect(html).to.contain('<img src="data:image/svg+xml;utf8');
+    expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });
   it('should inline svg sources fragments', async () => {
     const test = '<img inline src="symbols.svg#icon-close,icon-minus,icon-plus" />';
