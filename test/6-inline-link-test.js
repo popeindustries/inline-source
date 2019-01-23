@@ -23,6 +23,11 @@ describe('inline <link>', () => {
     const html = await inline(test, { compress: true });
     expect(html).to.eql(test);
   });
+  it('should ignore rel=preload/prefetch sources', async () => {
+    const test = '<link rel="preload" href="foo.css">';
+    const html = await inline(test, { compress: true, attribute: false });
+    expect(html).to.eql(test);
+  });
   it('should inline sources that contain an "inline" attribute', async () => {
     const test = '<link inline rel="stylesheet" href="foo.css">';
     const html = await inline(test, { compress: true });
