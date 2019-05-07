@@ -18,16 +18,16 @@ Inline and compress tags that contain the `inline` attribute. Supports `<script>
 
 Available `options` include:
 
-* `attribute`: attribute used to parse sources (all tags will be parsed if set to `false`. Default `'inline'`)
-* `compress`: enable/disable compression of inlined content (default `true`)
-* `fs`: specify `fs` implementation (default is Node core `'fs'`)
-* `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
-* `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
-* `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
-* `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
-* `saveRemote`: enable/disable saving a local copy of remote sources (default `true`)
-* `swallowErrors`: enable/disable suppression of errors (default `false`)
-* `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
+- `attribute`: attribute used to parse sources (all tags will be parsed if set to `false`. Default `'inline'`)
+- `compress`: enable/disable compression of inlined content (default `true`)
+- `fs`: specify `fs` implementation (default is Node core `'fs'`)
+- `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
+- `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
+- `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
+- `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
+- `saveRemote`: enable/disable saving a local copy of remote sources (default `true`)
+- `svgAsImage`: convert `<img inline src="*.svg" />` to `<img>` and not `<svg>` (default `false`)
+- `swallowErrors`: enable/disable suppression of errors (default `false`)
 
 ```bash
 $ npm install inline-source
@@ -37,18 +37,18 @@ $ npm install inline-source
 <!-- located at project/src/html/index.html -->
 <!DOCTYPE html>
 <html>
-<head>
-  <!-- inline project/www/css/inlineStyle.css as <style> -->
-  <link inline href="css/inlineStyle.css">
-  <!-- inline project/src/js/inlineScript.js as <script> -->
-  <script inline src="../src/js/inlineScript.js"></script>
-  <!-- inline remote file as <script> -->
-  <script inline src="http://js/inlineScript.js"></script>
-  <!-- inline project/www/images/inlineImage.png as base64 <img> -->
-  <img inline src="images/inlineImage.png" />
-  <!-- inline project/www/images/inlineImage.svg as <svg> -->
-  <img inline src="images/inlineImage.svg" />
-</head>
+  <head>
+    <!-- inline project/www/css/inlineStyle.css as <style> -->
+    <link inline href="css/inlineStyle.css" />
+    <!-- inline project/src/js/inlineScript.js as <script> -->
+    <script inline src="../src/js/inlineScript.js"></script>
+    <!-- inline remote file as <script> -->
+    <script inline src="http://js/inlineScript.js"></script>
+    <!-- inline project/www/images/inlineImage.png as base64 <img> -->
+    <img inline src="images/inlineImage.png" />
+    <!-- inline project/www/images/inlineImage.svg as <svg> -->
+    <img inline src="images/inlineImage.svg" />
+  </head>
 </html>
 ```
 
@@ -63,11 +63,13 @@ inlineSource(htmlpath, {
   rootpath: path.resolve('www'),
   // Skip all css types and png formats
   ignore: ['css', 'png']
-}).then(html => {
-  // Do something with html
-}).catch(err => {
-  // Handle error
-});
+})
+  .then((html) => {
+    // Do something with html
+  })
+  .catch((err) => {
+    // Handle error
+  });
 ```
 
 ...or preferably using `async/await`:
@@ -87,7 +89,7 @@ try {
     ignore: ['css', 'png']
   });
   // Do something with html
-} catch(err) {
+} catch (err) {
   // Handle error
 }
 ```
@@ -96,26 +98,26 @@ try {
 
 Custom handlers are simple middleware-type functions that enable you to provide new, or override existing, inlining behaviour. All handlers have the following signature: `(source, context) => Promise`
 
-* `source`: the current source object to act upon
+- `source`: the current source object to act upon
 
-  * `attributes`: the parsed tag attributes object
-  * `compress`: the compress flag (may be overriden at the tag level via [props](#props))
-  * `content`: the processed `fileContent` string
-  * `extension`: the file extension
-  * `fileContent`: the loaded file content string
-  * `filepath`: the fully qualified path string
-  * `format`: the format string (`jpg`, `gif`, `svg+xml`, etc)
-  * `match`: the matched html tag string, including closing tag if appropriate
-  * `props`: the parsed namespaced attributes object (see [props](#props))
-  * `replace`: the tag wrapped `content` string to replace `match`
-  * `tag`: the tag string (`script`, `link`, etc)
-  * `type`: the content type based on `type` mime-type attribute, or `tag` (`js` for `application/javascript`, `css` for `text/css`, etc)
+  - `attributes`: the parsed tag attributes object
+  - `compress`: the compress flag (may be overriden at the tag level via [props](#props))
+  - `content`: the processed `fileContent` string
+  - `extension`: the file extension
+  - `fileContent`: the loaded file content string
+  - `filepath`: the fully qualified path string
+  - `format`: the format string (`jpg`, `gif`, `svg+xml`, etc)
+  - `match`: the matched html tag string, including closing tag if appropriate
+  - `props`: the parsed namespaced attributes object (see [props](#props))
+  - `replace`: the tag wrapped `content` string to replace `match`
+  - `tag`: the tag string (`script`, `link`, etc)
+  - `type`: the content type based on `type` mime-type attribute, or `tag` (`js` for `application/javascript`, `css` for `text/css`, etc)
 
-* `context`: the global context object storing all configuration options (`attribute`, `compress`, `ignore`, `pretty`, `rootpath`, `swallowErrors`, `svgAsImage`), in addtion to:
+- `context`: the global context object storing all configuration options (`attribute`, `compress`, `ignore`, `pretty`, `rootpath`, `swallowErrors`, `svgAsImage`), in addtion to:
 
-  * `html`: the html file's content string
-  * `htmlpath`: the html file's path string
-  * `sources`: the array of `source` objects
+  - `html`: the html file's content string
+  - `htmlpath`: the html file's path string
+  - `sources`: the array of `source` objects
 
 Custom handlers are inserted before the defaults, enabling overriding of default behaviour:
 
@@ -135,7 +137,12 @@ In general, default file content processing will be skipped if `source.content` 
 Source `props` are a subset of `attributes` that are namespaced with the current global `attribute` ('inline' by default), and allow declaratively passing data or settings to handlers:
 
 ```html
-<script inline inline-foo="foo" inline-compress="false" src="../src/js/inlineScript.js"></script>
+<script
+  inline
+  inline-foo="foo"
+  inline-compress="false"
+  src="../src/js/inlineScript.js"
+></script>
 ```
 
 ```js
