@@ -38,7 +38,29 @@
     "test": "NODE_ENV=test mocha --reporter spec --bail"
   },
   "engines": {
-    "node": ">=7.6"
+    "node": ">=8"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "prettier --write",
+        "eslint",
+        "git add"
+      ],
+      "*.json": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "*.min.js"
+    ]
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "htmlWhitespaceSensitivity": "strict",
+    "printWidth": 80,
+    "singleQuote": true
   },
   "repository": "git://github.com/popeindustries/inline-source.git",
   "readmeFilename": "README.md",

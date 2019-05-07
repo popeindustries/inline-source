@@ -47,7 +47,8 @@ describe('inline <script>', () => {
     expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');
   });
   it('should inline multiple sources that contain an "inline" attribute', async () => {
-    const test = '<script inline src="foo.js"></script>\n<script inline src="bar.js"></script>';
+    const test =
+      '<script inline src="foo.js"></script>\n<script inline src="bar.js"></script>';
     const html = normaliseNewLine(await inline(test, { compress: true }));
     expect(html).to.eql(
       '<script>var foo=this;console.log(foo);</script>\n<script>var bar=this;console.log(bar);</script>'
@@ -74,14 +75,18 @@ describe('inline <script>', () => {
     expect(html).to.eql('<script>var foo=this;console.log(foo);</script>');
   });
   it('should remove the "inline" attribute for sources that can\'t be found when options.swallowErrors is "true"', async () => {
-    const test = '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
-    const html = normaliseNewLine(await inline(test, { compress: true, swallowErrors: true }));
+    const test =
+      '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
+    const html = normaliseNewLine(
+      await inline(test, { compress: true, swallowErrors: true })
+    );
     expect(html).to.eql(
       '<script src="baz.js"></script>\n<script>var foo=this;console.log(foo);</script>'
     );
   });
   it('should return an error when options.swallowErrors is "false"', async () => {
-    const test = '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
+    const test =
+      '<script inline src="baz.js"></script>\n<script inline src="foo.js"></script>';
     try {
       const html = await inline(test, { compress: true });
       expect(html).to.not.exist;
@@ -90,7 +95,8 @@ describe('inline <script>', () => {
     }
   });
   it('should preserve order of multiple inlined items', async () => {
-    const test = '<script inline src="bar.js"></script>\n<script inline src="foo.js"></script>';
+    const test =
+      '<script inline src="bar.js"></script>\n<script inline src="foo.js"></script>';
     const html = normaliseNewLine(await inline(test, { compress: true }));
     expect(html).to.eql(
       '<script>var bar=this;console.log(bar);</script>\n<script>var foo=this;console.log(foo);</script>'
@@ -98,13 +104,18 @@ describe('inline <script>', () => {
   });
   it('should allow specification of a custom attribute name', async () => {
     const test = '<script data-inline src="bar.js"></script>';
-    const html = await inline(test, { compress: true, attribute: 'data-inline' });
+    const html = await inline(test, {
+      compress: true,
+      attribute: 'data-inline'
+    });
     expect(html).to.eql('<script>var bar=this;console.log(bar);</script>');
   });
   it('should allow override of compression setting', async () => {
     const test = '<script inline inline-compress=false src="bar.js"></script>';
     const html = await inline(test, { compress: true });
-    expect(html).to.eql('<script>var bar = this;\nconsole.log(bar);\n</script>');
+    expect(html).to.eql(
+      '<script>var bar = this;\nconsole.log(bar);\n</script>'
+    );
   });
   it('should load html source content if none specified', async () => {
     const html = await inline(path.resolve('test.html'));
@@ -127,18 +138,25 @@ describe('inline <script>', () => {
   });
   it('should inline sources referenced by absolute path relative to passed rootpath directory', async () => {
     const test = '<script inline src="/bar.js"></script>';
-    const html = await inline(test, { compress: true, rootpath: path.resolve('nested/deep') });
+    const html = await inline(test, {
+      compress: true,
+      rootpath: path.resolve('nested/deep')
+    });
     expect(html).to.eql('<script>var bar=this;console.log(bar);</script>');
   });
   it('should not compress inlined content when options.compressed is "false"', async () => {
     const test = '<script inline src="./nested/foo.js"></script>';
     const html = normaliseNewLine(await inline(test, { compress: false }));
-    expect(html).to.eql('<script>var foo = this;\nconsole.log(foo);\n</script>');
+    expect(html).to.eql(
+      '<script>var foo = this;\nconsole.log(foo);\n</script>'
+    );
   });
   it('should replace content ignoring special string.replace tokens', async () => {
     const test = '<script inline src="./nested/tokens.js"></script>';
     const html = await inline(test, { compress: false });
-    expect(html).to.eql('<script>/* eslint no-undef:0 */\ne & $ && doSomething();\n</script>');
+    expect(html).to.eql(
+      '<script>/* eslint no-undef:0 */\ne & $ && doSomething();\n</script>'
+    );
   });
   it('should not inline content when options.ignore includes "script"', async () => {
     const test = '<script inline src="./nested/foo.js"></script>';
@@ -152,7 +170,10 @@ describe('inline <script>', () => {
   });
   it('should preserve whitespace while inlining content when options.pretty is "true"', async () => {
     const html = normaliseNewLine(
-      await inline(path.resolve('multiline.html'), { pretty: true, compress: false })
+      await inline(path.resolve('multiline.html'), {
+        pretty: true,
+        compress: false
+      })
     );
     expect(html).to.eql(`<!DOCTYPE html>
 <html>
@@ -228,7 +249,9 @@ describe('inline <script>', () => {
       '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
     const html = await inline(test, { compress: true });
     expect(html).to.eql('<script>preact;</script>');
-    expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(true);
+    expect(
+      fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))
+    ).to.equal(true);
     fs.unlinkSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'));
   });
   it('should not save a copy of an inlined remote source when options.saveRemote is "false"', async () => {
@@ -239,7 +262,9 @@ describe('inline <script>', () => {
       '<script inline src="https://cdnjs.cloudflare.com/ajax/libs/preact/8.2.7/preact.min.js"></script>';
     const html = await inline(test, { compress: true, saveRemote: false });
     expect(html).to.eql('<script>preact;</script>');
-    expect(fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))).to.equal(false);
+    expect(
+      fs.existsSync(path.resolve('ajax_libs_preact_8.2.7_preact.min.js'))
+    ).to.equal(false);
   });
   it('should remove the "inline" attribute for remote sources that can\'t be found when options.swallowErrors is "true"', async () => {
     nock('https://cdnjs.cloudflare.com')
@@ -256,7 +281,8 @@ describe('inline <script>', () => {
     nock('https://cdnjs.cloudflare.com')
       .get('/blah.js')
       .reply(404);
-    const test = '<script inline src="https://cdnjs.cloudflare.com/blah.js"></script>';
+    const test =
+      '<script inline src="https://cdnjs.cloudflare.com/blah.js"></script>';
     try {
       const html = await inline(test, { compress: true });
       expect(html).to.not.exist;

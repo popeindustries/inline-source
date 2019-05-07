@@ -12,7 +12,11 @@ const HANDLEBARS_TYPE = 'text/x-handlebars-template';
  */
 module.exports = function handlbars(source) {
   return new Promise((resolve, reject) => {
-    if (source.fileContent && !source.content && source.type == HANDLEBARS_TYPE) {
+    if (
+      source.fileContent &&
+      !source.content &&
+      source.type == HANDLEBARS_TYPE
+    ) {
       let content;
 
       try {

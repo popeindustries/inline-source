@@ -42,7 +42,8 @@ describe('inline <object>', () => {
     expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });
   it('should inline svg sources as base64 if svgAsImage="true"', async () => {
-    const test = '<object inline inline-svgAsImage type="image/svg+xml" data="foo.svg"></object>';
+    const test =
+      '<object inline inline-svgAsImage type="image/svg+xml" data="foo.svg"></object>';
     const html = await inline(test, { compress: true });
     expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });

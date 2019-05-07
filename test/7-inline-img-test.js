@@ -48,7 +48,8 @@ describe('inline <img>', () => {
   it('should inline svg sources that contain an "inline" attribute and line break in <svg> tag', async () => {
     const test = '<img inline src="bar.svg" />';
     const html = await inline(test, { compress: false });
-    expect(html).to.eql(`<svg id="bar" x="0px" y="0px" xml:space="preserve" viewBox="0 0 100 36">
+    expect(html).to
+      .eql(`<svg id="bar" x="0px" y="0px" xml:space="preserve" viewBox="0 0 100 36">
 <rect y="0.7" width="12.3" height="35.1"/>
 </svg>`);
   });
@@ -69,7 +70,8 @@ describe('inline <img>', () => {
 </svg>`);
   });
   it('should inline svg sources that contain an "inline" attribute, removing the alt attribute and preserving others', async () => {
-    const test = '<img id="foo" class="foo bar" inline src="foo.svg" alt="foo"/>';
+    const test =
+      '<img id="foo" class="foo bar" inline src="foo.svg" alt="foo"/>';
     const html = await inline(test, { compress: false });
     expect(html).to
       .eql(`<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">
@@ -106,7 +108,8 @@ describe('inline <img>', () => {
     expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });
   it('should inline svg sources fragments', async () => {
-    const test = '<img inline src="symbols.svg#icon-close,icon-minus,icon-plus" />';
+    const test =
+      '<img inline src="symbols.svg#icon-close,icon-minus,icon-plus" />';
     const html = normaliseNewLine(await inline(test, { compress: true }));
     expect(html).to.eql(
       '<svg id="symbols" style="display:none;">\n  <symbol id="icon-close" viewBox="0 0 50 50">\n    <polygon points="80.76,24.19 75.81,19.24 50,45.05 24.19,19.24 19.24,24.19 45.05,50 19.24,75.81 24.19,80.76 50,54.95 75.81,80.76 80.76,75.81 54.95,50 "/>\n  </symbol>\n  \n  <symbol id="icon-minus">\n      <rect x="10" y="46.5" width="80" height="7"/>\n  </symbol>\n  <symbol id="icon-plus">\n    <polygon points="90,46.5 53.5,46.5 53.5,10 46.5,10 46.5,46.5 10,46.5 10,53.5 46.5,53.5 46.5,90 53.5,90 53.5,53.5 90,53.5 "/>\n  </symbol>\n  \n  \n</svg>'
@@ -114,7 +117,9 @@ describe('inline <img>', () => {
   });
   it('should inline svg sources when attribute=false', async () => {
     const test = '<img src="foo.svg" />';
-    const html = normaliseNewLine(await inline(test, { attribute: false, compress: false }));
+    const html = normaliseNewLine(
+      await inline(test, { attribute: false, compress: false })
+    );
     expect(html).to
       .eql(`<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">
 <circle cx="50" cy="50" r="25"/>
