@@ -56,6 +56,16 @@ describe('parse', () => {
     expect(ctx.sources[0]).to.have.property('tag', 'link');
     expect(ctx.sources[0]).to.have.property('type', 'css');
   });
+  it('should generate a source object for a matching inline <link> tag on multiple lines', async () => {
+    ctx.html = `<link
+      inline
+      rel="stylesheet"
+      href="foo.css">`;
+    await parse(ctx);
+    expect(ctx.sources).to.have.length(1);
+    expect(ctx.sources[0]).to.have.property('tag', 'link');
+    expect(ctx.sources[0]).to.have.property('type', 'css');
+  });
   it('should generate a source object for a matching inline <link> tag when attribute=false', async () => {
     ctx = createContext(false);
     ctx.html = '<link inline>';
