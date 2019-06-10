@@ -22,6 +22,7 @@ Available `options` include:
 - `compress`: enable/disable compression of inlined content (default `true`)
 - `fs`: specify `fs` implementation (default is Node core `'fs'`)
 - `handlers`: specify custom handlers (default `[]`) [see [custom handlers](#custom-handlers)]
+- `preHandlers`: specify custom pre handlers (default `[]`) [see [custom pre handlers](#custom-pre-handlers)]
 - `ignore`: disable inlining based on `tag`, `type`, and/or `format` (default `[]`)
 - `pretty`: maintain leading whitespace when `options.compress` is `false` (default `false`)
 - `rootpath`: directory path used for resolving inlineable paths (default `process.cwd()`)
@@ -131,6 +132,20 @@ module.exports = function customjs(source, context) {
 ```
 
 In general, default file content processing will be skipped if `source.content` is already set, and default wrapping of processed content will be skipped if `source.replace` is already set.
+
+### Custom Pre Handlers
+Custom pre handlers are the same as custom handlers only they run before loading the file. All handlers have the following signature: `(source, context) => Promise`
+
+With custom Pre handlers you can make changes to the file name
+
+```js
+module.exports = function customjs(source, context) {
+  const { version } = require('../package.json');
+  source.filepath = source.filepath.replace('.js', `_${version}.js`)
+  return Promise.resolve();
+};
+```
+
 
 ### Props
 

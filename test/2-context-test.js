@@ -28,4 +28,27 @@ describe('context', () => {
 
     expect(ctx.stack).to.have.length(7);
   });
+
+  it('should allow adding preHandlers', () => {
+    const ctx = context.create({
+      preHandlers: [
+        function() {
+          return Promise.resolve();
+        }
+      ]
+    });
+
+    expect(ctx.stack).to.have.length(7);
+  });
+
+  it('preHandlers should be added first', () => {
+    function handler() {
+      return Promise.resolve();
+    }
+    const ctx = context.create({
+      preHandlers: [handler]
+    });
+
+    expect(ctx.stack[0]).to.equal(handler);
+  });
 });
