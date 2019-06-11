@@ -45,6 +45,14 @@ describe('inline <img>', () => {
 <circle cx="50" cy="50" r="25"/>
 </svg>`);
   });
+  it('should inline multiple duplicate svg sources', async () => {
+    const test =
+      '<img inline src="right.svg" />\n<img inline src="right.svg" />\n<img inline src="left.svg" />\n<img inline src="left.svg" />';
+    const html = normaliseNewLine(await inline(test, { compress: true }));
+    expect(html).to.eql(
+      `<svg viewBox="0 0 32 32"><path d="M6 15h15v2H6z"/><path d="M20 20v-8l5 4-5 4z"/></svg>\n<svg viewBox="0 0 32 32"><path d="M6 15h15v2H6z"/><path d="M20 20v-8l5 4-5 4z"/></svg>\n<svg viewBox="0 0 32 32"><path d="M26 17H11v-2h15z"/><path d="M12 12v8l-5-4 5-4z"/></svg>\n<svg viewBox="0 0 32 32"><path d="M26 17H11v-2h15z"/><path d="M12 12v8l-5-4 5-4z"/></svg>`
+    );
+  });
   it('should inline svg sources that contain an "inline" attribute and line break in <svg> tag', async () => {
     const test = '<img inline src="bar.svg" />';
     const html = await inline(test, { compress: false });
