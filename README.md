@@ -123,29 +123,27 @@ Custom handlers are simple middleware-type functions that enable you to provide 
 Custom handlers are inserted before the defaults, enabling overriding of default behaviour:
 
 ```js
-module.exports = function customjs(source, context) {
+module.exports = function handler(source, context) {
   if (source.fileContent && !source.content && source.type == 'js') {
     source.content = "Hey! I'm overriding the file's content!";
   }
-  return Promise.resolve();
 };
 ```
 
 In general, default file content processing will be skipped if `source.content` is already set, and default wrapping of processed content will be skipped if `source.replace` is already set.
 
 ### Custom Pre Handlers
+
 Custom pre handlers are the same as custom handlers only they run before loading the file. All handlers have the following signature: `(source, context) => Promise`
 
 With custom Pre handlers you can make changes to the file name
 
 ```js
-module.exports = function customjs(source, context) {
+module.exports = function handler(source, context) {
   const { version } = require('../package.json');
-  source.filepath = source.filepath.replace('.js', `_${version}.js`)
-  return Promise.resolve();
+  source.filepath = source.filepath.replace('.js', `_${version}.js`);
 };
 ```
-
 
 ### Props
 
@@ -161,7 +159,7 @@ Source `props` are a subset of `attributes` that are namespaced with the current
 ```
 
 ```js
-module.exports = function customjs(source, context) {
+module.exports = function handler(source, context) {
   if (source.fileContent && !source.content && source.type == 'js') {
     // The `inline-compress` attribute automatically overrides the global flag
     if (!source.compress) {

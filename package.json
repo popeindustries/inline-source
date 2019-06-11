@@ -38,7 +38,7 @@
     "test": "NODE_ENV=test mocha --reporter spec --bail"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=8.3.0"
   },
   "lint-staged": {
     "linters": {
