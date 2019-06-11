@@ -2,6 +2,7 @@ export interface Options {
 	attribute: string | boolean;
 	compress: boolean;
 	fs: any; // like MemoryFileSystem
+	preHandlers: [(source: any, context: any) => Promise<any>];
 	handlers: [(source: any, context: any) => Promise<any>];
 	ignore: string[] | { [key: string]: string };
 	pretty: boolean;
