@@ -26,9 +26,9 @@
     "husky": "^3.0.0",
     "lint-staged": "^9.0.0",
     "memory-fs": "*",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "nock": "^10.0.6",
-    "prettier": "^1.17.0"
+    "prettier": "^1.18.2"
   },
   "main": "index.js",
   "scripts": {
