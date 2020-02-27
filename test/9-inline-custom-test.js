@@ -68,7 +68,7 @@ describe('inline <custom>', () => {
       })
     );
     expect(html).to.contain(
-      'container.escapeExpression(((helper = (helper = helpers.title'
+      'container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title")'
     );
   });
 });

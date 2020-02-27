@@ -19,16 +19,16 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^6.0.1",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "handlebars": "^4.1.2",
-    "husky": "^3.0.0",
-    "lint-staged": "^9.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "handlebars": "^4.7.3",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
     "memory-fs": "*",
-    "mocha": "^6.2.0",
-    "nock": "^11.3.2",
-    "prettier": "^1.18.2"
+    "mocha": "^6.2.2",
+    "nock": "^11.9.1",
+    "prettier": "^1.19.1"
   },
   "main": "index.js",
   "scripts": {
