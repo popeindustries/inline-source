@@ -12,7 +12,7 @@ describe('run', () => {
       attribute: 'inline',
       html: '',
       rootpath: path.resolve('./test'),
-      sources: []
+      sources: [],
     };
   });
 
@@ -22,11 +22,11 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function() {
+        function () {
           idx++;
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
     await run(ctx, ctx.sources, false);
     expect(idx).to.equal(1);
@@ -37,7 +37,7 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function() {
+        function () {
           return new Promise((resolve) => {
             setTimeout(() => {
               idx++;
@@ -45,11 +45,11 @@ describe('run', () => {
             }, 50);
           });
         },
-        function() {
+        function () {
           idx++;
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
     await run(ctx, ctx.sources, false);
     expect(idx).to.equal(2);
@@ -62,7 +62,7 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function() {
+          function () {
             return new Promise((resolve) => {
               setTimeout(() => {
                 idx++;
@@ -71,27 +71,27 @@ describe('run', () => {
               }, 50);
             });
           },
-          function() {
+          function () {
             idx++;
             stack.push('1b');
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       },
       {
         parentContext: ctx,
         stack: [
-          function() {
+          function () {
             idx++;
             stack.push('2a');
             return Promise.resolve();
           },
-          function() {
+          function () {
             idx++;
             stack.push('2b');
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       }
     );
     await run(ctx, ctx.sources, false);
@@ -104,15 +104,15 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function() {
+        function () {
           idx++;
           return Promise.reject(new Error('oops'));
         },
-        function() {
+        function () {
           idx++;
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
     try {
       await run(ctx, ctx.sources, false);
@@ -127,15 +127,15 @@ describe('run', () => {
     ctx.sources.push({
       parentContext: ctx,
       stack: [
-        function() {
+        function () {
           idx++;
           return Promise.reject(new Error('oops'));
         },
-        function() {
+        function () {
           idx++;
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
     await run(ctx, ctx.sources, true);
     expect(idx).to.equal(2);
@@ -147,28 +147,28 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function() {
+          function () {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function() {
+          function () {
             idx++;
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       },
       {
         parentContext: ctx,
         stack: [
-          function() {
+          function () {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function() {
+          function () {
             idx++;
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       }
     );
     try {
@@ -185,28 +185,28 @@ describe('run', () => {
       {
         parentContext: ctx,
         stack: [
-          function() {
+          function () {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function() {
+          function () {
             idx++;
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       },
       {
         parentContext: ctx,
         stack: [
-          function() {
+          function () {
             idx++;
             return Promise.reject(new Error('oops'));
           },
-          function() {
+          function () {
             idx++;
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       }
     );
     await run(ctx, ctx.sources, true);

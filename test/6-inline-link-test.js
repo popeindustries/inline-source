@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const { inlineSource: inline } = require('..');
 
 describe('inline <link>', () => {
-  before(function() {
+  before(function () {
     process.chdir(require('path').resolve(__dirname, './fixtures'));
   });
 

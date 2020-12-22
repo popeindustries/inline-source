@@ -106,7 +106,7 @@ describe('inline <script>', () => {
     const test = '<script data-inline src="bar.js"></script>';
     const html = await inline(test, {
       compress: true,
-      attribute: 'data-inline'
+      attribute: 'data-inline',
     });
     expect(html).to.eql('<script>var bar=this;console.log(bar);</script>');
   });
@@ -140,7 +140,7 @@ describe('inline <script>', () => {
     const test = '<script inline src="/bar.js"></script>';
     const html = await inline(test, {
       compress: true,
-      rootpath: path.resolve('nested/deep')
+      rootpath: path.resolve('nested/deep'),
     });
     expect(html).to.eql('<script>var bar=this;console.log(bar);</script>');
   });
@@ -172,7 +172,7 @@ describe('inline <script>', () => {
     const html = normaliseNewLine(
       await inline(path.resolve('multiline.html'), {
         pretty: true,
-        compress: false
+        compress: false,
       })
     );
     expect(html).to.eql(`<!DOCTYPE html>
@@ -278,9 +278,7 @@ describe('inline <script>', () => {
     );
   });
   it('should throw on error inlining remote sources', async () => {
-    nock('https://cdnjs.cloudflare.com')
-      .get('/blah.js')
-      .reply(404);
+    nock('https://cdnjs.cloudflare.com').get('/blah.js').reply(404);
     const test =
       '<script inline src="https://cdnjs.cloudflare.com/blah.js"></script>';
     try {

@@ -15,7 +15,7 @@ function createContext(attribute) {
     ignore: { tag: [], type: [] },
     re: getTagRegExp(attribute),
     rootpath: path.resolve('./test'),
-    sources: []
+    sources: [],
   };
 }
 
