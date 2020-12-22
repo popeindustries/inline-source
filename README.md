@@ -1,5 +1,5 @@
 [![NPM Version](https://img.shields.io/npm/v/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
-[![Build Status](https://img.shields.io/travis/popeindustries/inline-source.svg?style=flat)](https://github.com/popeindustries/inline-source/actions)
+[![Build Status](https://img.shields.io/github/workflow/status/popeindustries/inline-source/test/master)](https://github.com/popeindustries/inline-source/actions)
 [![Downloads](https://img.shields.io/npm/dm/inline-source.svg?style=flat)](https://npmjs.org/package/inline-source)
 
 # inline-source
