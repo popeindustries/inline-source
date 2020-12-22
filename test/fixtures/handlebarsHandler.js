@@ -6,8 +6,8 @@ const HANDLEBARS_TYPE = 'text/x-handlebars-template';
 
 /**
  * Handle JavaScript content
- * @param {Object} source
- * @param {Object} context
+ * @param {object} source
+ * @param {object} context
  * @returns {Promise}
  */
 module.exports = function handlbars(source) {
