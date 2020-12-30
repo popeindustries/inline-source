@@ -20,10 +20,10 @@ describe('context', () => {
   it('should allow adding handlers', () => {
     const ctx = context.create({
       handlers: [
-        function() {
+        function () {
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
 
     expect(ctx.stack).to.have.length(7);
@@ -32,10 +32,10 @@ describe('context', () => {
   it('should allow adding preHandlers', () => {
     const ctx = context.create({
       preHandlers: [
-        function() {
+        function () {
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
 
     expect(ctx.stack).to.have.length(7);
@@ -46,7 +46,7 @@ describe('context', () => {
       return Promise.resolve();
     }
     const ctx = context.create({
-      preHandlers: [handler]
+      preHandlers: [handler],
     });
 
     expect(ctx.stack[0]).to.equal(handler);

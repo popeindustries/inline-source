@@ -8,7 +8,7 @@ function normaliseNewLine(str) {
 }
 
 describe('inline <img>', () => {
-  before(function() {
+  before(function () {
     process.chdir(require('path').resolve(__dirname, './fixtures'));
   });
 

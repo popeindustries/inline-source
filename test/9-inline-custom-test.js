@@ -8,7 +8,7 @@ function normaliseNewLine(str) {
 }
 
 describe('inline <custom>', () => {
-  before(function() {
+  before(function () {
     process.chdir(require('path').resolve(__dirname, './fixtures'));
   });
 
@@ -24,8 +24,8 @@ describe('inline <custom>', () => {
         (source) => {
           if (source.tag == 'foo') source.content = 'foo';
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
     expect(html).to.eql('<foo>foo</foo>');
   });
@@ -36,8 +36,8 @@ describe('inline <custom>', () => {
         (source) => {
           if (source.type == 'js') source.content = 'foo';
           return Promise.resolve();
-        }
-      ]
+        },
+      ],
     });
     expect(html).to.eql('<script>foo</script>');
   });
@@ -51,8 +51,8 @@ describe('inline <custom>', () => {
             if (source.type == 'json')
               source.content = source.props.var + ' = ' + source.fileContent;
             return Promise.resolve();
-          }
-        ]
+          },
+        ],
       })
     );
     expect(html).to.eql(
@@ -64,7 +64,7 @@ describe('inline <custom>', () => {
       '<script type="text/x-handlebars-template" src="foo.handlebars" inline></script>';
     const html = normaliseNewLine(
       await inline(test, {
-        handlers: [require('./fixtures/handlebarsHandler')]
+        handlers: [require('./fixtures/handlebarsHandler')],
       })
     );
     expect(html).to.contain(

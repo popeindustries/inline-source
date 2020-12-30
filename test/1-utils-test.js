@@ -7,7 +7,7 @@ const {
   isFilepath,
   isIgnored,
   parseAttributes,
-  parseProps
+  parseProps,
 } = require('../lib/utils');
 const path = require('path');
 
@@ -66,7 +66,7 @@ describe('utils', () => {
     });
     it('should return an object with matching props', () => {
       expect(parseProps({ 'inline-foo': 'foo' }, 'inline')).to.eql({
-        foo: 'foo'
+        foo: 'foo',
       });
     });
   });
