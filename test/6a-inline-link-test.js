@@ -7,8 +7,7 @@ describe('inline <link>', () => {
   before(function() {
     process.chdir(require('path').resolve(__dirname, './fixtures'));
   });
-
-  it('should inline favicon sources with rel="icon" [DUPLICATE from 6-inline-link-test]', async () => {
+  it('should inline PNG favicon sources with rel="icon" [DUPLICATE from 6-inline-link-test]', async () => {
     const test = '<link rel="icon" type="image/png" href="foo.png" inline >';
     const html = await inline(test, { compress: true });
     expect(html).to.eql(
