@@ -1,14 +1,10 @@
-'use strict';
-
-const agent = require('superagent');
-
 /**
  * Load content for 'source'
- * @param { object } source
- * @param { object } context
+ * @param { Source } source
+ * @param { Context } context
  * @returns { Promise<void> }
  */
-module.exports = async function load(source, context) {
+export async function load(source, context) {
   if (!source.fileContent && source.filepath) {
     // Raw buffer if image and not svg
     const encoding =
@@ -34,4 +30,4 @@ module.exports = async function load(source, context) {
       source.fileContent = res.text;
     }
   }
-};
+}

@@ -1,11 +1,9 @@
-'use strict';
-
-const { expect } = require('chai');
-const context = require('../lib/context');
+import { expect } from 'chai';
+import { createContext } from '../src/context.js';
 
 describe('context', () => {
   it('should return a default context', () => {
-    const ctx = context.create();
+    const ctx = createContext();
 
     expect(ctx).to.have.property('attribute', 'inline');
     expect(ctx).to.have.property('compress', true);
@@ -13,12 +11,12 @@ describe('context', () => {
     expect(ctx).to.have.property('swallowErrors', false);
   });
   it('should allow overriding defaults with "options"', () => {
-    const ctx = context.create({ compress: false });
+    const ctx = createContext({ compress: false });
 
     expect(ctx).to.have.property('compress', false);
   });
   it('should allow adding handlers', () => {
-    const ctx = context.create({
+    const ctx = createContext({
       handlers: [
         function () {
           return Promise.resolve();
@@ -30,7 +28,7 @@ describe('context', () => {
   });
 
   it('should allow adding preHandlers', () => {
-    const ctx = context.create({
+    const ctx = createContext({
       preHandlers: [
         function () {
           return Promise.resolve();
@@ -45,7 +43,7 @@ describe('context', () => {
     function handler() {
       return Promise.resolve();
     }
-    const ctx = context.create({
+    const ctx = createContext({
       preHandlers: [handler],
     });
 

@@ -1,16 +1,14 @@
-'use strict';
-
-const { getAttributeString } = require('./utils');
+import { getAttributeString } from './utils.js';
 
 const RE_BEGIN_LINE = /^./gm;
 
 /**
  * Wrap source content
- * @param { object } source
- * @param { object } context
+ * @param { Source } source
+ * @param { Context } context
  * @returns { void }
  */
-module.exports = function wrap(source, context) {
+export function wrap(source, context) {
   if (source.content !== null && !source.replace) {
     const attrs = getAttributeString(
       source.attributes,
@@ -27,4 +25,4 @@ module.exports = function wrap(source, context) {
 
     source.replace = `<${source.tag + attrs}>${content}${closing}`;
   }
-};
+}

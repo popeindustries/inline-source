@@ -1,15 +1,13 @@
-'use strict';
-
-const { expect } = require('chai');
-const {
+import { expect } from 'chai';
+import {
   getAttributeString,
   getSourcepath,
   isFilepath,
   isIgnored,
   parseAttributes,
   parseProps,
-} = require('../lib/utils');
-const path = require('path');
+} from '../src/utils.js';
+import path from 'path';
 
 describe('utils', () => {
   describe('isFilepath()', () => {

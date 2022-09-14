@@ -1,21 +1,21 @@
-'use strict';
+import { minify } from 'terser';
 
 const RE_SCRIPT = /(<)(\/script>)/gi;
 
 /**
  * Handle JavaScript content
- * @param { object } source
- * @param { object } context
+ * @param { Source } source
+ * @param { Context } context
  * @returns { Promise<void> }
  */
-module.exports = async function js(source) {
+export async function js(source) {
   if (source.fileContent && !source.content && source.type == 'js') {
     let content;
 
     if (!source.compress) {
       content = source.fileContent;
     } else {
-      const compressed = await require('terser').minify(source.fileContent);
+      const compressed = await minify(source.fileContent);
       if (compressed.error) {
         throw compressed.error;
       }
@@ -30,4 +30,4 @@ module.exports = async function js(source) {
 
     source.content = content;
   }
-};
+}

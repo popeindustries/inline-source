@@ -1,6 +1,4 @@
-'use strict';
-
-const {
+import {
   getFormatFromExtension,
   getPadding,
   getSourcepath,
@@ -11,23 +9,23 @@ const {
   isRemoteFilepath,
   parseAttributes,
   parseProps,
-} = require('./utils');
-const htmlparser = require('htmlparser2');
-const path = require('path');
+} from './utils.js';
+import { DefaultHandler, Parser } from 'htmlparser2';
+import path from 'path';
 
 const RE_COMMENT = /(<!--[^[i][\S\s]+?--\s?>)/gm;
 
 /**
  * Parse inlineable sources, modifying passed 'context'
- * @param { object } context
+ * @param { Context } context
  * @returns { Promise<void> }
  */
-module.exports = async function parse(context) {
+export async function parse(context) {
   // Remove comments
   const html = context.html.replace(RE_COMMENT, '');
   // This api uses a synchronous callback handler, so order and definition of 'match' is preserved
-  const parser = new htmlparser.Parser(
-    new htmlparser.DomHandler((err, dom) => {
+  const parser = new Parser(
+    new DefaultHandler((err, dom) => {
       if (err) {
         throw err;
       }
@@ -95,6 +93,6 @@ module.exports = async function parse(context) {
   let match;
 
   while ((match = context.re.exec(html))) {
-    parser.parseComplete(match);
+    parser.parseComplete(match[0]);
   }
-};
+}

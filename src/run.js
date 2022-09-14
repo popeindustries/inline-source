@@ -1,16 +1,14 @@
-'use strict';
-
 const isTest = process.env.NODE_ENV === 'test';
 
 /**
  * Process stack for 'sources'
- * @param { object } context
- * @param { Array<object> } sources
+ * @param { Context } context
+ * @param { Array<Source> } sources
  * @param { boolean } swallowErrors
  * @returns { Promise<string> }
  */
-module.exports = async function run(context, sources = [], swallowErrors) {
-  return Promise.all(
+export async function run(context, sources = [], swallowErrors) {
+  await Promise.all(
     sources.map(async (source) => {
       for (const handler of source.stack) {
         try {
@@ -28,5 +26,7 @@ module.exports = async function run(context, sources = [], swallowErrors) {
         }
       }
     })
-  ).then(() => context.html);
-};
+  );
+
+  return context.html;
+}

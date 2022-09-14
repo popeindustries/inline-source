@@ -1,31 +1,59 @@
-name: test
+name: inline-source
 
 on: push
 
+env:
+  CI: true
+  PNPM_CACHE_FOLDER: .pnpm-store
+  HUSKY: 0 # Bypass husky commit hook for CI
+
 jobs:
-  build_deploy:
+  publish:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['12', '14', '15']
-    name: Install and test (Node ${{ matrix.node }})
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
+        node: ['16', '18']
+    name: Install, build, and test (Node ${{ matrix.node }})
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: 'Cache pnpm modules'
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.PNPM_CACHE_FOLDER }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: 'Install pnpm 7'
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.x
+
+      - name: 'Install Node.js'
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+          cache: 'pnpm'
 
-      - name: Cache node_modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: node-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }} # Cache key based on Node version + hashed package-lock.json contents
+      - name: 'Set up npm credentials'
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Install
-        run: npm install
+      - name: 'Configure pnpm'
+        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
 
-      - name: Test
-        run: npm run test
+      - name: 'Install dependencies'
+        run: pnpm --frozen-lockfile install
+
+      - name: 'Build'
+        run: pnpm run clean && pnpm run build
+
+      - name: 'Test'
+        run: pnpm test

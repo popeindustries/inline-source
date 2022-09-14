@@ -1,7 +1,5 @@
-'use strict';
-
-const { getAttributeString, parseAttributes } = require('./utils');
-const htmlparser = require('htmlparser2');
+import { getAttributeString, parseAttributes } from './utils.js';
+import { DefaultHandler, Parser } from 'htmlparser2';
 
 const DEFAULT_SVG_ATTR = {
   x: '0',
@@ -13,12 +11,12 @@ const RE_SYMBOL = /<symbol\sid=['"]([^'"]+)[\S\s]*?<\/\s?symbol>/gm;
 
 /**
  * Handle SVG IMG content
- * @param { object } source
- * @param { object } context
+ * @param { Source } source
+ * @param { Context } context
  * @param { object } svgo
  * @returns { Promise<void> }
  */
-module.exports = async function imgSVG(source, context, svgo) {
+export async function imgSVG(source, context, svgo) {
   RE_SVG_CONTENT.lastIndex = 0;
 
   const svgContent =
@@ -26,8 +24,8 @@ module.exports = async function imgSVG(source, context, svgo) {
   // Use default attributes if no outer <svg> tag
   const defaultAttributes = Array.isArray(svgContent) ? {} : DEFAULT_SVG_ATTR;
   let attributes = {};
-  const parser = new htmlparser.Parser(
-    new htmlparser.DomHandler((err, dom) => {
+  const parser = new Parser(
+    new DefaultHandler((err, dom) => {
       if (err) {
         throw err;
       }
@@ -94,4 +92,4 @@ module.exports = async function imgSVG(source, context, svgo) {
       source.replace = result.data;
     }
   }
-};
+}

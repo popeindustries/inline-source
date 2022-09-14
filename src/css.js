@@ -1,12 +1,9 @@
-'use strict';
-
 /**
  * Handle CSS content
- * @param { object } source
- * @param { object } context
+ * @param { Source } source
  * @returns { Promise<void> }
  */
-module.exports = async function css(source) {
+export async function css(source) {
   if (source.fileContent && !source.content && source.type == 'css') {
     source.content = source.compress
       ? require('csso').minify(source.fileContent).css
@@ -14,4 +11,4 @@ module.exports = async function css(source) {
     // Change tag type
     source.tag = 'style';
   }
-};
+}

@@ -1,7 +1,5 @@
-'use strict';
-
-const imgSVG = require('./imgSVG.js');
-const { getAttributeString } = require('./utils');
+import { imgSVG } from './imgSVG.js';
+import { getAttributeString } from './utils.js';
 
 const RE_XML_TAG = /<\?xml.+?\?>\s+/g;
 
@@ -9,11 +7,11 @@ let svgo;
 
 /**
  * Handle IMG content
- * @param { object } source
- * @param { object } context
+ * @param { Source } source
+ * @param { Context } context
  * @returns { Promise<void> }
  */
-module.exports = async function img(source, context) {
+export async function img(source, context) {
   if (source.fileContent && !source.content && source.type == 'image') {
     const attributeType = source.attributes.type;
     let strict = !source.errored;
@@ -83,4 +81,4 @@ module.exports = async function img(source, context) {
     source.content = src;
     source.replace = `<${source.tag}${attrs}/>`;
   }
-};
+}

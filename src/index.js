@@ -1,19 +1,17 @@
-'use strict';
-
-const { isFilepath } = require('./lib/utils');
-const context = require('./lib/context');
-const path = require('path');
-const parse = require('./lib/parse');
-const run = require('./lib/run');
+import { isFilepath } from './utils.js';
+import { createContext } from './context.js';
+import path from 'path';
+import { parse } from './parse.js';
+import { run } from './run.js';
 
 /**
  * Inline sources found in 'htmlpath'
  * @param { string } htmlpath
- * @param { object } options
+ * @param { Options } options
  * @returns { Promise<string> }
  */
-exports.inlineSource = async function inlineSource(htmlpath, options = {}) {
-  const ctx = context.create(options);
+export async function inlineSource(htmlpath, options = {}) {
+  const ctx = createContext(options);
 
   // Load html content
   if (isFilepath(htmlpath)) {
@@ -31,4 +29,4 @@ exports.inlineSource = async function inlineSource(htmlpath, options = {}) {
   }
 
   return ctx.html;
-};
+}

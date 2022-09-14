@@ -1,10 +1,8 @@
-'use strict';
-
-const { expect } = require('chai');
-const { getTagRegExp } = require('../lib/utils');
-const fs = require('fs');
-const path = require('path');
-const parse = require('../lib/parse');
+import { expect } from 'chai';
+import { getTagRegExp } from '../src/utils.js';
+import fs from 'fs';
+import path from 'path';
+import { parse } from '../src/parse.js';
 
 let ctx;
 

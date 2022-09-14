@@ -1,8 +1,6 @@
-'use strict';
-
-const { expect } = require('chai');
-const path = require('path');
-const run = require('../lib/run');
+import { expect } from 'chai';
+import path from 'path';
+import { run } from '../src/run.js';
 
 let ctx;
 
