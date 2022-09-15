@@ -45,26 +45,33 @@ describe('inline <custom>', () => {
     expect(html).to.eql('<script>foo</script>');
   });
   it('should inline sources with custom handler and special props', async () => {
-    const test = '<script type="application/json" src="foo.json" inline inline-var="window.foo"></script>';
+    const test =
+      '<script type="application/json" src="foo.json" inline inline-var="window.foo"></script>';
     const html = normaliseNewLine(
       await inlineSource(test, {
         handlers: [
           (source) => {
-            if (source.type == 'json') source.content = source.props.var + ' = ' + source.fileContent;
+            if (source.type == 'json')
+              source.content = source.props.var + ' = ' + source.fileContent;
             return Promise.resolve();
           },
         ],
       }),
     );
-    expect(html).to.eql('<script type="application/json">window.foo = {\n  "foo": "foo"\n}\n</script>');
+    expect(html).to.eql(
+      '<script type="application/json">window.foo = {\n  "foo": "foo"\n}\n</script>',
+    );
   });
   it('should inline handlebars sources with custom handler', async () => {
-    const test = '<script type="text/x-handlebars-template" src="foo.handlebars" inline></script>';
+    const test =
+      '<script type="text/x-handlebars-template" src="foo.handlebars" inline></script>';
     const html = normaliseNewLine(
       await inlineSource(test, {
         handlers: [handlebarsHandler],
       }),
     );
-    expect(html).to.contain('container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title")');
+    expect(html).to.contain(
+      'container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title")',
+    );
   });
 });

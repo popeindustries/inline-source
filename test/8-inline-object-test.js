@@ -16,15 +16,20 @@ describe('inline <object>', () => {
 
   it('should inline svg sources that contain an "inline" attribute', async () => {
     const test = '<object inline type="image/svg+xml" data="foo.svg"></object>';
-    const html = normaliseNewLine(await inlineSource(test, { compress: false }));
+    const html = normaliseNewLine(
+      await inlineSource(test, { compress: false }),
+    );
     expect(html).to
       .eql(`<svg id="Layer_1" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200">
 <circle cx="50" cy="50" r="25"/>
 </svg>`);
   });
   it('should inline svg sources that contain an "inline" attribute, preserving other attributes', async () => {
-    const test = '<object inline id="foo" class="foo bar" type="image/svg+xml" data="foo.svg"></object>';
-    const html = normaliseNewLine(await inlineSource(test, { compress: false }));
+    const test =
+      '<object inline id="foo" class="foo bar" type="image/svg+xml" data="foo.svg"></object>';
+    const html = normaliseNewLine(
+      await inlineSource(test, { compress: false }),
+    );
     expect(html).to
       .eql(`<svg id="foo" x="100px" y="100px" enable-background="new 0 0 100 100" xml:space="preserve" viewBox="0 0 200 200" class="foo bar">
 <circle cx="50" cy="50" r="25"/>
@@ -43,7 +48,8 @@ describe('inline <object>', () => {
     expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });
   it('should inline svg sources as base64 if svgAsImage="true"', async () => {
-    const test = '<object inline inline-svgAsImage type="image/svg+xml" data="foo.svg"></object>';
+    const test =
+      '<object inline inline-svgAsImage type="image/svg+xml" data="foo.svg"></object>';
     const html = await inlineSource(test, { compress: true });
     expect(html).to.contain('<img src="data:image/svg+xml;charset=utf8');
   });

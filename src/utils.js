@@ -1,7 +1,16 @@
 import { URL } from 'node:url';
 import path from 'node:path';
 
-const ATTRIBUTE_BLACKLIST = ['href', 'rel', 'src', 'data', 'xmlns', 'xmlns:xlink', 'version', 'baseprofile'];
+const ATTRIBUTE_BLACKLIST = [
+  'href',
+  'rel',
+  'src',
+  'data',
+  'xmlns',
+  'xmlns:xlink',
+  'version',
+  'baseprofile',
+];
 const RE_ANY = /<(script|link|img|object)\s?[^>]*?>(?:<\/\1\s?>)?/gm;
 const RE_ESCAPE = /[-/\\^$*+?.()|[\]{}]/g;
 // Multiline, tags, data:uri
@@ -38,7 +47,10 @@ export function getAttributeString(attributes, prefix, strict) {
       : prop.indexOf(prefix) != 0;
 
     if (include) {
-      str += attributes[prop] === true ? ` ${prop}` : ` ${prop}="${attributes[prop]}"`;
+      str +=
+        attributes[prop] === true
+          ? ` ${prop}`
+          : ` ${prop}="${attributes[prop]}"`;
     }
   }
 
@@ -253,7 +265,9 @@ export function isIgnored(ignore, tag, type, format) {
  */
 export function isRelativeFilepath(str) {
   if (str) {
-    return isFilepath(str) && (str.indexOf('./') == 0 || str.indexOf('../') == 0);
+    return (
+      isFilepath(str) && (str.indexOf('./') == 0 || str.indexOf('../') == 0)
+    );
   }
   return false;
 }

@@ -97,7 +97,11 @@ export async function img(source, context) {
     }
 
     const src = `data:image/${source.format};${encoding},${data}`;
-    let attrs = getAttributeString(source.attributes, context.attribute, strict);
+    let attrs = getAttributeString(
+      source.attributes,
+      context.attribute,
+      strict,
+    );
 
     attrs += ` ${sourceProp}="${src}"`;
     source.content = src;

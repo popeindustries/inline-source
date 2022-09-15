@@ -9,7 +9,8 @@ import fetch from 'node-fetch';
 export async function load(source, context) {
   if (!source.fileContent && source.filepath) {
     // Raw buffer if image and not svg
-    const encoding = source.type == 'image' && source.format != 'svg+xml' ? null : 'utf8';
+    const encoding =
+      source.type == 'image' && source.format != 'svg+xml' ? null : 'utf8';
 
     try {
       // @ts-ignore
@@ -24,7 +25,9 @@ export async function load(source, context) {
       const res = await fetch(/** @type { string } */ (source.sourcepath));
 
       if (!res.ok) {
-        throw Error(res.status === 404 ? 'Not found' : `Fetch error: ${res.status}`);
+        throw Error(
+          res.status === 404 ? 'Not found' : `Fetch error: ${res.status}`,
+        );
       }
 
       const text = await res.text();
