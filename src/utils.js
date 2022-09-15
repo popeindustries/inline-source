@@ -30,12 +30,14 @@ export function escape(str) {
 
 /**
  * Retrieve stringified attributes
- * @param { Record<string, string> } attributes
- * @param { string } prefix
+ * @param { Record<string, string | boolean> } attributes
+ * @param { string | boolean } prefix
  * @param { boolean } strict
  * @returns { string }
  */
 export function getAttributeString(attributes, prefix, strict) {
+  prefix = String(prefix);
+
   let str = '';
 
   for (const prop in attributes) {
@@ -61,27 +63,25 @@ export function getAttributeString(attributes, prefix, strict) {
  * @returns { string }
  */
 export function getFormatFromExtension(extension) {
-  if (extension) {
-    switch (extension) {
-      case 'js':
-        return 'js';
-      case 'json':
-        return 'json';
-      case 'css':
-        return 'css';
-      case 'gif':
-        return 'gif';
-      case 'png':
-        return 'png';
-      case 'jpeg':
-      case 'jpg':
-        return 'jpeg';
-      case 'svg':
-        return 'svg+xml';
-      default:
-        return extension;
-    }
+  switch (extension) {
+    case 'js':
+      return 'js';
+    case 'json':
+      return 'json';
+    case 'css':
+      return 'css';
+    case 'gif':
+      return 'gif';
+    case 'png':
+      return 'png';
+    case 'jpeg':
+    case 'jpg':
+      return 'jpeg';
+    case 'svg':
+      return 'svg+xml';
   }
+
+  return extension;
 }
 
 /**
@@ -102,39 +102,42 @@ export function getPadding(source, html) {
  * @param { string } filepath
  * @param { string } htmlpath
  * @param { string } rootpath
- * @returns { Array<string> }
+ * @returns { [filepath: string, anchor: string] }
  */
 export function getSourcepath(filepath, htmlpath, rootpath) {
-  if (!filepath) {
+  /** @type { string | Array<string> } */
+  let sourcepath = filepath;
+
+  if (!sourcepath) {
     return ['', ''];
   }
 
-  if (isRemoteFilepath(filepath)) {
-    const url = new URL(filepath);
+  if (isRemoteFilepath(sourcepath)) {
+    const url = new URL(sourcepath);
 
-    filepath = `./${url.pathname.slice(1).replace(RE_FORWARD_SLASH, '_')}`;
+    sourcepath = `./${url.pathname.slice(1).replace(RE_FORWARD_SLASH, '_')}`;
   }
   // Strip query params
-  filepath = filepath.replace(RE_QUERY, '');
+  sourcepath = sourcepath.replace(RE_QUERY, '');
   // Relative path
-  if (htmlpath && isRelativeFilepath(filepath)) {
-    filepath = path.resolve(path.dirname(htmlpath), filepath);
+  if (htmlpath && isRelativeFilepath(sourcepath)) {
+    sourcepath = path.resolve(path.dirname(htmlpath), sourcepath);
     // Strip leading '/'
-  } else if (filepath.indexOf('/') == 0) {
-    filepath = filepath.slice(1);
+  } else if (sourcepath.indexOf('/') == 0) {
+    sourcepath = sourcepath.slice(1);
   }
-  if (filepath.includes('#')) {
-    filepath = filepath.split('#');
+  if (sourcepath.includes('#')) {
+    sourcepath = sourcepath.split('#');
   }
 
-  return Array.isArray(filepath)
-    ? [path.resolve(rootpath, filepath[0]), filepath[1]]
-    : [path.resolve(rootpath, filepath), ''];
+  return Array.isArray(sourcepath)
+    ? [path.resolve(rootpath, sourcepath[0]), sourcepath[1]]
+    : [path.resolve(rootpath, sourcepath), ''];
 }
 
 /**
  * Retrieve tag regexp for 'attribute'
- * @param { string } attribute
+ * @param { string | boolean } attribute
  * @returns { RegExp }
  */
 export function getTagRegExp(attribute) {
@@ -162,43 +165,41 @@ export function getTagRegExp(attribute) {
  * @returns { string }
  */
 export function getTypeFromType(type) {
-  if (type) {
-    switch (type) {
-      case 'application/javascript':
-      case 'application/x-javascript':
-      case 'application/ecmascript':
-      case 'text/javascript':
-      case 'text/form-script':
-      case 'text/ecmascript':
-      case 'javascript':
-      case 'js':
-      case 'ecmascript':
-      case 'module':
-        return 'js';
-      case 'text/css':
-      case 'css':
-        return 'css';
-      case 'image/png':
-      case 'image/gif':
-      case 'image/jpeg':
-      case 'image/jpg':
-      case 'image/svg+xml':
-      case 'image/svg':
-      case 'png':
-      case 'gif':
-      case 'jpeg':
-      case 'jpg':
-      case 'svg':
-      case 'image':
-        return 'image';
-      case 'application/json':
-      case 'text/json':
-      case 'json':
-        return 'json';
-      default:
-        return type;
-    }
+  switch (type) {
+    case 'application/javascript':
+    case 'application/x-javascript':
+    case 'application/ecmascript':
+    case 'text/javascript':
+    case 'text/form-script':
+    case 'text/ecmascript':
+    case 'javascript':
+    case 'js':
+    case 'ecmascript':
+    case 'module':
+      return 'js';
+    case 'text/css':
+    case 'css':
+      return 'css';
+    case 'image/png':
+    case 'image/gif':
+    case 'image/jpeg':
+    case 'image/jpg':
+    case 'image/svg+xml':
+    case 'image/svg':
+    case 'png':
+    case 'gif':
+    case 'jpeg':
+    case 'jpg':
+    case 'svg':
+    case 'image':
+      return 'image';
+    case 'application/json':
+    case 'text/json':
+    case 'json':
+      return 'json';
   }
+
+  return type;
 }
 
 /**
@@ -207,29 +208,27 @@ export function getTypeFromType(type) {
  * @returns { string }
  */
 export function getTypeFromTag(tag) {
-  if (tag) {
-    switch (tag) {
-      case 'script':
-        return 'js';
-      case 'link':
-        return 'css';
-      case 'img':
-      case 'object':
-        return 'image';
-      default:
-        return '';
-    }
+  switch (tag) {
+    case 'script':
+      return 'js';
+    case 'link':
+      return 'css';
+    case 'img':
+    case 'object':
+      return 'image';
   }
+
+  return '';
 }
 
 /**
  * Determine if 'str' is likely a filepath
- * @param { string } str
+ * @param { string | boolean } str
  * @returns { boolean }
  */
 export function isFilepath(str) {
   RE_NOT_FILEPATH.lastIndex = 0;
-  if (str) {
+  if (str && typeof str === 'string') {
     return !RE_NOT_FILEPATH.test(str);
   }
   return false;
@@ -251,11 +250,11 @@ export function isIgnored(ignore, tag, type, format) {
     ignore = [ignore];
   }
 
-  return !!(
+  return Boolean(
     ignore.includes(tag) ||
-    ignore.includes(type) ||
-    ignore.includes(format) ||
-    ignore.includes(formatAlt)
+      ignore.includes(type) ||
+      ignore.includes(format) ||
+      (formatAlt && ignore.includes(formatAlt))
   );
 }
 
@@ -275,11 +274,11 @@ export function isRelativeFilepath(str) {
 
 /**
  * Determine if 'str' is a remote filepath
- * @param { string } str
+ * @param { string | boolean } str
  * @returns { boolean }
  */
 export function isRemoteFilepath(str) {
-  if (str) {
+  if (str && typeof str === 'string') {
     return isFilepath(str) && RE_REMOTE.test(str);
   }
   return false;
@@ -287,8 +286,8 @@ export function isRemoteFilepath(str) {
 
 /**
  * Parse 'attributes'
- * @param { Record<string, string> } attributes
- * @returns { object }
+ * @param { Record<string, string | boolean> } attributes
+ * @returns { Record<string, string | boolean> }
  */
 export function parseAttributes(attributes) {
   for (const prop in attributes) {
@@ -303,27 +302,30 @@ export function parseAttributes(attributes) {
 
 /**
  * Parse props with 'prefix' from 'attributes'
- * @param { Record<string, string> } attributes
- * @param { string } prefix
- * @returns { Record<string, string> }
+ * @param { Record<string, string | boolean> } attributes
+ * @param { string | boolean } prefix
+ * @returns { Record<string, string | boolean> }
  */
 export function parseProps(attributes, prefix) {
-  prefix += '-';
-
+  /** @type { Record<string, string | boolean> } */
   const props = {};
 
-  for (const prop in attributes) {
-    // Strip 'inline-' and store
-    if (prop.indexOf(prefix) == 0) {
-      let value = attributes[prop];
+  if (typeof prefix === 'string') {
+    prefix += '-';
+    for (const prop in attributes) {
+      // Strip 'inline-' and store
+      if (prop.indexOf(prefix) == 0) {
+        /** @type { string | boolean } */
+        let value = attributes[prop];
 
-      if (value === 'false') {
-        value = false;
+        if (value === 'false') {
+          value = false;
+        }
+        if (value === 'true') {
+          value = true;
+        }
+        props[prop.slice(prefix.length)] = value;
       }
-      if (value === 'true') {
-        value = true;
-      }
-      props[prop.slice(prefix.length)] = value;
     }
   }
 

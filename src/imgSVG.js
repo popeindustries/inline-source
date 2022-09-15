@@ -24,6 +24,7 @@ export async function imgSVG(source, context, svgoConfig) {
     RE_SVG_CONTENT.exec(source.fileContent) || source.fileContent;
   // Use default attributes if no outer <svg> tag
   const defaultAttributes = Array.isArray(svgContent) ? {} : DEFAULT_SVG_ATTR;
+  /** @type { Record<string, string | boolean> } */
   let attributes = {};
   const parser = new Parser(
     new DefaultHandler((err, dom) => {
@@ -34,7 +35,9 @@ export async function imgSVG(source, context, svgoConfig) {
       dom = dom.filter((item) => item.type == 'tag' && item.name == 'svg');
 
       if (dom.length) {
-        attributes = parseAttributes(dom[0].attribs);
+        attributes = parseAttributes(
+          /** @type { { attribs: Record<String, string> } } */ (dom[0]).attribs
+        );
         // Fix lowercasing
         if ('viewbox' in attributes) {
           attributes.viewBox = attributes.viewbox;
@@ -83,14 +86,19 @@ export async function imgSVG(source, context, svgoConfig) {
     );
     const content = `<svg${attrs}>${source.content}</svg>`;
     const result = await optimize(content, svgoConfig);
-    RE_SVG_CONTENT.lastIndex = 0;
-    const rematch = RE_SVG_CONTENT.exec(result.data);
 
-    if (rematch) {
-      source.content = rematch[1];
+    if ('data' in result) {
+      RE_SVG_CONTENT.lastIndex = 0;
+      const rematch = RE_SVG_CONTENT.exec(result.data);
+
+      if (rematch) {
+        source.content = rematch[1];
+      } else {
+        // Error re-parsing, leave as is;
+        source.replace = result.data;
+      }
     } else {
-      // Error re-parsing, leave as is;
-      source.replace = result.data;
+      // Error optimizing
     }
   }
 }

@@ -5,7 +5,6 @@ const RE_SCRIPT = /(<)(\/script>)/gi;
 /**
  * Handle JavaScript content
  * @param { Source } source
- * @param { Context } context
  * @returns { Promise<void> }
  */
 export async function js(source) {
@@ -16,11 +15,7 @@ export async function js(source) {
       content = source.fileContent;
     } else {
       const compressed = await minify(source.fileContent);
-      if (compressed.error) {
-        throw compressed.error;
-      }
-
-      content = compressed.code;
+      content = /** @type { string } */ (compressed.code);
     }
 
     // Escape closing </script>

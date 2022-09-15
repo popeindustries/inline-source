@@ -3,6 +3,7 @@ import { getAttributeString } from './utils.js';
 import { optimize } from 'svgo';
 
 const RE_XML_TAG = /<\?xml.+?\?>\s+/g;
+/** @type { import('svgo').OptimizeOptions } */
 const SVGO_CONFIG = {
   plugins: [
     'removeDoctype',
@@ -72,7 +73,11 @@ export async function img(source, context) {
       if (source.compress) {
         const result = await optimize(source.content, SVGO_CONFIG);
 
-        source.content = result.data;
+        if ('data' in result) {
+          source.content = result.data;
+        } else {
+          // Error optimizing
+        }
       }
       data = encodeURIComponent(source.content);
       encoding = 'charset=utf8';

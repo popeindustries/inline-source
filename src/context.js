@@ -9,7 +9,6 @@ import path from 'node:path';
 import { wrap } from './wrap.js';
 
 const DEFAULT = {
-  attribute: 'inline',
   compress: true,
   fs /* Allow overriding 'fs' implementation */,
   html: '',
@@ -23,26 +22,20 @@ const DEFAULT = {
 
 /**
  * Retrieve context from 'options'
- * @param { object } options
- * @param { String } options.attribute
- * @param { boolean } options.compress
- * @param { object } options.fs
- * @param { Array<(source: any, context: any) => Promise<any>> } options.preHandlers
- * @param { Array<(source: any, context: any) => Promise<any>> } options.handlers
- * @param { Array<string> | { [key: string]: string } } options.ignore
- * @param { boolean } options.pretty
- * @param { string } options.rootpath
- * @param { boolean } options.saveRemote
- * @param { boolean } options.swallowErrors
- * @param { boolean } options.svgAsImage
- * @returns { object }
+ * @param { Options } options
+ * @returns { Context }
  */
 export function createContext(options = {}) {
-  const { handlers = [], preHandlers = [] } = options;
+  const { attribute = 'inline', handlers = [], preHandlers = [] } = options;
+
+  /** @type { Context } */
   const context = Object.assign(
     {
+      attribute,
+      re: getTagRegExp(attribute),
       rootpath: process.cwd(),
       sources: [],
+      stack: [...preHandlers, load, ...handlers, js, css, img, wrap, inline],
     },
     DEFAULT,
     options
@@ -54,17 +47,6 @@ export function createContext(options = {}) {
   if (options.pretty == true && context.compress == false) {
     context.pretty = true;
   }
-  context.re = getTagRegExp(context.attribute);
-  context.stack = [
-    ...preHandlers,
-    load,
-    ...handlers,
-    js,
-    css,
-    img,
-    wrap,
-    inline,
-  ];
 
   return context;
 }

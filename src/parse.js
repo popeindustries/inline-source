@@ -23,6 +23,9 @@ const RE_COMMENT = /(<!--[^[i][\S\s]+?--\s?>)/gm;
 export async function parse(context) {
   // Remove comments
   const html = context.html.replace(RE_COMMENT, '');
+  /** @type { RegExpExecArray | null } */
+  let match;
+
   // This api uses a synchronous callback handler, so order and definition of 'match' is preserved
   const parser = new Parser(
     new DefaultHandler((err, dom) => {
@@ -30,13 +33,17 @@ export async function parse(context) {
         throw err;
       }
 
-      const parsed = dom[0];
+      const parsed = /** @type { { attribs: Record<String, string> } } */ (
+        dom[0]
+      );
 
       if (parsed) {
+        const [matching, tag] = /** @type { RegExpExecArray } */ (match);
         const attributes = parseAttributes(parsed.attribs);
         const props = parseProps(attributes, context.attribute);
-        const tag = match[1];
-        const type = getTypeFromType(attributes.type) || getTypeFromTag(tag);
+        const type =
+          getTypeFromType(/** @type { string } */ (attributes.type)) ||
+          getTypeFromTag(tag);
         const sourcepath = attributes.src || attributes.href || attributes.data;
 
         // Empty sourcepath attribute will be resolved as "true", so skip
@@ -53,7 +60,7 @@ export async function parse(context) {
 
         if (sourcepath === undefined || isFilepath(sourcepath)) {
           const filepath = getSourcepath(
-            sourcepath,
+            /** @type { string } */ (sourcepath),
             context.htmlpath,
             context.rootpath
           );
@@ -64,7 +71,10 @@ export async function parse(context) {
           if (!isIgnored(context.ignore, tag, type, format)) {
             context.sources.push({
               attributes,
-              compress: 'compress' in props ? props.compress : context.compress,
+              compress:
+                'compress' in props
+                  ? /** @type { boolean } */ (props.compress)
+                  : context.compress,
               content: null,
               errored: false,
               extension,
@@ -73,16 +83,18 @@ export async function parse(context) {
               filepathAnchor: filepath[1],
               format,
               isRemote: isRemoteFilepath(sourcepath),
-              match: match[0],
-              padding: context.pretty ? getPadding(match[0], context.html) : '',
+              match: matching,
+              padding: context.pretty ? getPadding(matching, context.html) : '',
               parentContext: context,
               props,
               replace: '',
               sourcepath,
               stack: context.stack,
               svgAsImage:
-                'svgasimage' in props ? props.svgasimage : context.svgAsImage,
-              tag: match[1],
+                'svgasimage' in props
+                  ? /** @type { boolean } */ (props.svgasimage)
+                  : context.svgAsImage,
+              tag,
               type,
             });
           }
@@ -90,7 +102,6 @@ export async function parse(context) {
       }
     })
   );
-  let match;
 
   while ((match = context.re.exec(html))) {
     parser.parseComplete(match[0]);

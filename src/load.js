@@ -13,6 +13,7 @@ export async function load(source, context) {
       source.type == 'image' && source.format != 'svg+xml' ? null : 'utf8';
 
     try {
+      // @ts-ignore
       source.fileContent = context.fs.readFileSync(source.filepath, encoding);
     } catch (err) {
       if (!source.isRemote) {
@@ -21,7 +22,7 @@ export async function load(source, context) {
     }
 
     if (source.isRemote) {
-      const res = await fetch(source.sourcepath);
+      const res = await fetch(/** @type { string } */ (source.sourcepath));
 
       if (!res.ok) {
         throw Error(

@@ -2,8 +2,10 @@ lockfileVersion: 5.4
 
 specifiers:
   '@changesets/cli': ^2.24.4
+  '@types/csso': 5.0.0
   '@types/mocha': ^9.1.1
   '@types/node': ^18.7.18
+  '@types/svgo': ^2.6.4
   '@typescript-eslint/eslint-plugin': ^5.37.0
   '@typescript-eslint/parser': ^5.37.0
   chai: ^4.3.6
@@ -34,8 +36,10 @@ dependencies:
 
 devDependencies:
   '@changesets/cli': 2.24.4
+  '@types/csso': 5.0.0
   '@types/mocha': 9.1.1
   '@types/node': 18.7.18
+  '@types/svgo': 2.6.4
   '@typescript-eslint/eslint-plugin': 5.37.0_22c5fnooleyfkzrkkgdmel5kmi
   '@typescript-eslint/parser': 5.37.0_irgkl5vooow2ydyo6aokmferha
   chai: 4.3.6
@@ -398,6 +402,16 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: false
 
+  /@types/css-tree/1.0.7:
+    resolution: {integrity: sha512-Pz+DfVODpQTAV6PwPBK6kzyy7+f6EyPbr1+mYkc1YolJfl2NAJ4wbg0TC/AJPBsqn9jWfyiO19A/sgpvFLfqnw==}
+    dev: true
+
+  /@types/csso/5.0.0:
+    resolution: {integrity: sha512-EMrCTGpXRUsbFfZBzn2jcW6Sqg8kxWXkJcpvAGYSEzFqAJ2THDJSwiMeS2fPUw+0p6RQNT/n8F/skEc9hUBc0g==}
+    dependencies:
+      '@types/css-tree': 1.0.7
+    dev: true
+
   /@types/is-ci/3.0.0:
     resolution: {integrity: sha512-Q0Op0hdWbYd1iahB+IFNQcWXFq4O0Q5MwQP7uN0souuQ4rPg1vEYcnIOfr1gY+M+6rc8FGoRaBO1mOOvL29sEQ==}
     dependencies:
@@ -430,6 +444,12 @@ packages:
 
   /@types/semver/6.2.3:
     resolution: {integrity: sha512-KQf+QAMWKMrtBMsB8/24w53tEsxllMj6TuA80TT/5igJalLI/zm0L3oXRbIAl4Ohfc85gyHX/jhMwsVkmhLU4A==}
+    dev: true
+
+  /@types/svgo/2.6.4:
+    resolution: {integrity: sha512-l4cmyPEckf8moNYHdJ+4wkHvFxjyW6ulm9l4YGaOxeyBWPhBOT0gvni1InpFPdzx1dKf/2s62qGITwxNWnPQng==}
+    dependencies:
+      '@types/node': 18.7.18
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.37.0_22c5fnooleyfkzrkkgdmel5kmi:

@@ -1,18 +1,11 @@
-export interface Options {
-  attribute: string | boolean;
-  compress: boolean;
-  fs: any; // like MemoryFileSystem
-  preHandlers: Array<(source: any, context: any) => Promise<any>>;
-  handlers: Array<(source: any, context: any) => Promise<any>>;
-  ignore: Array<string> | { [key: string]: string };
-  pretty: boolean;
-  rootpath: string;
-  saveRemote: boolean;
-  svgAsImage: boolean;
-  swallowErrors: boolean;
-}
-
+/**
+ * Parse `htmlpath` content for tags containing an `inline` attribute,
+ * and replace with (optionally compressed) file contents.
+ */
 export function inlineSource(
+  /**
+   * Path to html file or raw string of html
+   */
   htmlpath: string,
-  options?: Partial<Options>
+  options?: Options
 ): Promise<string>;

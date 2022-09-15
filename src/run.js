@@ -18,7 +18,7 @@ export async function run(context, sources = [], swallowErrors) {
             throw err;
           }
           if (!isTest) {
-            console.warn(err.message);
+            console.warn(/** @type { Error } */ (err).message);
           }
           // Clear content
           source.content = '';

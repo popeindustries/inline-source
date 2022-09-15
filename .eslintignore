@@ -1,2 +1,3 @@
 *.min.js
 *.d.ts
+/index.js

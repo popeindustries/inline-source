@@ -8,7 +8,7 @@ import { minify } from 'csso';
 export async function css(source) {
   if (source.fileContent && !source.content && source.type == 'css') {
     source.content = source.compress
-      ? minify(source.fileContent).css
+      ? minify(/** @type { string } */ (source.fileContent)).css
       : source.fileContent;
     // Change tag type
     source.tag = 'style';
