@@ -45,6 +45,7 @@
   },
   "scripts": {
     "build": "node ./scripts/build.js",
+    "clean": "git clean -x -f",
     "format": "prettier --write './{src,test}/**/*.{js,json,css}'",
     "lint": "pnpm run lint:eslint && pnpm run lint:typescript",
     "lint:eslint": "eslint 'src/**/*.js'",
