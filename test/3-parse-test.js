@@ -73,33 +73,23 @@ describe('parse', () => {
     expect(ctx.sources[0]).to.have.property('type', 'css');
   });
   it('should generate source objects for all tags with "inline" attribute', async () => {
-    ctx.html = fs.readFileSync(
-      path.resolve('./test/fixtures/match.html'),
-      'utf-8'
-    );
+    ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
     await parse(ctx);
     expect(ctx.sources).to.have.length(14);
   });
   it('should generate source objects for all tags when attribute=false', async () => {
     ctx = createContext(false);
-    ctx.html = fs.readFileSync(
-      path.resolve('./test/fixtures/match-any.html'),
-      'utf-8'
-    );
+    ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match-any.html'), 'utf-8');
     await parse(ctx);
     expect(ctx.sources).to.have.length(14);
   });
   it('should synchronously generate source objects for all tags with "inline" attribute', () => {
-    ctx.html = fs.readFileSync(
-      path.resolve('./test/fixtures/match.html'),
-      'utf-8'
-    );
+    ctx.html = fs.readFileSync(path.resolve('./test/fixtures/match.html'), 'utf-8');
     parse(ctx);
     expect(ctx.sources).to.have.length(14);
   });
   it('should generate a source object for a matching inline <link> tag inside an ie conditional comment', async () => {
-    ctx.html =
-      '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
+    ctx.html = '<!--[if IE 8 ]>\n  <link inline rel="stylesheet" href="css/ie.min.css" >\n<![endif]-->';
     await parse(ctx);
     expect(ctx.sources).to.have.length(1);
     expect(ctx.sources[0]).to.have.property('tag', 'link');
@@ -123,14 +113,10 @@ describe('parse', () => {
     ctx.html = '<script src="foo.js" inline></script>';
     await parse(ctx);
     expect(ctx.sources).to.have.length(1);
-    expect(ctx.sources[0]).to.have.property(
-      'filepath',
-      path.resolve('./test/foo.js')
-    );
+    expect(ctx.sources[0]).to.have.property('filepath', path.resolve('./test/foo.js'));
   });
   it("should parse an inline <script>'s type", async () => {
-    ctx.html =
-      '<script type="application/json" src="foo.json" inline></script>';
+    ctx.html = '<script type="application/json" src="foo.json" inline></script>';
     await parse(ctx);
     expect(ctx.sources).to.have.length(1);
     expect(ctx.sources[0]).to.have.property('type', 'json');

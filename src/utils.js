@@ -1,16 +1,7 @@
 import { URL } from 'node:url';
 import path from 'node:path';
 
-const ATTRIBUTE_BLACKLIST = [
-  'href',
-  'rel',
-  'src',
-  'data',
-  'xmlns',
-  'xmlns:xlink',
-  'version',
-  'baseprofile',
-];
+const ATTRIBUTE_BLACKLIST = ['href', 'rel', 'src', 'data', 'xmlns', 'xmlns:xlink', 'version', 'baseprofile'];
 const RE_ANY = /<(script|link|img|object)\s?[^>]*?>(?:<\/\1\s?>)?/gm;
 const RE_ESCAPE = /[-/\\^$*+?.()|[\]{}]/g;
 // Multiline, tags, data:uri
@@ -47,10 +38,7 @@ export function getAttributeString(attributes, prefix, strict) {
       : prop.indexOf(prefix) != 0;
 
     if (include) {
-      str +=
-        attributes[prop] === true
-          ? ` ${prop}`
-          : ` ${prop}="${attributes[prop]}"`;
+      str += attributes[prop] === true ? ` ${prop}` : ` ${prop}="${attributes[prop]}"`;
     }
   }
 
@@ -153,7 +141,7 @@ export function getTagRegExp(attribute) {
         '=([\\\'\\"])(?:true|' +
         attribute +
         ')\\2[^>]*?)>(?:<\\/\\1\\s?>)?',
-      'gm'
+      'gm',
     );
   }
   return RE_ANY;
@@ -254,7 +242,7 @@ export function isIgnored(ignore, tag, type, format) {
     ignore.includes(tag) ||
       ignore.includes(type) ||
       ignore.includes(format) ||
-      (formatAlt && ignore.includes(formatAlt))
+      (formatAlt && ignore.includes(formatAlt)),
   );
 }
 
@@ -265,9 +253,7 @@ export function isIgnored(ignore, tag, type, format) {
  */
 export function isRelativeFilepath(str) {
   if (str) {
-    return (
-      isFilepath(str) && (str.indexOf('./') == 0 || str.indexOf('../') == 0)
-    );
+    return isFilepath(str) && (str.indexOf('./') == 0 || str.indexOf('../') == 0);
   }
   return false;
 }

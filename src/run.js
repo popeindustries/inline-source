@@ -25,7 +25,7 @@ export async function run(context, sources = [], swallowErrors) {
           source.errored = true;
         }
       }
-    })
+    }),
   );
 
   return context.html;

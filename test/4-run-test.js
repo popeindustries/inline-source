@@ -90,7 +90,7 @@ describe('run', () => {
             return Promise.resolve();
           },
         ],
-      }
+      },
     );
     await run(ctx, ctx.sources, false);
     expect(idx).to.equal(4);
@@ -167,7 +167,7 @@ describe('run', () => {
             return Promise.resolve();
           },
         ],
-      }
+      },
     );
     try {
       await run(ctx, ctx.sources, false);
@@ -205,7 +205,7 @@ describe('run', () => {
             return Promise.resolve();
           },
         ],
-      }
+      },
     );
     await run(ctx, ctx.sources, true);
     expect(idx).to.equal(4);

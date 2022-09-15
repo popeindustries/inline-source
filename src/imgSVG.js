@@ -20,8 +20,7 @@ const RE_SYMBOL = /<symbol\sid=['"]([^'"]+)[\S\s]*?<\/\s?symbol>/gm;
 export async function imgSVG(source, context, svgoConfig) {
   RE_SVG_CONTENT.lastIndex = 0;
 
-  const svgContent =
-    RE_SVG_CONTENT.exec(source.fileContent) || source.fileContent;
+  const svgContent = RE_SVG_CONTENT.exec(source.fileContent) || source.fileContent;
   // Use default attributes if no outer <svg> tag
   const defaultAttributes = Array.isArray(svgContent) ? {} : DEFAULT_SVG_ATTR;
   /** @type { Record<string, string | boolean> } */
@@ -35,27 +34,20 @@ export async function imgSVG(source, context, svgoConfig) {
       dom = dom.filter((item) => item.type == 'tag' && item.name == 'svg');
 
       if (dom.length) {
-        attributes = parseAttributes(
-          /** @type { { attribs: Record<String, string> } } */ (dom[0]).attribs
-        );
+        attributes = parseAttributes(/** @type { { attribs: Record<String, string> } } */ (dom[0]).attribs);
         // Fix lowercasing
         if ('viewbox' in attributes) {
           attributes.viewBox = attributes.viewbox;
           delete attributes.viewbox;
         }
       }
-    })
+    }),
   );
 
   // Strip xml tag
   parser.parseComplete(source.fileContent);
   source.content = Array.isArray(svgContent) ? svgContent[1] : svgContent;
-  source.attributes = Object.assign(
-    {},
-    defaultAttributes,
-    attributes,
-    source.attributes
-  );
+  source.attributes = Object.assign({}, defaultAttributes, attributes, source.attributes);
   // Remove the alt attribute if it exists. alt attributes are not allowed on svg elements as per W3C spec
   // @see https://www.w3.org/TR/SVG/attindex.html for allowed attributes
   if ('alt' in source.attributes) {
@@ -79,11 +71,7 @@ export async function imgSVG(source, context, svgoConfig) {
   }
   if (source.compress) {
     // svgo sometiemes throws errors if content not wrapped in <svg>, so wrap here
-    const attrs = getAttributeString(
-      source.attributes,
-      context.attribute,
-      false
-    );
+    const attrs = getAttributeString(source.attributes, context.attribute, false);
     const content = `<svg${attrs}>${source.content}</svg>`;
     const result = await optimize(content, svgoConfig);
 

@@ -45,35 +45,27 @@
   },
   "scripts": {
     "build": "node ./scripts/build.js",
-    "format": "prettier --write './{lib,test}/**/*.{js,json,css}'",
+    "format": "prettier --write './{src,test}/**/*.{js,json,css}'",
     "lint": "pnpm run lint:eslint && pnpm run lint:typescript",
     "lint:eslint": "eslint 'src/**/*.js'",
     "lint:typescript": "tsc --noEmit --skipLibCheck",
     "test": "NODE_ENV=test mocha --reporter spec --bail 'test/*-test.js'"
   },
   "engines": {
-    "node": ">=8.3.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "node": ">=16.0.0"
   },
   "lint-staged": {
     "*.js": [
-      "prettier --write",
-      "eslint",
-      "git add"
+      "eslint"
     ],
-    "*.json": [
-      "prettier --write",
-      "git add"
+    "*.{js,json,md}": [
+      "prettier --write"
     ]
   },
   "prettier": {
     "arrowParens": "always",
-    "htmlWhitespaceSensitivity": "strict",
-    "printWidth": 80,
-    "singleQuote": true
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "all"
   }
 }

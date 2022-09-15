@@ -33,37 +33,26 @@ export async function parse(context) {
         throw err;
       }
 
-      const parsed = /** @type { { attribs: Record<String, string> } } */ (
-        dom[0]
-      );
+      const parsed = /** @type { { attribs: Record<String, string> } } */ (dom[0]);
 
       if (parsed) {
         const [matching, tag] = /** @type { RegExpExecArray } */ (match);
         const attributes = parseAttributes(parsed.attribs);
         const props = parseProps(attributes, context.attribute);
-        const type =
-          getTypeFromType(/** @type { string } */ (attributes.type)) ||
-          getTypeFromTag(tag);
+        const type = getTypeFromType(/** @type { string } */ (attributes.type)) || getTypeFromTag(tag);
         const sourcepath = attributes.src || attributes.href || attributes.data;
 
         // Empty sourcepath attribute will be resolved as "true", so skip
         // Skip link tags without rel=stylesheet/icon (missing rel assumed to be stylesheet)
         if (
           sourcepath === true ||
-          (tag === 'link' &&
-            attributes.rel &&
-            attributes.rel !== 'stylesheet' &&
-            attributes.rel !== 'icon')
+          (tag === 'link' && attributes.rel && attributes.rel !== 'stylesheet' && attributes.rel !== 'icon')
         ) {
           return;
         }
 
         if (sourcepath === undefined || isFilepath(sourcepath)) {
-          const filepath = getSourcepath(
-            /** @type { string } */ (sourcepath),
-            context.htmlpath,
-            context.rootpath
-          );
+          const filepath = getSourcepath(/** @type { string } */ (sourcepath), context.htmlpath, context.rootpath);
           const extension = path.extname(filepath[0]).slice(1);
           const format = getFormatFromExtension(extension);
 
@@ -71,10 +60,7 @@ export async function parse(context) {
           if (!isIgnored(context.ignore, tag, type, format)) {
             context.sources.push({
               attributes,
-              compress:
-                'compress' in props
-                  ? /** @type { boolean } */ (props.compress)
-                  : context.compress,
+              compress: 'compress' in props ? /** @type { boolean } */ (props.compress) : context.compress,
               content: null,
               errored: false,
               extension,
@@ -90,17 +76,14 @@ export async function parse(context) {
               replace: '',
               sourcepath,
               stack: context.stack,
-              svgAsImage:
-                'svgasimage' in props
-                  ? /** @type { boolean } */ (props.svgasimage)
-                  : context.svgAsImage,
+              svgAsImage: 'svgasimage' in props ? /** @type { boolean } */ (props.svgasimage) : context.svgAsImage,
               tag,
               type,
             });
           }
         }
       }
-    })
+    }),
   );
 
   while ((match = context.re.exec(html))) {

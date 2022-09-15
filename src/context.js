@@ -38,7 +38,7 @@ export function createContext(options = {}) {
       stack: [...preHandlers, load, ...handlers, js, css, img, wrap, inline],
     },
     DEFAULT,
-    options
+    options,
   );
 
   if (options.rootpath) {
