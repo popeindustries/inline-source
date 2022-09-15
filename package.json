@@ -54,6 +54,7 @@
     "lint": "pnpm run lint:eslint && pnpm run lint:typescript",
     "lint:eslint": "eslint 'src/**/*.js'",
     "lint:typescript": "tsc --noEmit --skipLibCheck",
+    "prepublishOnly": "pnpm run build",
     "test": "NODE_ENV=test mocha --reporter spec --bail 'test/*-test.js'"
   },
   "engines": {
