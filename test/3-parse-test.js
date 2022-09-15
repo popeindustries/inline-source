@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { getTagRegExp } from '../src/utils.js';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { parse } from '../src/parse.js';
 
 let ctx;

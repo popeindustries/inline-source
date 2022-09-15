@@ -1,7 +1,10 @@
-'use strict';
+import { expect } from 'chai';
+import { fileURLToPath } from 'node:url';
+import { handlebarsHandler } from './fixtures/handlebarsHandler.js';
+import { inlineSource } from '../src/index.js';
+import path from 'node:path';
 
-const { expect } = require('chai');
-const { inlineSource: inline } = require('..');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function normaliseNewLine(str) {
   return str.replace(/\r\n/g, '\n');
@@ -9,17 +12,17 @@ function normaliseNewLine(str) {
 
 describe('inline <custom>', () => {
   before(function () {
-    process.chdir(require('path').resolve(__dirname, './fixtures'));
+    process.chdir(path.resolve(__dirname, './fixtures'));
   });
 
   it('should ignore tag types with no handler', async () => {
     const test = '<foo inline></foo>';
-    const html = await inline(test);
+    const html = await inlineSource(test);
     expect(html).to.eql(test);
   });
   it('should inline sources for custom tags and custom handler', async () => {
     const test = '<foo inline></foo>';
-    const html = await inline(test, {
+    const html = await inlineSource(test, {
       handlers: [
         (source) => {
           if (source.tag == 'foo') source.content = 'foo';
@@ -31,7 +34,7 @@ describe('inline <custom>', () => {
   });
   it('should inline sources with overridden js handler', async () => {
     const test = '<script src="foo.js" inline></script>';
-    const html = await inline(test, {
+    const html = await inlineSource(test, {
       handlers: [
         (source) => {
           if (source.type == 'js') source.content = 'foo';
@@ -45,7 +48,7 @@ describe('inline <custom>', () => {
     const test =
       '<script type="application/json" src="foo.json" inline inline-var="window.foo"></script>';
     const html = normaliseNewLine(
-      await inline(test, {
+      await inlineSource(test, {
         handlers: [
           (source) => {
             if (source.type == 'json')
@@ -63,8 +66,8 @@ describe('inline <custom>', () => {
     const test =
       '<script type="text/x-handlebars-template" src="foo.handlebars" inline></script>';
     const html = normaliseNewLine(
-      await inline(test, {
-        handlers: [require('./fixtures/handlebarsHandler')],
+      await inlineSource(test, {
+        handlers: [handlebarsHandler],
       })
     );
     expect(html).to.contain(

@@ -1,5 +1,5 @@
-import { URL } from 'url';
-import path from 'path';
+import { URL } from 'node:url';
+import path from 'node:path';
 
 const ATTRIBUTE_BLACKLIST = [
   'href',

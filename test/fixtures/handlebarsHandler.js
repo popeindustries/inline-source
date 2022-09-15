@@ -1,6 +1,4 @@
-'use strict';
-
-const Handlebars = require('handlebars');
+import Handlebars from 'handlebars';
 
 const HANDLEBARS_TYPE = 'text/x-handlebars-template';
 
@@ -10,7 +8,7 @@ const HANDLEBARS_TYPE = 'text/x-handlebars-template';
  * @param {object} context
  * @returns {Promise}
  */
-module.exports = function handlbars(source) {
+export function handlebarsHandler(source) {
   return new Promise((resolve, reject) => {
     if (
       source.fileContent &&
@@ -30,4 +28,4 @@ module.exports = function handlbars(source) {
 
     resolve();
   });
-};
+}

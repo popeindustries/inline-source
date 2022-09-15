@@ -17,6 +17,7 @@
   "dependencies": {
     "csso": "^5.0.5",
     "htmlparser2": "^8.0.1",
+    "node-fetch": "^3.2.10",
     "svgo": "^2.8.0",
     "terser": "^5.15.0"
   },
@@ -43,7 +44,7 @@
   "scripts": {
     "format": "prettier --write './{lib,test}/**/*.{js,json,css}'",
     "lint": "eslint './{lib,test}/**/*.js'",
-    "test": "NODE_ENV=test mocha --reporter spec --bail 'test/5-*-test.js'"
+    "test": "NODE_ENV=test mocha --reporter spec --bail 'test/*-test.js'"
   },
   "engines": {
     "node": ">=8.3.0"

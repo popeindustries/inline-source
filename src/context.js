@@ -1,11 +1,11 @@
 import { css } from './css.js';
-import fs from 'fs';
+import fs from 'node:fs';
 import { getTagRegExp } from './utils.js';
 import { inline } from './inline.js';
 import { js } from './js.js';
 import { img } from './img.js';
 import { load } from './load.js';
-import path from 'path';
+import path from 'node:path';
 import { wrap } from './wrap.js';
 
 const DEFAULT = {

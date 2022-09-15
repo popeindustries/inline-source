@@ -11,7 +11,7 @@ import {
   parseProps,
 } from './utils.js';
 import { DefaultHandler, Parser } from 'htmlparser2';
-import path from 'path';
+import path from 'node:path';
 
 const RE_COMMENT = /(<!--[^[i][\S\s]+?--\s?>)/gm;
 

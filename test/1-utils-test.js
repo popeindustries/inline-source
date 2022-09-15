@@ -7,7 +7,7 @@ import {
   parseAttributes,
   parseProps,
 } from '../src/utils.js';
-import path from 'path';
+import path from 'node:path';
 
 describe('utils', () => {
   describe('isFilepath()', () => {

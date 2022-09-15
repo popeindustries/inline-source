@@ -1,6 +1,6 @@
-import { isFilepath } from './utils.js';
 import { createContext } from './context.js';
-import path from 'path';
+import { isFilepath } from './utils.js';
+import path from 'node:path';
 import { parse } from './parse.js';
 import { run } from './run.js';
 

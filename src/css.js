@@ -1,3 +1,5 @@
+import { minify } from 'csso';
+
 /**
  * Handle CSS content
  * @param { Source } source
@@ -6,7 +8,7 @@
 export async function css(source) {
   if (source.fileContent && !source.content && source.type == 'css') {
     source.content = source.compress
-      ? require('csso').minify(source.fileContent).css
+      ? minify(source.fileContent).css
       : source.fileContent;
     // Change tag type
     source.tag = 'style';

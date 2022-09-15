@@ -1,9 +1,12 @@
 import { expect } from 'chai';
+import { fileURLToPath } from 'node:url';
 import { inlineSource } from '../src/index.js';
-import fs from 'fs';
+import fs from 'node:fs';
 import MemoryFileSystem from 'memory-fs';
 import nock from 'nock';
-import path from 'path';
+import path from 'node:path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function normaliseNewLine(str) {
   return str.replace(/\r\n/g, '\n');
@@ -11,7 +14,7 @@ function normaliseNewLine(str) {
 
 describe('inline <script>', () => {
   before(() => {
-    process.chdir(require('path').resolve(__dirname, './fixtures'));
+    process.chdir(path.resolve(__dirname, './fixtures'));
   });
 
   it('should ignore commented sources', async () => {
@@ -296,7 +299,7 @@ describe('inline <script>', () => {
       const html = await inlineSource(test, { compress: true });
       expect(html).to.not.exist;
     } catch (err) {
-      expect(err.message).to.eql('Not Found');
+      expect(err.message).to.eql('Not found');
     }
   });
 });

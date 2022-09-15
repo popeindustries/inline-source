@@ -1,5 +1,6 @@
 import { getAttributeString, parseAttributes } from './utils.js';
 import { DefaultHandler, Parser } from 'htmlparser2';
+import { optimize } from 'svgo';
 
 const DEFAULT_SVG_ATTR = {
   x: '0',
@@ -13,10 +14,10 @@ const RE_SYMBOL = /<symbol\sid=['"]([^'"]+)[\S\s]*?<\/\s?symbol>/gm;
  * Handle SVG IMG content
  * @param { Source } source
  * @param { Context } context
- * @param { object } svgo
+ * @param { object } svgoConfig
  * @returns { Promise<void> }
  */
-export async function imgSVG(source, context, svgo) {
+export async function imgSVG(source, context, svgoConfig) {
   RE_SVG_CONTENT.lastIndex = 0;
 
   const svgContent =
@@ -81,7 +82,7 @@ export async function imgSVG(source, context, svgo) {
       false
     );
     const content = `<svg${attrs}>${source.content}</svg>`;
-    const result = await svgo.optimize(content);
+    const result = await optimize(content, svgoConfig);
     RE_SVG_CONTENT.lastIndex = 0;
     const rematch = RE_SVG_CONTENT.exec(result.data);
 

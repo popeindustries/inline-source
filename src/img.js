@@ -1,9 +1,46 @@
 import { imgSVG } from './imgSVG.js';
 import { getAttributeString } from './utils.js';
+import { optimize } from 'svgo';
 
 const RE_XML_TAG = /<\?xml.+?\?>\s+/g;
-
-let svgo;
+const SVGO_CONFIG = {
+  plugins: [
+    'removeDoctype',
+    'removeXMLProcInst',
+    'removeComments',
+    'removeMetadata',
+    'removeEditorsNSData',
+    'cleanupAttrs',
+    'mergeStyles',
+    'inlineStyles',
+    'minifyStyles',
+    // 'cleanupIDs', Prevent removal of unused <symbol> elements
+    'cleanupNumericValues',
+    'convertColors',
+    // 'removeUnknownsAndDefaults', Prevent removal of <image> src attribute
+    'removeNonInheritableGroupAttrs',
+    'removeUselessStrokeAndFill',
+    'removeViewBox',
+    'cleanupEnableBackground',
+    'removeHiddenElems',
+    'removeEmptyText',
+    'convertShapeToPath',
+    'convertEllipseToCircle',
+    'moveElemsAttrsToGroup',
+    'moveGroupAttrsToElems',
+    'collapseGroups',
+    'convertPathData',
+    'convertTransform',
+    // 'removeEmptyAttrs', Prevent removal of xlink:href on <image> elements
+    // 'removeUselessDefs',
+    'removeEmptyContainers',
+    'mergePaths',
+    'removeUnusedNS',
+    'sortDefsChildren',
+    'removeTitle',
+    'removeDesc',
+  ],
+};
 
 /**
  * Handle IMG content
@@ -24,24 +61,8 @@ export async function img(source, context) {
 
     // svg
     if (source.format == 'svg+xml' && !isIcon) {
-      // Init compressor
-      if (source.compress && svgo === undefined) {
-        const Svgo = require('svgo');
-
-        svgo = new Svgo({
-          plugins: [
-            // Prevent removal of unused <symbol> elements
-            { cleanupIDs: false },
-            // Prevent removal of xlink:href on <image> elements
-            { removeEmptyAttrs: false },
-            { removeUselessDefs: false },
-            // Prevent removal of <image> src attribute
-            { removeUnknownsAndDefaults: false },
-          ],
-        });
-      }
       if (!source.svgAsImage) {
-        await imgSVG(source, context, svgo);
+        await imgSVG(source, context, SVGO_CONFIG);
         return;
       }
 
@@ -49,7 +70,7 @@ export async function img(source, context) {
       // Strip xml tag
       source.content = source.fileContent.replace(RE_XML_TAG, '');
       if (source.compress) {
-        const result = await svgo.optimize(source.content);
+        const result = await optimize(source.content, SVGO_CONFIG);
 
         source.content = result.data;
       }
