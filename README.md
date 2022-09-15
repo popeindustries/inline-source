@@ -6,13 +6,11 @@
 
 Inline and compress tags that contain the `inline` attribute. Supports `<script>`, `<link>`, and `<img>` (including `*.svg` sources) tags by default, and is easily extensible to handle others.
 
-**NOTE**: since version 6, the API is now Promise based, and compatible with `async/await`, requiring a minimum Node version of 7.6
-
 > You can use [inline-source-cli](https://github.com/developit/inline-source-cli) to run `inline-source` from the command line or NPM Scripts.
 
 ## Usage
 
-**`inlineSource(htmlpath, [options]): Promise<string>`**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
+**`inlineSource(htmlpath: string, [options: Options]): Promise<string>`**: parse `htmlpath` content for tags containing an `inline` attribute, and replace with (optionally compressed) file contents.
 
 `htmlpath` can be either a filepath _or_ a string of html content.
 
@@ -54,9 +52,10 @@ $ npm install inline-source
 ```
 
 ```javascript
-const { inlineSource } = require('inline-source');
-const fs = require('fs');
-const path = require('path');
+import { inlineSource } from 'inline-source';
+import fs from 'node:fs';
+import path from 'node:path';
+
 const htmlpath = path.resolve('project/src/html/index.html');
 
 inlineSource(htmlpath, {
@@ -76,14 +75,14 @@ inlineSource(htmlpath, {
 ...or preferably using `async/await`:
 
 ```javascript
-const { inlineSource } = require('inline-source');
-const fs = require('fs');
-const path = require('path');
+import { inlineSource } from 'inline-source';
+import fs from 'node:fs';
+import path from 'node:path';
+
 const htmlpath = path.resolve('project/src/html/index.html');
-let html;
 
 try {
-  html = await inlineSource(htmlpath, {
+  const html = await inlineSource(htmlpath, {
     compress: true,
     rootpath: path.resolve('www'),
     // Skip all css types and png formats
@@ -97,7 +96,7 @@ try {
 
 ### Custom Handlers
 
-Custom handlers are simple middleware-type functions that enable you to provide new, or override existing, inlining behaviour. All handlers have the following signature: `(source, context) => Promise`
+Custom handlers are simple middleware-type functions that enable you to provide new, or override existing, inlining behaviour. All handlers have the following signature: `(source: Source, context: Context) => Promise<void> | void`
 
 - `source`: the current source object to act upon
 
@@ -123,26 +122,26 @@ Custom handlers are simple middleware-type functions that enable you to provide 
 Custom handlers are inserted before the defaults, enabling overriding of default behaviour:
 
 ```js
-module.exports = function handler(source, context) {
+export function handler(source, context) {
   if (source.fileContent && !source.content && source.type == 'js') {
     source.content = "Hey! I'm overriding the file's content!";
   }
-};
+}
 ```
 
 In general, default file content processing will be skipped if `source.content` is already set, and default wrapping of processed content will be skipped if `source.replace` is already set.
 
 ### Custom Pre Handlers
 
-Custom pre handlers are the same as custom handlers only they run before loading the file. All handlers have the following signature: `(source, context) => Promise`
+Custom pre handlers are the same as custom handlers only they run before loading the file. All handlers have the following signature: `(source: Source, context: Context) => Promise<void> | void`
 
 With custom Pre handlers you can make changes to the file name
 
 ```js
-module.exports = function handler(source, context) {
-  const { version } = require('../package.json');
+export function prehandler(source, context) {
+  const { version } = getVersionFromSomewhere();
   source.filepath = source.filepath.replace('.js', `_${version}.js`);
-};
+}
 ```
 
 ### Props
@@ -159,7 +158,7 @@ Source `props` are a subset of `attributes` that are namespaced with the current
 ```
 
 ```js
-module.exports = function handler(source, context) {
+export function handler(source, context) {
   if (source.fileContent && !source.content && source.type == 'js') {
     // The `inline-compress` attribute automatically overrides the global flag
     if (!source.compress) {
@@ -169,6 +168,5 @@ module.exports = function handler(source, context) {
       // foo content
     }
   }
-  return Promise.resolve();
-};
+}
 ```
