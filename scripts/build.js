@@ -11,6 +11,15 @@ await esbuild.build({
   platform: 'node',
   outfile: 'index.js',
 });
+await esbuild.build({
+  bundle: true,
+  entryPoints: ['./src/index.js'],
+  external: ['csso', 'svgo', 'htmlparser2', 'terser', 'node-fetch'],
+  format: 'cjs',
+  target: 'node16',
+  platform: 'node',
+  outfile: 'index.cjs',
+});
 
 const types = fs
   .readFileSync(path.resolve('src/types.d.ts'), 'utf8')
@@ -18,5 +27,5 @@ const types = fs
 
 fs.writeFileSync(
   path.resolve('index.d.ts'),
-  `${types}\n${fs.readFileSync(path.resolve('src/index.d.ts'), 'utf8')}`
+  `${types}\n${fs.readFileSync(path.resolve('src/index.d.ts'), 'utf8')}`,
 );

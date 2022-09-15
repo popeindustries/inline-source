@@ -1,5 +1,0 @@
-.git*
-test/
-package-lock.json
-CHANGELOG.md
-.*
