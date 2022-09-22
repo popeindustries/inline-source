@@ -1,7 +1,7 @@
 {
   "name": "inline-source",
   "description": "Inline all flagged js, css, image source files",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "license": "MIT",
   "author": "Alexander Pope <alex@pope.industries>",
   "keywords": [
