@@ -76,6 +76,7 @@
   },
   "files": [
     "*.d.ts",
+    "*.cjs",
     "*.js",
     "README.MD"
   ]
