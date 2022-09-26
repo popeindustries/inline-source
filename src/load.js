@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 /**
  * Load content for 'source'
  * @param { Source } source
@@ -22,6 +20,8 @@ export async function load(source, context) {
     }
 
     if (source.isRemote) {
+      // node-fetch is esm-only, so support cjs via import()
+      const fetch = (await import('node-fetch')).default;
       const res = await fetch(/** @type { string } */ (source.sourcepath));
 
       if (!res.ok) {
