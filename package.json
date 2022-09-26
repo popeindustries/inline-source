@@ -55,7 +55,7 @@
     "lint:eslint": "eslint 'src/**/*.js'",
     "lint:typescript": "tsc --noEmit --skipLibCheck",
     "prepublishOnly": "pnpm run build",
-    "test": "NODE_ENV=test mocha --reporter spec --bail 'test/*-test.js'"
+    "test": "NODE_ENV=test mocha --reporter spec --bail 'test/*-test.*js'"
   },
   "engines": {
     "node": ">=16.0.0"
