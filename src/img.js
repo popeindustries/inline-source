@@ -3,7 +3,7 @@ import { getAttributeString } from './utils.js';
 import { optimize } from 'svgo';
 
 const RE_XML_TAG = /<\?xml.+?\?>\s+/g;
-/** @type { import('svgo').OptimizeOptions } */
+/** @type { import('svgo').Config } */
 const SVGO_CONFIG = {
   plugins: [
     'removeDoctype',
